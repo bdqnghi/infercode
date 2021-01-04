@@ -28,3 +28,8 @@ To train the model:
 Here are some of the inspirational presentations about self-supervised learning:
 - [Yann Lecun's talk on self-supervised learning: could machine learn like humans?](https://www.youtube.com/watch?v=7I0Qt7GALVk&t=2639s)
 - [DeepMind tutorial on Self-supervised learning at ICML 2020](https://drive.google.com/file/d/1Ee2_EBgJQY5rMEiZJaRxxs6Il7m3EA-o/view)
+
+## Notes
+- For a fair comparison with InferCode in the future, please consider
+  + Using the same ASTs structure, since different ASTs structures can effect the performance a lot. We use SrcML in InferCode
+  + Using the similar settings of InferCode on the embedding size
