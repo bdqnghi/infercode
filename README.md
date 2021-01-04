@@ -6,7 +6,7 @@ We provide the source code implementation of InferCode and parts of our dataset.
 
 ### Why self-supervised learning?
 
-In source code learning, we need enough labeled data to implement supervised learning with deep neural networks. Human annotators manually label data to obtain that which is both a time-consuming and costly process. There are also areas in the medical field where collecting enough data is itself a challenge. Thus the label generation aspect is a big bottleneck in the current supervised learning paradigm. 
+In program representation learning, we need lots of labeled data to build the models. Most of the source code models at the moment are supervised, which requires label to train the model. Human annotators usually label the data manually, which is a time-consuming and costly process. Thus the label generation aspect is a big bottleneck in the current supervised learning paradigm. 
 
 ### What is self-supervised learning?
 Self-supervised learning is a method that poses the following question to formulate an unsupervised learning problem as a supervised one. We want to have an answer to this question:
