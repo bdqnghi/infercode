@@ -2,6 +2,21 @@
 
 InferCode works based on the key idea of using an encoder to predict subtrees as a pretext task. Then the weights learned from the encoder can be used to transfer for other downstream tasks. This is to alleviate the need for the huge amount of labeled data to build decent code learning models in Software Engineering. With this concept,  representation models for code can now learn from unlabeled data. 
 
+## Generate Subtrees
+We have packaged the tool to generate the subtrees into a docker image
+```docker run --rm -v $(pwd):/data -w /data --entrypoint /usr/local/bin/subtree -it yijun/fast input_folder output_folder node_types.csv```
+- input_folder: is the path to the directory that contains the raw source code files, e.g., .cpp, .c, .java, .cs
+- output_folder: is the path to the directory that contains the subtrees, each subtree is in this format:
+rootid-roottype-roottoken,nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken ..., depth_of_the_subtree
+
+rootid-roottype-roottoken: is the information of the root node of a subtree
+
+nodeid-nodetype-nodetoke: is the information of a node in a subtree
+
+The subtrees are sequentialized using the DFS algorith,
+
+
+
 ## Data Preparation
 
 1. Install the required dependencies ```pip install -r requirements.txt```.
