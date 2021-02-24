@@ -4,6 +4,11 @@ InferCode works based on the key idea of using an encoder to predict subtrees as
 
 ### [The code is not fully updated, we are working hard to make it available very soon]
 
+## Process
+- Generate subtrees: First, need to generate pseudo-labels for self-supervised learning. In this case, the pseudo-lables are the subtrees.
+- Train the model: Once the subtrees are generated (the directory subtree_features), we can start to train the model.
+- Infer vector from raw code: Once the encoder is trained, we can use it to generate vector for any source code snippet. Unfortunately, our tool could not receive raw source code directly, the tool can only receive the AST. It is because we need to rely on an external tool to generate the AST representation of the code. So we need to convert the code into the AST first.
+
 ## Generate Subtrees
 We have packaged the tool to generate the subtrees into a docker image. To generate the subtrees, simple run:
 
