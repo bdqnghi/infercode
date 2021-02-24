@@ -47,7 +47,7 @@ This step will process the AST trees, which comprises of 2 steps. First, it will
     - ```source training_script.sh```
     
 2. To test the model:
-    - ```source esting_script.sh```
+    - ```source testing_script.sh```
   
 
 ## Notes
