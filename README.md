@@ -2,6 +2,8 @@
 
 InferCode works based on the key idea of using an encoder to predict subtrees as a pretext task. Then the weights learned from the encoder can be used to transfer for other downstream tasks. This is to alleviate the need for the huge amount of labeled data to build decent code learning models in Software Engineering. With this concept,  representation models for code can now learn from unlabeled data. 
 
+### [The code is not fully updated, we are working hard to make it available very soon]
+
 ## Generate Subtrees
 We have packaged the tool to generate the subtrees into a docker image. To generate the subtrees, simple run:
 
@@ -47,7 +49,7 @@ This step will process the AST trees, which comprises of 2 steps. First, it will
     - ```source training_script.sh```
     
 2. To test the model:
-    - ```source esting_script.sh```
+    - ```source testing_script.sh```
   
 
 ## Notes
