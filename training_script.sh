@@ -23,7 +23,7 @@ TASK=0
 INCLUDE_TOKEN=1
 EPOCH=20
 PYTHON=python3
-${PYTHON} corder_2_new.py \
+${PYTHON} training_script.py \
 --train_path ${TRAIN_PATH} --val_path ${VAL_PATH} --train_label_path ${TRAIN_LABEL_PATH} --val_label_path ${VAL_LABEL_PATH} \
 --subtree_vocabulary_path ${SUBTREE_FEATURES_PATH} --cuda ${CUDA} \
 --batch_size ${BATCH_SIZE} --checkpoint_every ${CHECKPOINT_EVERY} \
