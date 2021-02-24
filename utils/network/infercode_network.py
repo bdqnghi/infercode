@@ -4,13 +4,11 @@ import tensorflow as tf
 # from utils import softmax
 # from utils import get_shape
 import numpy as np
-import config
 
 
-
-
-class CorderModel():
+class InferCodeModel():
     def __init__(self, opt):
+        self.include_token = opt.include_token
         self.num_conv = opt.num_conv
         self.output_size = opt.output_size
         
@@ -19,8 +17,12 @@ class CorderModel():
 
         self.node_token_dim = opt.node_token_dim
         self.node_type_dim = opt.node_type_dim
-        self.node_dim = self.node_type_dim + self.node_token_dim
-        self.subtree_dim = self.node_type_dim + self.node_token_dim
+
+        self.node_dim = self.output_size
+        self.subtree_dim = self.output_size
+        # if self.include_token == 1:
+        #     self.node_dim = self.node_type_dim + self.node_token_dim
+        #     self.subtree_dim = self.node_type_dim + self.node_token_dim
         # self.node_dim = self.node_type_dim
 
         self.loss_function = opt.loss
@@ -30,6 +32,7 @@ class CorderModel():
 
         self.num_subtrees = len(self.subtree_lookup.keys())
         self.num_sampling = opt.num_sampling
+        
 
         self.placeholders = {}
         self.weights = {}
@@ -42,28 +45,24 @@ class CorderModel():
             # nodes = tf.placeholder(tf.float32, shape=(None, None, feature_size), name='tree')
            
             self.placeholders["node_types"] = tf.placeholder(tf.int32, shape=(None, None), name='tree_node_types')
+            self.weights["node_type_embeddings"] = tf.Variable(tf.contrib.layers.xavier_initializer()([len(self.node_type_lookup.keys()), self.node_type_dim]), name='node_type_embeddings')
             self.placeholders["node_tokens"] = tf.placeholder(tf.int32, shape=(None, None, None), name='tree_node_tokens')
+            self.placeholders["children_node_tokens"] = tf.placeholder(tf.int32, shape=(None, None, None, None), name='children_tokens') # batch_size x max_num_nodes x max_children x max_sub_tokens
+            if self.include_token == 1:
+                print("Including token weights..........")            
+                self.weights["node_token_embeddings"] = tf.Variable(tf.contrib.layers.xavier_initializer()([len(self.node_token_lookup.keys()), self.node_token_dim]), name='node_token_embeddings')
+            else:
+                print("Excluding token weights..........")
+
             self.placeholders["children_indices"] = tf.placeholder(tf.int32, shape=(None, None, None), name='children_indices') # batch_size x max_num_nodes x max_children
             self.placeholders["children_node_types"] = tf.placeholder(tf.int32, shape=(None, None, None), name='children_types') # batch_size x max_num_nodes x max_children
-            self.placeholders["children_node_tokens"] = tf.placeholder(tf.int32, shape=(None, None, None, None), name='children_tokens') # batch_size x max_num_nodes x max_children x max_sub_tokens
-            if self.loss_function == 0:
-                print("Using full softmax........")
-                self.placeholders['labels'] = tf.placeholder(tf.int32, (None, self.num_subtrees))
-            else:
-                self.weights["subtree_embeddings_bias"] = tf.Variable(tf.contrib.layers.xavier_initializer()([len(self.subtree_lookup.keys())]), name='subtree_embeddings_bias')
-                # if self.loss_function == 1:
-                print("Using sampled softmax........")
-                self.placeholders['labels'] = tf.placeholder(tf.int32, (None, self.num_sampling))
-                # else:
-                    # print("Using nce........")
-                    # self.placeholders['labels'] = tf.placeholder(tf.int32, (None, 1))
-                
-
-            self.weights["node_type_embedding_lookup"] = tf.Variable(tf.contrib.layers.xavier_initializer()([len(self.node_type_lookup.keys()), self.node_dim]), name='node_type_embeddings')
-            # nodes_indicator = tf.placeholder(tf.float32, shape=(None, None), name='nodes_indicator')
-            self.weights["node_type_embeddings"] = tf.Variable(tf.contrib.layers.xavier_initializer()([len(self.node_type_lookup.keys()), self.node_type_dim]), name='node_type_embeddings')
-            self.weights["node_token_embeddings"] = tf.Variable(tf.contrib.layers.xavier_initializer()([len(self.node_token_lookup.keys()), self.node_token_dim]), name='node_token_embeddings')
+            
+            self.placeholders["labels"] = tf.placeholder(tf.float32, shape=(None, None), name="labels")
+            self.placeholders["dropout_rate"] = tf.placeholder(tf.float32)
+            # self.placeholders['is_training'] = tf.placeholder(tf.bool, name="is_training")
+            
             self.weights["subtree_embeddings"] = tf.Variable(tf.contrib.layers.xavier_initializer()([len(self.subtree_lookup.keys()), self.subtree_dim]), name='subtree_embeddings')
+            self.weights["subtree_embeddings_bias"] = tf.Variable(tf.contrib.layers.xavier_initializer()([len(self.subtree_lookup.keys())]), name='subtree_embeddings_bias')
 
             for i in range(self.num_conv):
                 self.weights["w_t_" + str(i)] = tf.Variable(tf.contrib.layers.xavier_initializer()([self.node_dim, self.output_size]), name='w_t_' + str(i))
@@ -73,8 +72,6 @@ class CorderModel():
 
             self.weights["w_attention"] = tf.Variable(tf.contrib.layers.xavier_initializer()([self.node_dim, 1]), name="w_attention")
       
-
-
     def feed_forward(self):
         with tf.name_scope('network'):  
                  
@@ -82,35 +79,43 @@ class CorderModel():
             # Example with batch size = 12: shape = (12, 48, 30)
             self.parent_node_type_embeddings = self.compute_parent_node_types_tensor(self.placeholders["node_types"], self.weights["node_type_embeddings"])
 
-            # shape = (batch_size, max_tree_size, node_token_dim)
-            # Example with batch size = 12: shape = (12, 48, 50))
-            self.parent_node_token_embeddings = self.compute_parent_node_tokens_tensor(self.placeholders["node_tokens"], self.weights["node_token_embeddings"])
-
-            # children_node_types_tensor = self.compute_children_node_types_tensor(self.placeholders["children_indices"])
-           
             # shape = (batch_size, max_tree_size, max_children, node_type_dim)
             # Example with batch size = 12: shape = (12, 48, 8, 30)
             self.children_node_type_embeddings = self.compute_children_node_types_tensor(self.parent_node_type_embeddings, self.placeholders["children_indices"], self.node_type_dim)
-            
-            # shape = (batch_size, max_tree_size, max_children, node_token_dim)
-            # Example with batch size = 12: shape = (12, 48, 7, 50)
-            self.children_node_token_embeddings = self.compute_children_node_tokens_tensor(self.placeholders["children_node_tokens"], self.node_token_dim, self.weights["node_token_embeddings"])
 
-            # Batch normalization for the inputs for regularization
-            # self.parent_node_type_embeddings = tf.layers.batch_normalization(self.parent_node_type_embeddings, training=self.placeholders['is_training'])
-            # self.parent_node_token_embeddings = tf.layers.batch_normalization(self.parent_node_token_embeddings, training=self.placeholders['is_training'])
-            # self.children_node_types_tensor = tf.layers.batch_normalization(self.children_node_types_tensor, training=self.placeholders['is_training'])
-            # self.children_node_tokens_tensor = tf.layers.batch_normalization(self.children_node_tokens_tensor, training=self.placeholders['is_training'])
 
-            # shape = (batch_size, max_tree_size, (node_type_dim + node_token_dim))
-            # Example with batch size = 12: shape = (12, 48, (30 + 50))) = (12, 48, 80)
-            self.parent_node_embeddings = tf.concat([self.parent_node_type_embeddings, self.parent_node_token_embeddings], -1)
-            
-            # shape = (batch_size, max_tree_size, max_children, (node_type_dim + node_token_dim))
-            # Example with batch size = 12: shape = (12, 48, 7, (30 + 50))) = (12, 48, 6, 80)
-            self.children_embeddings = tf.concat([self.children_node_type_embeddings, self.children_node_token_embeddings], -1)
+            if self.include_token == 1:
+                print("Including token information..........")
+                # shape = (batch_size, max_tree_size, node_token_dim)
+                # Example with batch size = 12: shape = (12, 48, 50))
+                self.parent_node_token_embeddings = self.compute_parent_node_tokens_tensor(self.placeholders["node_tokens"], self.weights["node_token_embeddings"])
+                
+                # shape = (batch_size, max_tree_size, max_children, node_token_dim)
+                # Example with batch size = 12: shape = (12, 48, 7, 50)
+                self.children_node_token_embeddings = self.compute_children_node_tokens_tensor(self.placeholders["children_node_tokens"], self.node_token_dim, self.weights["node_token_embeddings"])
+               
+                # Batch normalization for the inputs for regularization
+                # self.parent_node_type_embeddings = tf.layers.batch_normalization(self.parent_node_type_embeddings, training=self.placeholders['is_training'])
+                # self.parent_node_token_embeddings = tf.layers.batch_normalization(self.parent_node_token_embeddings, training=self.placeholders['is_training'])
+                # self.children_node_types_tensor = tf.layers.batch_normalization(self.children_node_types_tensor, training=self.placeholders['is_training'])
+                # self.children_node_tokens_tensor = tf.layers.batch_normalization(self.children_node_tokens_tensor, training=self.placeholders['is_training'])
 
-            
+                # shape = (batch_size, max_tree_size, (node_type_dim + node_token_dim))
+                # Example with batch size = 12: shape = (12, 48, (30 + 50))) = (12, 48, 80)
+                self.parent_node_embeddings = tf.concat([self.parent_node_type_embeddings, self.parent_node_token_embeddings], -1)
+                self.parent_node_embeddings = tf.layers.dense(self.parent_node_embeddings, units=self.node_dim, activation=tf.nn.tanh)
+                # shape = (batch_size, max_tree_size, max_children, (node_type_dim + node_token_dim))
+                # Example with batch size = 12: shape = (12, 48, 7, (30 + 50))) = (12, 48, 6, 80)
+                self.children_embeddings = tf.concat([self.children_node_type_embeddings, self.children_node_token_embeddings], -1)
+                self.children_embeddings = tf.layers.dense(self.children_embeddings, units=self.node_dim, activation=tf.nn.tanh)
+
+
+            else:
+                print("Excluding token information..........")
+                # Example with batch size = 12: shape = (12, 48, (30 + 50))) = (12, 48, 80)
+                self.parent_node_embeddings = self.parent_node_type_embeddings
+                self.children_embeddings = self.children_node_type_embeddings
+                        
             """Tree based Convolutional Layer"""
             # Example with batch size = 12 and num_conv = 8: shape = (12, 48, 128, 8)
             # Example with batch size = 1 and num_conv = 8: shape = (1, 48, 128, 8)
@@ -120,29 +125,18 @@ class CorderModel():
 
             self.code_vector, self.attention_scores = self.aggregation_layer(self.conv_output, self.weights["w_attention"])
 
-            if self.loss_function == 0:
-                self.logits = tf.matmul(self.code_vector, self.weights["subtree_embeddings"], transpose_b=True)
-                self.loss = self.loss_layer(self.logits, self.placeholders["labels"])
+        
+            self.logits = tf.matmul(self.code_vector, self.weights["subtree_embeddings"], transpose_b=True)
+            # self.loss = self.loss_layer(self.logits, self.placeholders["labels"])
 
-            else:
-                if self.loss_function == 1:
-                    sampled_softmax_loss = tf.nn.sampled_softmax_loss(weights=self.weights["subtree_embeddings"], 
-                                                                      biases=self.weights["subtree_embeddings_bias"], 
-                                                                      labels=self.placeholders["labels"], 
-                                                                      inputs=self.code_vector,
-                                                                      num_classes=self.num_subtrees,
-                                                                      num_true=self.num_sampling,
-                                                                      num_sampled=3)
-                    self.loss = tf.reduce_mean(sampled_softmax_loss)
-                else:
-                    noise_contrastive_loss = tf.nn.nce_loss(weights=self.weights["subtree_embeddings"], 
-                                                            biases=self.weights["subtree_embeddings_bias"], 
-                                                            labels=self.placeholders["labels"], 
-                                                            inputs=self.code_vector, 
-                                                            num_sampled=10000, 
-                                                            num_true=self.num_sampling,
-                                                            num_classes=self.num_subtrees)
-                    self.loss = tf.reduce_mean(noise_contrastive_loss)
+            sampled_softmax_loss = tf.nn.sampled_softmax_loss(weights=self.weights["subtree_embeddings"], 
+                                                                biases=self.weights["subtree_embeddings_bias"], 
+                                                                labels=self.placeholders["labels"], 
+                                                                inputs=self.code_vector, 
+                                                                num_sampled=1000, 
+                                                                num_classes=self.num_subtrees)
+            self.loss = tf.reduce_mean(sampled_softmax_loss)
+
 
     def aggregation_layer(self, nodes_representation, w_attention):
         # nodes_representation is (batch_size, max_graph_size, self.node_dim)
@@ -269,7 +263,12 @@ class CorderModel():
                 result = tf.tensordot(result, weights, [[2, 3], [0, 1]])
 
                 # output is (batch_size, max_tree_size, output_size)
-                return tf.nn.tanh(result + b_conv)
+
+                output = tf.nn.leaky_relu(result + b_conv)
+                # output = tf.compat.v1.nn.swish(result + b_conv)
+                # output = tf.layers.batch_normalization(output, training=self.placeholders['is_training'])
+                output_drop_out = tf.nn.dropout(output, rate=self.placeholders["dropout_rate"])  # DROP-OUT here
+                return output_drop_out
 
     def compute_children_node_types_tensor(self, parent_node_embeddings, children_indices, node_type_dim):
         """Build the children tensor from the input nodes and child lookup."""
@@ -412,7 +411,7 @@ class CorderModel():
         """Create a loss layer for training."""
     
         with tf.name_scope('loss_layer'):
-            cross_entropy = tf.nn.softmax_cross_entropy_with_logits(
+            cross_entropy = tf.nn.sigmoid_cross_entropy_with_logits(
                 labels=labels, logits=logits_node, name='cross_entropy'
             )
 

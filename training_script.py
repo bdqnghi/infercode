@@ -4,10 +4,10 @@ import random
 import pickle
 
 import tensorflow as tf
-from utils.data.tree_loader_sub_structures_2 import CodeClassificationData
+from utils.data.tree_loader import CodeClassificationData
 from utils.utils import ThreadedIterator
 # from utils.network.dense_ggnn_method_name_prediction import DenseGGNNModel
-from utils.network.corder_sub_structures_2_new import CorderModel
+from utils.network.infercode_network import InferCodeModel
 # import utils.network.treecaps_2 as network
 import os
 import sys
@@ -307,10 +307,7 @@ def main(opt):
         if opt.task == 0:
             validation_batch_iterator = ThreadedIterator(validation_dataset.make_minibatch_iterator(), max_queue_size=opt.worker)         
            
-
             for val_step, val_batch_data in enumerate(validation_batch_iterator):
-                
-                print("DDDDDDDDDDDDDDDDd")
                 scores = sess.run(
                     [corder.code_vector],
                     feed_dict={
