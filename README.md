@@ -10,7 +10,7 @@ InferCode works based on the key idea of using an encoder to predict subtrees as
 - Infer vector from raw code: Once the encoder is trained, we can use it to generate vector for any source code snippet. Unfortunately, our tool could not receive raw source code directly, the tool can only receive the AST. It is because we need to rely on an external tool to generate the AST representation of the code. So we need to convert the code into the AST first.
 
 ## Generate Subtrees
-We have packaged the tool to generate the subtrees into a docker image. To generate the subtrees, simple run:
+We have packaged the tool to generate the subtrees into a docker image. To generate the subtrees, simply run:
 
 ```docker run --rm -v $(pwd):/data -w /data --entrypoint /usr/local/bin/subtree -it yijun/fast input_folder output_folder node_types.csv```
 
@@ -24,8 +24,12 @@ rootid-roottype-roottoken: is the information of the root node of a subtree
 
 nodeid-nodetype-nodetoke: is the information of a node in a subtree
 
-The subtrees are sequentialized using the DFS algorith,
+The subtrees are sequentialized using the DFS algorithm.
 
+We have prepare an example to illustrate how the command above works, run:
+```docker run --rm -v $(pwd):/data -w /data --entrypoint /usr/local/bin/subtree -it yijun/fast examples/raw_code examples/subtrees node_types.csv```
+
+After running this command, you will see a folder subtrees/ appear under the directory examples/.
 
 
 ## Data Preparation
