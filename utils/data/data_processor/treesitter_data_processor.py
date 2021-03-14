@@ -18,7 +18,7 @@ import resource
 resource.setrlimit(resource.RLIMIT_STACK, (2**29,-1))
 sys.setrecursionlimit(10**6)
 
-class TreeSitterCDataProcessor(DataProcessor):
+class TreeSitterDataProcessor(DataProcessor):
    
     def __init__(self, node_type_vocab_path, token_vocab_path, data_path, parser):
         super().__init__(node_type_vocab_path, token_vocab_path, data_path, parser)
