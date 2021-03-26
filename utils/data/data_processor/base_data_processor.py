@@ -21,6 +21,7 @@ class DataProcessor():
         self.node_token_lookup = self.load_node_token_vocab(token_vocab_path)
         self.node_type_lookup = self.load_node_type_vocab(node_type_vocab_path)
 
+        print(self.node_type_lookup)
         base_name =os.path.basename(data_path)
         
         self.simple_tree_pkl_name = os.path.basename(os.path.dirname(data_path))
@@ -47,7 +48,7 @@ class DataProcessor():
 
         pickle.dump(self.buckets, open(self.buckets_name_path, "wb" ) )
 
-    
+
     def load_node_token_vocab(self, token_vocab_path):
         node_token_lookup = {}
         with open(token_vocab_path, "r") as f:
@@ -66,7 +67,7 @@ class DataProcessor():
            
             for i, line in enumerate(data):
                 line = line.replace("\n", "").strip()
-                node_type_lookup[line.upper()] = i
+                node_type_lookup[line] = i
 
         return bidict(node_type_lookup)
 
@@ -96,7 +97,7 @@ class DataProcessor():
 
 
     def look_up_for_id_from_node_type(self, node_type):
-        node_type = node_type.upper()
+        # node_type = node_type.upper()
         node_type_id = self.node_type_lookup[node_type]
         return node_type_id
 
@@ -111,6 +112,23 @@ class DataProcessor():
             for t in tokens:
                 f.write(t)
                 f.write("\n")
+
+    def process_list_of_sub_tokens(self, sub_tokens):
+        sub_tokens = list(filter(None, sub_tokens))
+        sub_tokens = list(map(lambda x: x.lower(), sub_tokens))
+        temp_sub_tokens = []
+        for s in sub_tokens:
+            if not self.detect_special_characer(s):
+                temp_sub_tokens.append(s)
+        return temp_sub_tokens
+
+    def detect_special_characer(self, pass_string): 
+        regex= re.compile('"[@_!#$%^&*()<>?/\|}{~:]') 
+        if re.match("^[a-zA-Z0-9_]*$", pass_string):
+            res = False
+        else: 
+            res = True
+        return res
 
     def load_tree_from_pickle_file(self, file_path):
         """Builds an AST from a script."""
@@ -135,7 +153,7 @@ class DataProcessor():
 
     def extract_training_data(self, tree_data):
         
-        tree, label, sub_tokens, size, file_path = tree_data["tree"], tree_data["label"], tree_data["sub_tokens"] , tree_data["size"], tree_data["file_path"]
+        tree, subtrees, sub_tokens, size, file_path = tree_data["tree"], tree_data["label"], tree_data["sub_tokens"] , tree_data["size"], tree_data["file_path"]
         print("Extracting............", file_path)
         # print(tree)
         node_type_id = []
