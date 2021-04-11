@@ -5,12 +5,12 @@ import random
 
 class BaseDataLoader():
    
-    def __init__(self, batch_size, label_size, tree_size_threshold_upper, tree_size_threshold_lower, data_path, is_training=True):
+    def __init__(self, batch_size, tree_size_threshold_upper, tree_size_threshold_lower, tree_path, bucket_path, is_training=True):
 
         self.is_training = is_training
-        self.buckets = pickle.load(open(data_path, "rb" ))
+        self.buckets = pickle.load(open(bucket_path, "rb" ))
+        self.trees = pickle.load(open(tree_path, "rb"))
         self.batch_size = batch_size
-        self.label_size = label_size
         self.tree_size_threshold_upper = tree_size_threshold_upper
         self.tree_size_threshold_lower = tree_size_threshold_lower
         # self.make_minibatch_iterator()
@@ -31,11 +31,11 @@ class BaseDataLoader():
         batch_children_node_sub_tokens_id = []
         batch_children_node_token = []
 
-        batch_labels = []
-        batch_labels_one_hot = []
+        batch_subtree_id = []
         batch_size = []
 
-        for tree_data in batch_data:
+        for element in batch_data:
+            tree_data = self.trees[element["file_path"]]
             
             batch_node_index.append(tree_data["node_index"])
             batch_node_type_id.append(tree_data["node_type_id"])
@@ -47,9 +47,7 @@ class BaseDataLoader():
             batch_children_node_sub_tokens_id.append(tree_data["children_node_sub_tokens_id"])
             batch_children_node_token.append(tree_data["children_node_token"])
 
-            batch_labels.append(tree_data["label"])
-            batch_labels_one_hot.append(self._onehot(tree_data["label"], self.label_size))
-
+            batch_subtree_id.append(element["subtree_id"])
             batch_size.append(tree_data["size"])
         
         # [[]]
@@ -72,8 +70,7 @@ class BaseDataLoader():
             "batch_children_index": batch_children_index,
             "batch_children_node_type_id": batch_children_node_type_id,
             "batch_children_node_sub_tokens_id": batch_children_node_sub_tokens_id,
-            "batch_labels": batch_labels,
-            "batch_labels_one_hot": batch_labels_one_hot,
+            "batch_subtree_id": batch_subtree_id,
             "batch_size": batch_size
         }
         return batch_obj

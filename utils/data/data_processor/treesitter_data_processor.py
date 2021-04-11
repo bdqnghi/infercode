@@ -24,7 +24,7 @@ sys.setrecursionlimit(10**6)
 
 class TreeSitterDataProcessor(DataProcessor):
    
-    def __init__(self, node_type_vocab_path, token_vocab_path, data_path, parser):
+    def __init__(self, node_type_vocab_path, token_vocab_path, subtree_vocab_path, data_path):
 
 
         home = str(Path.home())
@@ -40,75 +40,94 @@ class TreeSitterDataProcessor(DataProcessor):
         os.chdir(cd)
 
         self.excluded_node_types = ["comment", "error", "'", '"']
-        super().__init__(node_type_vocab_path, token_vocab_path, data_path, parser)
+        super().__init__(node_type_vocab_path, token_vocab_path, subtree_vocab_path, data_path)
 
     
      
     def load_program_data(self, directory):
-        trees = []
+        trees = {}
         
         # all_tokens = []
         count_processed_files = 0
+
+        all_files = []
         for subdir , dirs, files in os.walk(directory): 
-            count = 0
             for file in tqdm(files):
-                # if count < 20:
-                file_path = os.path.join(subdir,file)
-                print(file_path)
-                # try:
-                    # print(txl_file_path)
-                file_path_splits = file_path.split("/")
-        
-                count_processed_files += 1
+                
+                if not file.endswith(".pkl"):
 
-                parser = Parser()
-                parser_lang = self.Languages.get("java")
-                parser.set_language(parser_lang)
+                    file_path = os.path.join(subdir,file)
+                    all_files.append(file_path)
 
-                binary_data = open(file_path, "rb").read()
-                treesitter_tree = parser.parse(binary_data)
+        for file_path in all_files:
+         
+            print(file_path)
+            # try:
+                # print(txl_file_path)
+            file_path_splits = file_path.split("/")
+    
+            count_processed_files += 1
 
-                tree, sub_tokens, size = self._convert_ast_into_simpler_tree_format(treesitter_tree.root_node, binary_data)
+            parser = Parser()
+            parser_lang = self.Languages.get("java")
+            parser.set_language(parser_lang)
 
-                subtrees_flattened = {}
-                print_subtree(binary_data, treesitter_tree.root_node, subtrees_flattened, self.excluded_node_types)
+            binary_data = open(file_path, "rb").read()
+            treesitter_tree = parser.parse(binary_data)
 
-                subtrees = []
+            tree, sub_tokens, size = self._convert_ast_into_simpler_tree_format(treesitter_tree.root_node, binary_data)
 
-                for key, subtree in subtrees_flattened.items():
-                    print("--------------------")
-                    nodes = subtree.split(",")
-                    nodes = nodes[:len(nodes)-1]
-                    print(nodes)
-                    subtree_arr = []
-                    for node in nodes:
-                        node_info = node.split("-")
-                        if len(node_info) >= 2 and len(node) > 1:
-                            node_type = node_info[1]
-                            if node_type:
-                                # print("type:", node_type)
-                                subtree_arr.append(node_type)
-                    subtree_str = "_".join(subtree_arr)
+            subtrees_flattened = {}
+            print_subtree(binary_data, treesitter_tree.root_node, subtrees_flattened, self.excluded_node_types)
+
+            subtrees = []
+
+            for key, subtree in subtrees_flattened.items():
+                print("--------------------")
+                nodes = subtree.split(",")
+                nodes = nodes[:len(nodes)-1]
+                print(nodes)
+                subtree_arr = []
+                for node in nodes:
+                    node_info = node.split("-")
+                    if len(node_info) >= 2 and len(node) > 1:
+                        node_type = node_info[1]
+                        if node_type:
+                            # print("type:", node_type)
+                            subtree_arr.append(node_type)
+                subtree_str = "_".join(subtree_arr)
+                if subtree_str:
                     subtrees.append(subtree_str)
 
+            subtrees = list(set(subtrees))
+            subtree_ids = []
 
-                print(sub_tokens)
-                tree_data = {
-                    "tree": tree,
-                    "size": size,
-                    "subtrees": subtrees,
-                    "sub_tokens": sub_tokens,
-                    "file_path": file_path
-                }
-                trees.append(tree_data)
-            
-                        
-                # except Exception as e:
-                #     print("Exeception when processing the file :", file_path, "with exeption", str(e))
+            for subtree in subtrees:
+                print("Subtree", subtree)
+                subtree_ids.append(self.look_up_for_id_from_subtree(subtree))
+
+
+            tree_data = {
+                "tree": tree,
+                "size": size,
+                "subtree_ids": subtree_ids,
+                "sub_tokens": sub_tokens,
+                "file_path": file_path
+            }
+
+            tree_training_data = self.extract_training_data(tree_data)
+            # trees[file_path] = tree_data
+            trees[file_path] = tree_training_data
+
+            # trees.append(tree_data)
+        
+                    
+            # except Exception as e:
+            #     print("Exeception when processing the file :", file_path, "with exeption", str(e))
             
 
         # all_tokens = list(set(all_tokens))
-        print("Total processed files : " + str(count_processed_files))
+        # print("Total processed files : " + str(count_processed_files))
         return trees
 
     def _convert_ast_into_simpler_tree_format(self, root, binary_data):

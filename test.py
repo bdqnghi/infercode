@@ -97,7 +97,7 @@ def _convert_ast_into_simpler_tree_format(root, binary_data):
 
             if len(children_sub_token_ids) == 0:
                 children_sub_token_ids.append(0)
-
+            
             child_json = {
                 "node_type": str(child_node.type),
                 "node_type_id": look_up_for_id_from_node_type(str(child_node.type)),

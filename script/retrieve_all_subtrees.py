@@ -23,7 +23,7 @@ for file in glob.glob("*.so"):
 os.chdir(cd)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--input_directory', metavar='F', type=str, default="../java-small", help='file to parse')
+parser.add_argument('--input_directory', metavar='F', type=str, default="../java-small-test", help='file to parse')
 parser.add_argument('--output_file', metavar='F', type=str, default="../examples/raw_code/104.c", help='file to parse')
 parser.add_argument('--node_type_path', type=str, default="../grammars/node_types_c_java_cpp_c-sharp.csv", help='path to node types')
 opt = parser.parse_args()
@@ -73,7 +73,7 @@ def main(opt):
     excluded_node_types = open("excluded_node_types/list.csv").read().splitlines()
     # print(excluded_node_types)
 
-    all_subtrees = []
+    subtrees = []
     for subdir , dirs, files in os.walk(opt.input_directory): 
         for file in files:
             file_path = os.path.join(subdir,file)
@@ -99,22 +99,29 @@ def main(opt):
             print_subtree(data, tree.root_node, subtrees_flattened, excluded_node_types)
 
             # print(subtrees_flattened)
-            for subt in subtrees_flattened:
-                
-                print(subtrees_flattened[subt])
-                # node_type_indices = process_subtree_line(subtrees_flattened[subt], node_types_dict)
+            
+            for key, subtree in subtrees_flattened.items():
+                print("--------------------")
+                nodes = subtree.split(",")
+                nodes = nodes[:len(nodes)-1]
+                print(nodes)
+                subtree_arr = []
+                for node in nodes:
+                    node_info = node.split("-")
+                    if len(node_info) >= 2 and len(node) > 1:
+                        node_type = node_info[1]
+                        if node_type:
+                            # print("type:", node_type)
+                            subtree_arr.append(node_type)
+                subtree_str = "_".join(subtree_arr)
+                subtrees.append(subtree_str)
 
-                # if len(node_type_indices) == 2:
-                #     print(node_type_indices)
-                # if len(node_type_indices) > 0:
-                #     all_subtrees.append("_".join(node_type_indices))
-
-    # all_subtrees = list(set(all_subtrees))
-    # all_subtrees.sort(key=len)
-    # for s in all_subtrees:
-    #     with open("../subtrees/subtrees.txt", "a") as f:
-    #         f.write(s)
-    #         f.write("\n")
+    subtrees = list(set(subtrees))
+    subtrees.sort(key=len)
+    for s in subtrees:
+        with open("../subtrees/subtrees.txt", "a") as f:
+            f.write(s)
+            f.write("\n")
 
 if __name__ == "__main__":
     main(opt)

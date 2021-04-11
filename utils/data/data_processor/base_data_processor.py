@@ -12,7 +12,7 @@ excluded_tokens = [",","{",";","}",")","(",'"',"'","`",""," ","[]","[","]","/","
 
 class DataProcessor():
    
-    def __init__(self, node_type_vocab_path, token_vocab_path, data_path, parser):
+    def __init__(self, node_type_vocab_path, token_vocab_path, subtree_vocab_path, data_path):
         
         self.node_type_vocab_path = node_type_vocab_path
         self.token_vocab_path = token_vocab_path
@@ -20,6 +20,7 @@ class DataProcessor():
 
         self.node_token_lookup = self.load_node_token_vocab(token_vocab_path)
         self.node_type_lookup = self.load_node_type_vocab(node_type_vocab_path)
+        self.subtree_lookup = self.load_subtree_vocab(subtree_vocab_path)
 
         print(self.node_type_lookup)
         base_name =os.path.basename(data_path)
@@ -28,8 +29,9 @@ class DataProcessor():
         self.buckets_name = os.path.basename(os.path.dirname(data_path))
 
         base_path = str(os.path.dirname(data_path))
-        self.simple_tree_pkl_path = "%s/%s-%s-%s.pkl" % (base_path, parser, "trees", base_name)
-        self.buckets_name_path = "%s/%s-%s-%s.pkl" % (base_path, parser, "buckets", base_name)
+        self.simple_tree_pkl_path = "%s/%s-%s.pkl" % (base_path, "trees", base_name)
+        self.all_subtrees_buckets_name_path = "%s/%s-%s.pkl" % (base_path, "buckets-all", base_name)
+        # self.random_subtrees_buckets_name_path = "%s/%s-%s.pkl" % (base_path, "buckets-random", base_name)
 
         self.bucket_sizes = np.array(list(range(30 , 7500 , 10)))
         self.buckets = defaultdict(list)
@@ -44,9 +46,10 @@ class DataProcessor():
             pickle.dump(self.trees, open(self.simple_tree_pkl_path, "wb" ) )
 
         print("Convert trees into training indices....")
-        self.convert_trees_into_training_indices(self.trees)
+        self.all_subtrees_buckets, self.bucket_sizes = self.convert_trees_into_training_indices(self.trees)
 
-        pickle.dump(self.buckets, open(self.buckets_name_path, "wb" ) )
+        pickle.dump(self.all_subtrees_buckets, open(self.all_subtrees_buckets_name_path, "wb" ) )
+        # pickle.dump(self.random_subtrees_buckets, open(self.random_subtrees_buckets_name_path, "wb" ) )
 
 
     def load_node_token_vocab(self, token_vocab_path):
@@ -70,6 +73,17 @@ class DataProcessor():
                 node_type_lookup[line] = i
 
         return bidict(node_type_lookup)
+
+    def load_subtree_vocab(self, subtree_vocab_path):
+        subtree_lookup = {}
+        with open(subtree_vocab_path, "r") as f:
+            data = f.readlines()
+           
+            for i, line in enumerate(data):
+                line = line.replace("\n", "").strip()
+                subtree_lookup[line] = i
+
+        return bidict(subtree_lookup)
 
     def process_token(self, token):
         for t in excluded_tokens:
@@ -95,7 +109,6 @@ class DataProcessor():
     def look_up_for_token_from_id(self, token_id):
         return self.node_token_lookup.inverse[token_id]
 
-
     def look_up_for_id_from_node_type(self, node_type):
         # node_type = node_type.upper()
         node_type_id = self.node_type_lookup[node_type]
@@ -103,6 +116,14 @@ class DataProcessor():
 
     def look_up_for_node_type_from_id(self, node_type_id):
         return self.node_type_lookup.inverse[node_type_id]
+
+    def look_up_for_id_from_subtree(self, subtree):
+        # node_type = node_type.upper()
+        subtree_id = self.subtree_lookup[subtree]
+        return subtree_id
+
+    def look_up_for_subtree_from_id(self, subtree_id):
+        return self.subtree_lookup.inverse[subtree_id]
 
     def save_tokens_vocab(self, tokens, token_vocab_path):
         tokens.sort()
@@ -139,21 +160,39 @@ class DataProcessor():
             return tree
         return None
 
-    def put_tree_into_buckets(self, tree_data):  
-        chosen_bucket_idx = np.argmax(self.bucket_sizes > tree_data["size"])
-        self.buckets[chosen_bucket_idx].append(tree_data)
-     
 
     # Prepare tensor data for training
+    # Not really put the trees into buckets, only put the tree_path and the sub_id into buckets to reduce the cost of computation
     def convert_trees_into_training_indices(self, trees):
-        for tree in trees:
-            tree_data = self.extract_training_data(tree)
-            self.put_tree_into_buckets(tree_data)
+
+        bucket_sizes = np.array(list(range(30 , 7500 , 10)))
+        # Maintain two copy of the buckets of the same dataset for different purposes
+        all_subtrees_buckets = defaultdict(list)
+        # random_subtrees_buckets = defaultdict(list)
+
+        for tree_path, tree_data in trees.items():
+            tree_size = tree_data["size"]
+            chosen_bucket_idx = np.argmax(bucket_sizes > tree_size)
+            print("Putting these ids to bucket : " + str(tree_data["subtree_ids"]))
+            for subtree_id in tree_data["subtree_ids"]:
+                temp_bucket_data = {}
+                temp_bucket_data["file_path"] = tree_path
+                temp_bucket_data["subtree_id"] = subtree_id
+                temp_bucket_data["size"] = tree_data["size"]
+
+                all_subtrees_buckets[chosen_bucket_idx].append(temp_bucket_data)
+
+            # random_subtrees_buckets[chosen_bucket_idx].append(temp_bucket_data)
+
+        print(all_subtrees_buckets)
+        # return all_subtrees_buckets, random_subtrees_buckets, bucket_sizes
+        return all_subtrees_buckets, bucket_sizes
 
 
     def extract_training_data(self, tree_data):
         
-        tree, subtrees, sub_tokens, size, file_path = tree_data["tree"], tree_data["label"], tree_data["sub_tokens"] , tree_data["size"], tree_data["file_path"]
+        tree, subtree_ids, sub_tokens, size, file_path = tree_data["tree"], tree_data["subtree_ids"], tree_data["sub_tokens"] , tree_data["size"], tree_data["file_path"]
+        # tree, sub_tokens, size, file_path = tree_data["tree"], tree_data["sub_tokens"] , tree_data["size"], tree_data["file_path"]
         print("Extracting............", file_path)
         # print(tree)
         node_type_id = []
@@ -209,6 +248,6 @@ class DataProcessor():
         results["children_node_token"] = children_node_token
         results["children_node_sub_tokens_id"] = children_node_sub_tokens_id
         results["size"] = size
-        results["label"] = label
+        results["subtree_ids"] = subtree_ids
 
         return results

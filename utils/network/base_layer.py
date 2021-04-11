@@ -12,8 +12,8 @@ class BaseLayer():
     def __init__(self, opt):
         self.node_type_lookup = self.load_node_type_vocab(opt.node_type_vocabulary_path)
         self.node_token_lookup = self.load_node_type_vocab(opt.token_vocabulary_path)
+        self.subtree_lookup = self.load_subtree_vocab(opt.subtree_vocabulary_path)
 
-        self.label_size = opt.label_size
         self.batch_size = opt.batch_size
 
         self.placeholders = {}
@@ -40,3 +40,15 @@ class BaseLayer():
                 node_type_lookup[line.upper()] = i
 
         return bidict(node_type_lookup)
+
+
+    def load_subtree_vocab(self, subtree_vocab_path):
+        subtree_lookup = {}
+        with open(subtree_vocab_path, "r") as f:
+            data = f.readlines()
+           
+            for i, line in enumerate(data):
+                line = line.replace("\n", "").strip()
+                subtree_lookup[line.upper()] = i
+
+        return bidict(subtree_lookup)
