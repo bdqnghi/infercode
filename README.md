@@ -2,8 +2,6 @@
 
 InferCode works based on the key idea of using an encoder to predict subtrees as a pretext task. Then the weights learned from the encoder can be used to transfer for other downstream tasks. This is to alleviate the need for the huge amount of labeled data to build decent code learning models in Software Engineering. With this concept,  representation models for code can now learn from unlabeled data. 
 
-### [The code is not fully updated, we are working hard to make it available very soon]
-
 ## Process
 - Generate subtrees: First, need to generate pseudo-labels for self-supervised learning. In this case, the pseudo-lables are the subtrees.
 - Train the model: Once the subtrees are generated (the directory subtree_features), we can start to train the model.
