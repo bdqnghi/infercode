@@ -1,0 +1,130 @@
+TensorFlow 2.0 Upgrade Script
+-----------------------------
+Converted 1 files
+Detected 5 issues that require attention
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+File: temp/infercode_network.py
+--------------------------------------------------------------------------------
+temp/infercode_network.py:132:35: WARNING: tf.nn.sampled_softmax_loss requires manual check. `partition_strategy` has been removed from tf.nn.sampled_softmax_loss.  The 'div' strategy will be used by default.
+temp/infercode_network.py:270:34: ERROR: tf.nn.dropout called without arguments, so automatic fix was disabled. tf.nn.dropout has changed the semantics of the second argument.
+temp/infercode_network.py:301:36: WARNING: tf.nn.embedding_lookup requires manual check. `partition_strategy` has been removed from tf.nn.embedding_lookup.  The 'div' strategy will be used by default.
+temp/infercode_network.py:305:36: WARNING: tf.nn.embedding_lookup requires manual check. `partition_strategy` has been removed from tf.nn.embedding_lookup.  The 'div' strategy will be used by default.
+temp/infercode_network.py:317:38: WARNING: tf.nn.embedding_lookup requires manual check. `partition_strategy` has been removed from tf.nn.embedding_lookup.  The 'div' strategy will be used by default.
+================================================================================
+Detailed log follows:
+
+================================================================================
+================================================================================
+Input tree: 'temp/'
+================================================================================
+--------------------------------------------------------------------------------
+Processing file 'temp/infercode_network.py'
+ outputting to 'temp_2/infercode_network.py'
+--------------------------------------------------------------------------------
+
+44:13: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+44:13: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+47:46: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+48:63: INFO: Changing tf.contrib.layers xavier initializer to a tf.compat.v1.keras.initializers.VarianceScaling and converting arguments.
+
+49:47: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+50:56: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+53:68: INFO: Changing tf.contrib.layers xavier initializer to a tf.compat.v1.keras.initializers.VarianceScaling and converting arguments.
+
+57:52: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+58:55: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+60:42: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+61:48: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+64:61: INFO: Changing tf.contrib.layers xavier initializer to a tf.compat.v1.keras.initializers.VarianceScaling and converting arguments.
+
+65:66: INFO: Changing tf.contrib.layers xavier initializer to a tf.compat.v1.keras.initializers.VarianceScaling and converting arguments.
+
+68:60: INFO: Changing tf.contrib.layers xavier initializer to a tf.compat.v1.keras.initializers.VarianceScaling and converting arguments.
+
+69:60: INFO: Changing tf.contrib.layers xavier initializer to a tf.compat.v1.keras.initializers.VarianceScaling and converting arguments.
+
+70:60: INFO: Changing tf.contrib.layers xavier initializer to a tf.compat.v1.keras.initializers.VarianceScaling and converting arguments.
+
+73:54: INFO: Changing tf.contrib.layers xavier initializer to a tf.compat.v1.keras.initializers.VarianceScaling and converting arguments.
+
+76:13: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+76:13: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+106:46: INFO: Renamed 'tf.layers.dense' to 'tf.compat.v1.layers.dense'
+110:43: INFO: Renamed 'tf.layers.dense' to 'tf.compat.v1.layers.dense'
+132:35: WARNING: tf.nn.sampled_softmax_loss requires manual check. `partition_strategy` has been removed from tf.nn.sampled_softmax_loss.  The 'div' strategy will be used by default.
+138:24: INFO: Added keywords to args of function 'tf.reduce_mean'
+144:13: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+144:13: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+145:25: INFO: Added keywords to args of function 'tf.shape'
+146:28: INFO: Added keywords to args of function 'tf.shape'
+160:32: INFO: Renamed keyword argument for tf.nn.softmax from dim to axis
+167:37: INFO: Added keywords to args of function 'tf.reduce_sum'
+193:13: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+193:13: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+200:13: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+200:13: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+221:13: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+221:13: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+225:17: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+225:17: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+234:17: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+234:17: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+244:17: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+244:17: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+249:17: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+249:17: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+250:29: INFO: Added keywords to args of function 'tf.shape'
+251:32: INFO: Added keywords to args of function 'tf.shape'
+252:31: INFO: Added keywords to args of function 'tf.shape'
+270:34: ERROR: tf.nn.dropout called without arguments, so automatic fix was disabled. tf.nn.dropout has changed the semantics of the second argument.
+276:23: INFO: Added keywords to args of function 'tf.shape'
+277:21: INFO: Added keywords to args of function 'tf.shape'
+278:20: INFO: Added keywords to args of function 'tf.shape'
+301:36: INFO: Added keywords to args of function 'tf.nn.embedding_lookup'
+301:36: WARNING: tf.nn.embedding_lookup requires manual check. `partition_strategy` has been removed from tf.nn.embedding_lookup.  The 'div' strategy will be used by default.
+305:36: INFO: Added keywords to args of function 'tf.nn.embedding_lookup'
+305:36: WARNING: tf.nn.embedding_lookup requires manual check. `partition_strategy` has been removed from tf.nn.embedding_lookup.  The 'div' strategy will be used by default.
+306:36: INFO: Added keywords to args of function 'tf.reduce_sum'
+314:21: INFO: Added keywords to args of function 'tf.shape'
+317:38: INFO: Added keywords to args of function 'tf.nn.embedding_lookup'
+317:38: WARNING: tf.nn.embedding_lookup requires manual check. `partition_strategy` has been removed from tf.nn.embedding_lookup.  The 'div' strategy will be used by default.
+318:38: INFO: Added keywords to args of function 'tf.reduce_sum'
+323:13: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+323:13: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+325:25: INFO: Added keywords to args of function 'tf.shape'
+326:28: INFO: Added keywords to args of function 'tf.shape'
+327:27: INFO: Added keywords to args of function 'tf.shape'
+336:13: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+336:13: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+339:25: INFO: Added keywords to args of function 'tf.shape'
+340:28: INFO: Added keywords to args of function 'tf.shape'
+341:27: INFO: Added keywords to args of function 'tf.shape'
+345:16: INFO: Renamed keyword argument for tf.count_nonzero from keep_dims to keepdims
+345:16: INFO: Renamed 'tf.count_nonzero' to 'tf.math.count_nonzero'
+356:46: INFO: Added keywords to args of function 'tf.shape'
+381:19: INFO: Renamed 'tf.where' to 'tf.compat.v1.where'
+392:13: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+392:13: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+394:25: INFO: Added keywords to args of function 'tf.shape'
+395:28: INFO: Added keywords to args of function 'tf.shape'
+400:49: INFO: Added keywords to args of function 'tf.shape'
+413:13: INFO: `name` passed to `name_scope`. Because you may be re-entering an existing scope, it is not safe to convert automatically,  the v2 name_scope does not support re-entering scopes by name.
+
+413:13: INFO: Renamed 'tf.name_scope' to 'tf.compat.v1.name_scope'
+418:19: INFO: Added keywords to args of function 'tf.reduce_mean'
+--------------------------------------------------------------------------------
+
