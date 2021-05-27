@@ -192,72 +192,38 @@ def main(opt):
             for i, var in enumerate(saver._var_list):
                 print('Var {}: {}'.format(i, var))
 
-        if opt.task == 1:
-            for epoch in range(1,  opt.epochs + 1):
-                train_batch_iterator = ThreadedIterator(train_dataset.make_minibatch_iterator(), max_queue_size=opt.worker)
-                train_accs = []
-                for train_step, train_batch_data in enumerate(train_batch_iterator):
-                    print("--------------------------")
-                    print(train_batch_data["batch_subtree_id"])
-                    # print(train_batch_data["batch_subtrees_ids"])
-                    logging.info(str(train_batch_data["batch_subtree_id"]))
-                    _, err = sess.run(
-                        [training_point, infercode.loss],
-                        feed_dict={
-                            infercode.placeholders["node_types"]: train_batch_data["batch_node_types"],
-                            infercode.placeholders["node_tokens"]:  train_batch_data["batch_node_tokens"],
-                            infercode.placeholders["children_indices"]:  train_batch_data["batch_children_indices"],
-                            infercode.placeholders["children_node_types"]: train_batch_data["batch_children_node_types"],
-                            infercode.placeholders["children_node_tokens"]: train_batch_data["batch_children_node_tokens"],
-                            infercode.placeholders["labels"]: train_batch_data["batch_subtree_id"],
-                            infercode.placeholders["dropout_rate"]: 0.3
-                        }
-                    )
-
-                    logging.info("Training at epoch " + str(epoch) + " and step " + str(train_step) + " with loss "  + str(err))
-                    print("Epoch:", epoch, "Step:", train_step, "Training loss:", err)
-                    if train_step % opt.checkpoint_every == 0 and train_step > 0:
-                        saver.save(sess, checkfile)                  
-                        print('Checkpoint saved, epoch:' + str(epoch) + ', step: ' + str(train_step) + ', loss: ' + str(err) + '.')
-              
-
-
-        if opt.task == 0:
-            validation_batch_iterator = ThreadedIterator(validation_dataset.make_minibatch_iterator(), max_queue_size=opt.worker)         
-           
-
-            for val_step, val_batch_data in enumerate(validation_batch_iterator):
-                
-              
-                scores = sess.run(
-                    [corder.code_vector],
+    
+        for epoch in range(1,  opt.epochs + 1):
+            train_batch_iterator = ThreadedIterator(train_dataset.make_minibatch_iterator(), max_queue_size=opt.worker)
+            train_accs = []
+            for train_step, train_batch_data in enumerate(train_batch_iterator):
+                print("--------------------------")
+                print(train_batch_data["batch_subtree_id"])
+                # print(train_batch_data["batch_subtrees_ids"])
+                logging.info(str(train_batch_data["batch_subtree_id"]))
+                _, err = sess.run(
+                    [training_point, infercode.loss],
                     feed_dict={
-                        corder.placeholders["node_types"]: val_batch_data["batch_node_types"],
-                        corder.placeholders["node_tokens"]:  val_batch_data["batch_node_tokens"],
-                        corder.placeholders["children_indices"]:  val_batch_data["batch_children_indices"],
-                        corder.placeholders["children_node_types"]: val_batch_data["batch_children_node_types"],
-                        corder.placeholders["children_node_tokens"]: val_batch_data["batch_children_node_tokens"],
-                        corder.placeholders["dropout_rate"]: 0.0
+                        infercode.placeholders["node_types"]: train_batch_data["batch_node_types"],
+                        infercode.placeholders["node_tokens"]:  train_batch_data["batch_node_tokens"],
+                        infercode.placeholders["children_indices"]:  train_batch_data["batch_children_indices"],
+                        infercode.placeholders["children_node_types"]: train_batch_data["batch_children_node_types"],
+                        infercode.placeholders["children_node_tokens"]: train_batch_data["batch_children_node_tokens"],
+                        infercode.placeholders["labels"]: train_batch_data["batch_subtree_id"],
+                        infercode.placeholders["dropout_rate"]: 0.3
                     }
                 )
-                
 
-                for i, vector in enumerate(scores[0]):
-                    file_name = "analysis/" + opt.dataset + "_" + opt.model_name + "_sampled_softmax_train.csv"
-                    with open(file_name, "a") as f:
-                        vector_score = []
-                        for score in vector:
-                            vector_score.append(str(score))
-                        line = str(val_batch_data["batch_labels"][i]) + "," + " ".join(vector_score)
-                        f.write(line)
-                        f.write("\n")
-                    
-
-
+                logging.info("Training at epoch " + str(epoch) + " and step " + str(train_step) + " with loss "  + str(err))
+                print("Epoch:", epoch, "Step:", train_step, "Training loss:", err)
+                if train_step % opt.checkpoint_every == 0 and train_step > 0:
+                    saver.save(sess, checkfile)                  
+                    print('Checkpoint saved, epoch:' + str(epoch) + ', step: ' + str(train_step) + ', loss: ' + str(err) + '.')
+              
 
 if __name__ == "__main__":
     opt = argument_parser.parse_arguments()
 
     os.environ['CUDA_VISIBLE_DEVICES'] = opt.cuda
-    
+
     main(opt)
