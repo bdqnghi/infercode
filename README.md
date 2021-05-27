@@ -30,33 +30,13 @@ We have prepare an example to illustrate how the command above works, run:
 After running this command, you will see a folder subtrees/ appear under the directory examples/.
 
 
-## Data Preparation
-
-1. Install the required dependencies ```pip install -r requirements.txt```.
-
-2. Download and extract the dataset and the pretrained models;
-
-    -```cd script```
-
-    -```python3 download_data.py```
-
-
-3. Preprocess the data
-    -```cd script```
-    
-    -```source process_data.sh```
-
-This step will process the AST trees, which comprises of 2 steps. First, it will convert the pycparser format into our simple tree format in the form of Python dictionary. Second, it will bucket the trees with similar sizes into the same bucket.
-
-
-
 ## Running the model
 
 1. To train the model:
-    - ```source training_script.sh```
+    - ```source train.sh```
     
 2. To test the model:
-    - ```source testing_script.sh```
+    - ```source infer.sh```
   
 
 ## Notes
