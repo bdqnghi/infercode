@@ -29,18 +29,6 @@ logging.basicConfig(filename='training.log',level=logging.DEBUG)
 np.set_printoptions(threshold=sys.maxsize)
 
 
-
-
-
-# def train_model():
-
-#     train_dataset = MethodNamePredictionData(opt, opt.train_path, True, False, False)
-
-    # train_batch_iterator = ThreadedIterator(train_dataset.make_minibatch_iterator(), max_queue_size=10)
-    # for train_step, train_batch_data in enumerate(train_batch_iterator):
-    #     print("-------------------------------------")
-    #     print(train_batch_data)
-
 def form_model_path(opt):
     model_traits = {}
   
@@ -56,9 +44,7 @@ def form_model_path(opt):
     for k, v in model_traits.items():
         model_path.append(k + "_" + v)
     
-
-
-    return opt.dataset + "_" + opt.model_name + "_" + "sampled_softmax" + "_" + "-".join(model_path)
+    return opt.dataset + "_" + "sampled_softmax" + "_" + "-".join(model_path)
 
 def load_vocabs(opt):
 
@@ -95,48 +81,6 @@ def load_vocabs(opt):
 
     return node_type_lookup, node_token_lookup, subtree_lookup
 
-def get_best_f1_score(opt):
-    best_f1_score = 0.0
-    
-    try:
-        os.mkdir("model_accuracy")
-    except Exception as e:
-        print(e)
-    
-    opt.model_accuracy_path = os.path.join("model_accuracy",form_model_path(opt) + ".txt")
-
-    if os.path.exists(opt.model_accuracy_path):
-        print("Model accuracy path exists : " + str(opt.model_accuracy_path))
-        with open(opt.model_accuracy_path,"r") as f4:
-            data = f4.readlines()
-            for line in data:
-                best_f1_score = float(line.replace("\n",""))
-    else:
-        print("Creating model accuracy path : " + str(opt.model_accuracy_path))
-        with open(opt.model_accuracy_path,"w") as f5:
-            f5.write("0.0")
-    
-    return best_f1_score
-
-
-def get_accuracy(target, sample_id):
-    """
-    Calculate accuracy
-    """
-    max_seq = max(target.shape[1], sample_id.shape[1])
-    if max_seq - target.shape[1]:
-        target = np.pad(
-            target,
-            [(0,0),(0,max_seq - target.shape[1])],
-            'constant')
-    if max_seq - sample_id.shape[1]:
-        sample_id = np.pad(
-            sample_id,
-            [(0,0),(0,max_seq - sample_id.shape[1])],
-            'constant')
-
-    return np.mean(np.equal(target, sample_id))
-
 
 def main(opt):
     
@@ -155,14 +99,10 @@ def main(opt):
     opt.node_token_lookup = node_token_lookup
     opt.subtree_lookup = subtree_lookup
 
-    if opt.task == 1:
-        train_dataset = TreeLoader(opt, True, False, False)
+  
+    validation_dataset = TreeLoader(opt)
 
-    if opt.task == 0:
-        val_opt = copy.deepcopy(opt)
-        val_opt.node_token_lookup = node_token_lookup
-        validation_dataset = TreeLoader(val_opt, False, False, True)
-
+  
     print("Initializing tree caps model...........")
     infercode = InferCodeModel(opt)
     print("Finished initializing corder model...........")
@@ -198,16 +138,15 @@ def main(opt):
 
         for val_step, val_batch_data in enumerate(validation_batch_iterator):
             
-          
             scores = sess.run(
-                [corder.code_vector],
+                [infercode.code_vector],
                 feed_dict={
-                    corder.placeholders["node_types"]: val_batch_data["batch_node_types"],
-                    corder.placeholders["node_tokens"]:  val_batch_data["batch_node_tokens"],
-                    corder.placeholders["children_indices"]:  val_batch_data["batch_children_indices"],
-                    corder.placeholders["children_node_types"]: val_batch_data["batch_children_node_types"],
-                    corder.placeholders["children_node_tokens"]: val_batch_data["batch_children_node_tokens"],
-                    corder.placeholders["dropout_rate"]: 0.0
+                    infercode.placeholders["node_types"]: val_batch_data["batch_node_types"],
+                    infercode.placeholders["node_tokens"]:  val_batch_data["batch_node_tokens"],
+                    infercode.placeholders["children_indices"]:  val_batch_data["batch_children_indices"],
+                    infercode.placeholders["children_node_types"]: val_batch_data["batch_children_node_types"],
+                    infercode.placeholders["children_node_tokens"]: val_batch_data["batch_children_node_tokens"],
+                    infercode.placeholders["dropout_rate"]: 0.0
                 }
             )
             
@@ -218,7 +157,7 @@ def main(opt):
                     vector_score = []
                     for score in vector:
                         vector_score.append(str(score))
-                    line = str(val_batch_data["batch_labels"][i]) + "," + " ".join(vector_score)
+                    line = str(val_batch_data["batch_file_path"][i]) + "," + " ".join(vector_score)
                     f.write(line)
                     f.write("\n")
                     

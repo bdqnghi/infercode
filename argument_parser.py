@@ -55,14 +55,10 @@ def parse_arguments():
                         help='0 for max pooling, 1 for attention with sum pooling, 2 for attention with max pooling, 3 for attention with average pooling')
     parser.add_argument('--distributed_function', type=int, default=0,
                         choices=range(0, 2), help='0 for softmax, 1 for sigmoid')
-    parser.add_argument('--train_path', default="OJ_pkl_train_test_val/train",
-                        help='path of training data')
-    parser.add_argument('--val_path', default="OJ_pkl_train_test_val/train",
-                        help='path of validation data')
-    parser.add_argument('--train_label_path', default="OJ_stmt_train_test_val/train",
-                        help='path of training data')
-    parser.add_argument('--val_label_path', default="OJ_stmt_train_test_val/train",
-                        help='path of validation data')
+    parser.add_argument('--data_path', default="OJ_pkl_train_test_val/train",
+                        help='path of data pickle')
+    parser.add_argument('--label_path', default="OJ_stmt_train_test_val/train",
+                        help='path of label to predict')
     parser.add_argument('--node_type_vocabulary_path', default="vocab/type_vocab.csv",
                         help='the path to node type vocab')
     parser.add_argument('--token_vocabulary_path', default="vocab/token_vocab.csv",
@@ -75,10 +71,8 @@ def parse_arguments():
                         choices=range(0, 3), help='loss function, 0 for softmax, 1 for sampled softmax, 2 for nce')
     parser.add_argument('--num_sampling', type=int, default=2, help="number of subtrees to be sampled for sampled softmax")
     parser.add_argument('--num_files_threshold', type=int, default=20000)
-    parser.add_argument('--top_a', type=int, default=10)
     parser.add_argument('--num_conv', type=int, default=1)
     parser.add_argument('--output_size', type=int, default=30)
-    parser.add_argument('--model_name', default="stmt")
     parser.add_argument('--dataset', default="OJ_new")
     parser.add_argument('--include_token', type=int,
                         default=1, help='including token for initializing or not, 1 for including, 0 for excluding')

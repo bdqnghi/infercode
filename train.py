@@ -4,6 +4,7 @@ import random
 import pickle
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
+from utils.data.tree_processor import TreeProcessor
 from utils.data.tree_loader import TreeLoader
 from utils.threaded_iterator import ThreadedIterator
 # from utils.network.dense_ggnn_method_name_prediction import DenseGGNNModel
@@ -30,17 +31,6 @@ np.set_printoptions(threshold=sys.maxsize)
 
 
 
-
-
-# def train_model():
-
-#     train_dataset = MethodNamePredictionData(opt, opt.train_path, True, False, False)
-
-    # train_batch_iterator = ThreadedIterator(train_dataset.make_minibatch_iterator(), max_queue_size=10)
-    # for train_step, train_batch_data in enumerate(train_batch_iterator):
-    #     print("-------------------------------------")
-    #     print(train_batch_data)
-
 def form_model_path(opt):
     model_traits = {}
   
@@ -51,13 +41,10 @@ def form_model_path(opt):
     model_traits["include_token"] = str(opt.include_token)
     # model_traits["version"] = "direct-routing"
     
-    
     model_path = []
     for k, v in model_traits.items():
         model_path.append(k + "_" + v)
     
-
-
     return opt.dataset + "_" + opt.model_name + "_" + "sampled_softmax" + "_" + "-".join(model_path)
 
 def load_vocabs(opt):
@@ -155,13 +142,7 @@ def main(opt):
     opt.node_token_lookup = node_token_lookup
     opt.subtree_lookup = subtree_lookup
 
-    if opt.task == 1:
-        train_dataset = TreeLoader(opt, True, False, False)
-
-    if opt.task == 0:
-        val_opt = copy.deepcopy(opt)
-        val_opt.node_token_lookup = node_token_lookup
-        validation_dataset = TreeLoader(val_opt, False, False, True)
+    train_dataset = TreeLoader(opt)
 
     print("Initializing tree caps model...........")
     infercode = InferCodeModel(opt)
@@ -180,7 +161,6 @@ def main(opt):
 
     # best_f1_score = get_best_f1_score(opt)
     # print("Best f1 score : " + str(best_f1_score))
-
 
     
     with tf.Session() as sess:
