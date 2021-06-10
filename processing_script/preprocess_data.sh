@@ -1,5 +1,5 @@
 DATASET=java-small
-DATA_DIRECTORY=../java-small-test/training
+DATA_DIRECTORY=../java-small/training
 SUBTREE_DIRECTORY=../java-small-subtrees
 NODE_TYPE_VOCAB_PATH=../vocab/${DATASET}/type_vocab.csv
 NODE_TOKEN_VOCAB_PATH=../vocab/${DATASET}/token_vocab.csv
