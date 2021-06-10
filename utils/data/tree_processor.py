@@ -13,7 +13,6 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 import pickle
 from utils import identifier_splitting
-from tensorflow.keras.preprocessing.sequence import pad_sequences
 import hashlib
 import csv
 import copy
@@ -75,7 +74,7 @@ class TreeProcessor(BaseTreeUtils):
         base_name =os.path.basename(tree_directory)
         parent_base_name = os.path.basename(os.path.dirname(tree_directory))
         base_path = str(os.path.dirname(tree_directory))
-        saved_input_filename = "%s/%s-%s.pkl" % (base_path, parent_base_name, base_name)
+        self.saved_input_filename = "%s/%s-%s.pkl" % (base_path, parent_base_name, base_name)
 
         # if os.path.exists(saved_input_filename):
         #     print("Loading existing data file: ", str(saved_input_filename))
@@ -83,12 +82,14 @@ class TreeProcessor(BaseTreeUtils):
            
         # else:
         self.trees = self.load_program_data(tree_directory, subtree_directory)
+        
+
+    def process_data(self):
         self.train_buckets, self.val_buckets, self.bucket_sizes = self.put_trees_into_bucket(self.trees)
         print("Serializing......")
         self.data = (self.train_buckets, self.val_buckets, self.bucket_sizes, self.trees)
-        pickle.dump(self.data, open(saved_input_filename, "wb" ) )
+        pickle.dump(self.data, open(self.saved_input_filename, "wb" ) )
 
-   
 
     def load_subtrees(self, subtree_file_path):
 
@@ -143,7 +144,6 @@ class TreeProcessor(BaseTreeUtils):
         # trees_dict = {}
         all_subtrees_dict = {}
 
-
         for subdir , dirs, files in os.walk(subtree_vocab_directory): 
             for file in tqdm(files):
                 subtree_file_path = os.path.join(subdir,file)
@@ -162,10 +162,10 @@ class TreeProcessor(BaseTreeUtils):
                     
                     if file_name in all_subtrees_dict:
                         subtree_file_path = all_subtrees_dict[file_name]
-                        # print(features_file_path)
+                        print(subtree_file_path)
 
                         if os.path.exists(subtree_file_path):
-                            # print("Loading subtrees from : ", subtree_file_path)
+                            print("Loading subtrees from : ", subtree_file_path)
                             file_subtrees_dict, subtrees_ids = self.load_subtrees(subtree_file_path)
                             # print(file_subtrees_dict)
                             if len(subtrees_ids) > 0:
