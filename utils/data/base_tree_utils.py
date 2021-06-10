@@ -1,4 +1,5 @@
 from bidict import bidict
+import pickle
 
 class BaseTreeUtils():
 
