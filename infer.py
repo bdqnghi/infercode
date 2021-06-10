@@ -46,41 +46,6 @@ def form_model_path(opt):
     
     return opt.dataset + "_" + "sampled_softmax" + "_" + "-".join(model_path)
 
-def load_vocabs(opt):
-
-    node_type_lookup = {}
-    node_token_lookup = {}
-    subtree_lookup = {}
-
-    node_type_vocabulary_path = opt.node_type_vocabulary_path
-    token_vocabulary_path = opt.token_vocabulary_path
-    subtree_vocabulary_path = opt.subtree_vocabulary_path
-
-    with open(node_type_vocabulary_path, "r") as f2:
-        data = f2.readlines()
-        for line in data:
-            splits = line.replace("\n", "").split(",")
-            node_type_lookup[splits[1]] = int(splits[0])
-
-    with open(token_vocabulary_path, "r") as f3:
-        data = f3.readlines()
-        for line in data:
-            splits = line.replace("\n", "").split(",")
-            node_token_lookup[splits[1]] = int(splits[0])
-
-    with open(subtree_vocabulary_path, "r") as f4:
-        data = f4.readlines()
-        for i, line in enumerate(data):
-            splits = line.replace("\n", "").split(",")
-            subtree_lookup[splits[0]] = i
-
-
-    node_type_lookup = bidict(node_type_lookup)
-    node_token_lookup = bidict(node_token_lookup)
-    subtree_lookup = bidict(subtree_lookup)
-
-    return node_type_lookup, node_token_lookup, subtree_lookup
-
 
 def main(opt):
     
@@ -91,22 +56,12 @@ def main(opt):
     print("Loss : " + str(opt.loss))
     if ckpt and ckpt.model_checkpoint_path:
         print("Continue training with old model : " + str(checkfile))
-
-    print("Loading vocabs.........")
-    node_type_lookup, node_token_lookup, subtree_lookup = load_vocabs(opt)
-
-    opt.node_type_lookup = node_type_lookup
-    opt.node_token_lookup = node_token_lookup
-    opt.subtree_lookup = subtree_lookup
-
   
     validation_dataset = TreeLoader(opt)
-
   
     print("Initializing tree caps model...........")
     infercode = InferCodeModel(opt)
     print("Finished initializing corder model...........")
-
 
     loss_node = infercode.loss
     optimizer = RAdamOptimizer(opt.lr)
