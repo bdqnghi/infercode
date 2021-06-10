@@ -11,12 +11,16 @@ InferCode works based on the key idea of using an encoder to predict subtrees as
 
 ### Convert raw source code into SrcML AST:
 
-```python3 generate_srcml_pkl.py```
+```python
+python3 generate_srcml_pkl.py
+```
 
 ### Generate Subtrees
 We have packaged the tool to generate the subtrees into a docker image. To generate the subtrees, simply run:
 
-```docker run --rm -v $(pwd):/data -w /data --entrypoint /usr/local/bin/subtree -it yijun/fast input_folder output_folder node_types.csv```
+```bash
+docker run --rm -v $(pwd):/data -w /data --entrypoint /usr/local/bin/subtree -it yijun/fast input_folder output_folder node_types.csv
+```
 
 Note that you need to install Docker for the command to work.
 - node_types.csv: contains the node types to consider in the AST
@@ -31,8 +35,9 @@ nodeid-nodetype-nodetoke: is the information of a node in a subtree
 The subtrees are sequentialized using the DFS algorithm.
 
 We have prepare an example to illustrate how the command above works, run:
-```docker run --rm -v $(pwd):/data -w /data --entrypoint /usr/local/bin/subtree -it yijun/fast examples/raw_code examples/subtrees node_types.csv```
-
+```bash
+docker run --rm -v $(pwd):/data -w /data --entrypoint /usr/local/bin/subtree -it yijun/fast examples/raw_code examples/subtrees node_types.csv
+```
 After running this command, you will see a folder subtrees/ appear under the directory examples/.
 
 
