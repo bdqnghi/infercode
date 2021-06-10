@@ -3,11 +3,17 @@
 InferCode works based on the key idea of using an encoder to predict subtrees as a pretext task. Then the weights learned from the encoder can be used to transfer for other downstream tasks. This is to alleviate the need for the huge amount of labeled data to build decent code learning models in Software Engineering. With this concept,  representation models for code can now learn from unlabeled data. 
 
 ## Process
+- Convert raw source code into SrcML AST as the protobuf format.
 - Generate subtrees: First, need to generate pseudo-labels for self-supervised learning. In this case, the pseudo-lables are the subtrees.
 - Train the model: Once the subtrees are generated (the directory subtree_features), we can start to train the model.
 - Infer vector from raw code: Once the encoder is trained, we can use it to generate vector for any source code snippet. Unfortunately, our tool could not receive raw source code directly, the tool can only receive the AST. It is because we need to rely on an external tool to generate the AST representation of the code. So we need to convert the code into the AST first.
 
-## Generate Subtrees
+
+### Convert raw source code into SrcML AST:
+
+```python3 generate_srcml_pkl.py```
+
+### Generate Subtrees
 We have packaged the tool to generate the subtrees into a docker image. To generate the subtrees, simply run:
 
 ```docker run --rm -v $(pwd):/data -w /data --entrypoint /usr/local/bin/subtree -it yijun/fast input_folder output_folder node_types.csv```
