@@ -30,15 +30,9 @@ rootid-roottype-roottoken,nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken no
 
 rootid-roottype-roottoken: is the information of the root node of a subtree
 
-nodeid-nodetype-nodetoke: is the information of a node in a subtree
+nodeid-nodetype-nodetoken: is the information of a node in a subtree
 
 The subtrees are sequentialized using the DFS algorithm.
-
-We have prepare an example to illustrate how the command above works, run:
-```bash
-docker run --rm -v $(pwd):/data -w /data --entrypoint /usr/local/bin/subtree -it yijun/fast examples/raw_code examples/subtrees node_types.csv
-```
-After running this command, you will see a folder subtrees/ appear under the directory examples/.
 
 
 ## Running the model
