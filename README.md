@@ -16,21 +16,21 @@ python3 generate_srcml_pkl.py
 ```
 
 ### Generate Subtrees
-We have packaged the tool to generate the subtrees into a docker image. To generate the subtrees, simply run:
+We have packaged the tool to generate the subtrees into a docker image. To generate the subtrees, run:
 
-```bash
-docker run --rm -v $(pwd):/data -w /data --entrypoint /usr/local/bin/subtree -it yijun/fast input_folder output_folder node_types.csv
+```python
+python3 generate_subtrees.py --input_path java-small --output_path java-small-subtrees --node_types-path node_types.csv"
 ```
 
 Note that you need to install Docker for the command to work.
-- node_types.csv: contains the node types to consider in the AST
-- input_folder: is the path to the directory that contains the raw source code files, e.g., .cpp, .c, .java, .cs
-- output_folder: is the path to the directory that contains the subtrees, each subtree is in this format:
-rootid-roottype-roottoken,nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken ..., depth_of_the_subtree
+- node_types.csv: contains the node types to consider in the AST. 
+- input_folder: is the path to the directory that contains the raw source code files, e.g., .cpp, .c, .java, .cs.
+- output_folder: is the path to the directory that contains the subtrees.
 
-rootid-roottype-roottoken: is the information of the root node of a subtree
-
-nodeid-nodetype-nodetoken: is the information of a node in a subtree
+Each file in the output folder contains the subtrees, each subtree is in this format:
+- rootid-roottype-roottoken,nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken ..., depth_of_the_subtree
+- rootid-roottype-roottoken: is the information of the root node of a subtree
+- nodeid-nodetype-nodetoken: is the information of a node in a subtree
 
 The subtrees are sequentialized using the DFS algorithm.
 
