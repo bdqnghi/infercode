@@ -9,7 +9,7 @@ InferCode works based on the key idea of using an encoder to predict subtrees as
 - Infer vector from raw code: Once the encoder is trained, we can use it to generate vector for any source code snippet. Unfortunately, our tool could not receive raw source code directly, the tool can only receive the AST. It is because we need to rely on an external tool to generate the AST representation of the code. So we need to convert the code into the AST first.
 
 
-### Convert raw source code into SrcML AST:
+### Convert raw source code into SrcML AST
 
 ```python
 python3 generate_srcml_pkl.py --input_path java-small/training --output_path java-small-pkl/training
