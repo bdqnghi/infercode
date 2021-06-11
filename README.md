@@ -36,6 +36,7 @@ The subtrees are sequentialized using the DFS algorithm.
 
 
 ## Running the model
+We have included our pretrained model on the java-small dataset in the directory ``model/``.
 
 1. To train the model:
     - ```source train.sh```
