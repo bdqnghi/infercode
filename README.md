@@ -28,9 +28,9 @@ Note that you need to install Docker for the command to work.
 - output_folder: is the path to the directory that contains the subtrees.
 
 Each file in the output folder contains the subtrees, each subtree is in this format:
-- rootid-roottype-roottoken,nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken ..., depth_of_the_subtree
-- rootid-roottype-roottoken: is the information of the root node of a subtree
-- nodeid-nodetype-nodetoken: is the information of a node in a subtree
+- ```rootid-roottype-roottoken,nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken ..., depth_of_the_subtree```
+- ```rootid-roottype-roottoken```: is the information of the root node of a subtree
+- ```nodeid-nodetype-nodetoken```: is the information of a node in a subtree
 
 The subtrees are sequentialized using the DFS algorithm.
 
