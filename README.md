@@ -12,7 +12,7 @@ InferCode works based on the key idea of using an encoder to predict subtrees as
 ### Convert raw source code into SrcML AST:
 
 ```python
-python3 generate_srcml_pkl.py
+python3 generate_srcml_pkl.py --input_path java-small/training --output_path java-small-pkl/training
 ```
 
 ### Generate Subtrees
