@@ -1,5 +1,5 @@
 DATASET=java-small
-DATA_PATH=java-small-test/java-small-test-training.pkl
+DATA_PATH=java-small-pkl/java-small-pkl-training.pkl
 NODE_TYPE_VOCAB_PATH=vocab/${DATASET}/type_vocab.csv
 NODE_TOKEN_VOCAB_PATH=vocab/${DATASET}/token_vocab.csv
 SUBTREE_VOCAB_PATH=subtrees_vocab/${DATASET}_subtrees_vocab_train.csv

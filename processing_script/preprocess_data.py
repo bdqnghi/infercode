@@ -18,9 +18,8 @@ from utils import evaluation
 
 
 def main(opt):
-    
     tree_processor = TreeProcessor(opt)
-
+    tree_processor.process_data()
 
 if __name__ == "__main__":
     opt = argument_parser.parse_arguments()

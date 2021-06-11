@@ -23,14 +23,16 @@ from .base_tree_utils import BaseTreeUtils
 
 class TreeLoader(BaseTreeUtils):
    
-    def __init__(self, opt):
+    def __init__(self, opt, training=True):
         super().__init__(opt)
         print("Loading existing data file: ", str(opt.data_path))
-        self.train_buckets, self.val_buckets, self.bucket_sizes, self.trees = pickle.load(open(opt.data_path, "rb"))
+        self.all_subtrees_bucket, self.random_subtrees_bucket, self.bucket_sizes, self.trees = pickle.load(open(opt.data_path, "rb"))
         
         self.tree_size_threshold_lower = opt.tree_size_threshold_lower
         self.tree_size_threshold_upper = opt.tree_size_threshold_upper
         self.batch_size = opt.batch_size
+
+        self.is_training = training
    
 
     def extract_training_data(self, tree_data):
@@ -187,13 +189,14 @@ class TreeLoader(BaseTreeUtils):
         return padded_inputs
 
     def make_minibatch_iterator(self):
-        buckets = self.train_buckets
+        buckets = self.random_subtrees_bucket
 
-        # if self.is_validating:
-        #     print("Using validating buckets...........")
-        #     buckets = self.val_buckets
-        # else:
-        #     print("Using training buckets...........")
+        # This part is important
+        if not self.is_training:
+            print("Using random subtrees buckets...........")
+            buckets = self.random_subtrees_bucket
+        else:
+            print("Using all subtrees buckets...........")
 
         bucket_ids = list(buckets.keys())
         random.shuffle(bucket_ids)

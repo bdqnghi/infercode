@@ -270,9 +270,11 @@ class TreeProcessor(BaseTreeUtils):
     def put_trees_into_bucket(self, trees):
         bucket_sizes = np.array(list(range(30 , 7500 , 10)))
 
-        # Maintain two copy of the buckets of the same dataset for different purposes
-        train_buckets = defaultdict(list)
-        val_buckets = defaultdict(list)
+        """
+        Maintain two copy of the buckets of the same dataset for different purposes
+        """
+        all_subtrees_bucket = defaultdict(list)
+        random_subtrees_bucket = defaultdict(list)
 
         for tree_path, tree_data in trees.items():
             tree_size = tree_data["size"]
@@ -285,6 +287,6 @@ class TreeProcessor(BaseTreeUtils):
                 
                 train_buckets[chosen_bucket_idx].append(temp_bucket_data)
 
-            val_buckets[chosen_bucket_idx].append(temp_bucket_data)
+            random_subtrees_bucket[chosen_bucket_idx].append(random.choice(all_subtrees_bucket[chosen_bucket_idx]))
 
-        return train_buckets, val_buckets, bucket_sizes
+        return all_subtrees_bucket, random_subtrees_bucket, bucket_sizes

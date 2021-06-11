@@ -57,7 +57,7 @@ def main(opt):
     if ckpt and ckpt.model_checkpoint_path:
         print("Continue training with old model : " + str(checkfile))
   
-    validation_dataset = TreeLoader(opt)
+    validation_dataset = TreeLoader(opt, training=False)
   
     print("Initializing tree caps model...........")
     infercode = InferCodeModel(opt)
