@@ -60,5 +60,18 @@ From the above lines, the code snippet ``../java-small-pkl/training/cassandra/Pr
 
 ## Notes
 - For a fair comparison with InferCode in the future, please consider
-  + Using the same ASTs structure, since different ASTs structures can effect the performance a lot. We use SrcML in InferCode
-  + Using the similar settings of InferCode on the embedding size
+  + Using the same ASTs structure, since different ASTs structures can affect the performance significantly. We use SrcML in InferCode
+  + Using the similar settings of InferCode on the embedding size (e.g. node type embedding, node token embedding
+
+## Citation
+If you find this tutorial useful for your research, please consider citing our paper:
+
+@INPROCEEDINGS{9402028,
+  author={Bui, Nghi D. Q. and Yu, Yijun and Jiang, Lingxiao},
+  booktitle={2021 IEEE/ACM 43rd International Conference on Software Engineering (ICSE)}, 
+  title={InferCode: Self-Supervised Learning of Code Representations by Predicting Subtrees}, 
+  year={2021},
+  volume={},
+  number={},
+  pages={1186-1197},
+  doi={10.1109/ICSE43902.2021.00109}}
