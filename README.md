@@ -19,7 +19,7 @@ python3 generate_srcml_pkl.py --input_path java-small/training --output_path jav
 We have packaged the tool to generate the subtrees into a docker image. To generate the subtrees, run:
 
 ```python
-python3 generate_subtrees.py --input_path java-small --output_path java-small-subtrees --node_types-path node_types.csv"
+python3 generate_subtrees.py --input_path java-small --output_path java-small-subtrees --node_types_path node_types.csv"
 ```
 
 Note that you need to install Docker for the command to work.
