@@ -66,6 +66,7 @@ From the above lines, the code snippet ``../java-small-pkl/training/cassandra/Pr
 ## Citation
 If you find this tutorial useful for your research, please consider citing our paper:
 
+```bibtex
 @INPROCEEDINGS{9402028,
   author={Bui, Nghi D. Q. and Yu, Yijun and Jiang, Lingxiao},
   booktitle={2021 IEEE/ACM 43rd International Conference on Software Engineering (ICSE)}, 
@@ -75,3 +76,4 @@ If you find this tutorial useful for your research, please consider citing our p
   number={},
   pages={1186-1197},
   doi={10.1109/ICSE43902.2021.00109}}
+```
