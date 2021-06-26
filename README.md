@@ -19,7 +19,7 @@ python3 generate_srcml_pkl.py --input_path java-small/training --output_path jav
 We have packaged the tool to generate the subtrees into a docker image. To generate the subtrees, run:
 
 ```python
-python3 generate_subtrees.py --input_path java-small --output_path java-small-subtrees --node_types-path node_types.csv"
+python3 generate_subtrees.py --input_path java-small --output_path java-small-subtrees --node_types_path node_types.csv"
 ```
 
 Note that you need to install Docker for the command to work.
@@ -28,9 +28,9 @@ Note that you need to install Docker for the command to work.
 - output_folder: is the path to the directory that contains the subtrees.
 
 Each file in the output folder contains the subtrees, each subtree is in this format:
-- rootid-roottype-roottoken,nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken ..., depth_of_the_subtree
-- rootid-roottype-roottoken: is the information of the root node of a subtree
-- nodeid-nodetype-nodetoken: is the information of a node in a subtree
+- ```rootid-roottype-roottoken,nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken nodeid-nodetype-nodetoken ..., depth_of_the_subtree```
+- ```rootid-roottype-roottoken```: is the information of the root node of a subtree
+- ```nodeid-nodetype-nodetoken```: is the information of a node in a subtree
 
 The subtrees are sequentialized using the DFS algorithm.
 
@@ -54,9 +54,25 @@ The script ```infer.sh``` will generate a file ``embeddings.csv`` which contains
 ```
 From the above lines, the code snippet ``../java-small-pkl/training/cassandra/PrimaryKeyRestrictionSetTest_testboundsAsClusteringWithSingleEqAndSliceRestrictions.pkl`` has the embedding of 50 dimesions ``1.1499425 -0.19412728 0.025818767 -0.2866059 0.19273856 -0.06809299 1.1991358 0.40147448 -0.97792214 -0.68117386 -0.0483394 -0.27027488 0.31322715 0.27028129 -0.5513973 0.28848505 -0.24859701 0.034147665 1.804145 2.4824371 -0.5267946 -0.23878224 -0.40670702 -0.7706362 -0.09361468 1.2538036 0.5394761 -0.1507038 -0.3530482 -0.30349588 0.53271616 -0.36247018 1.4977133 1.4030226 -0.08373651 0.4650672 0.28952408 0.047818244 -0.39104933 -0.4957824 0.31893227 0.28905505 -0.11106472 1.3183858 -0.8878206 -0.3408521 -0.77557135 -0.77547204 -0.39631933 -0.08504311``
 
+## Datasets
+- SrcML AST format of java-small: https://ai4code.s3.ap-southeast-1.amazonaws.com/java-small-pkl.zip
 
 
 ## Notes
 - For a fair comparison with InferCode in the future, please consider
-  + Using the same ASTs structure, since different ASTs structures can effect the performance a lot. We use SrcML in InferCode
-  + Using the similar settings of InferCode on the embedding size
+  + Using the same ASTs structure, since different ASTs structures can affect the performance significantly. We use SrcML in InferCode
+  + Using the similar settings of InferCode on the embedding size (e.g. node type embedding, node token embedding
+
+## Citation
+If you find this tutorial useful for your research, please consider citing our paper:
+
+```bibtex
+@inproceedings{bui2021infercode,
+  title={InferCode: Self-Supervised Learning of Code Representations by Predicting Subtrees},
+  author={Bui, Nghi DQ and Yu, Yijun and Jiang, Lingxiao},
+  booktitle={2021 IEEE/ACM 43rd International Conference on Software Engineering (ICSE)},
+  pages={1186--1197},
+  year={2021},
+  organization={IEEE}
+}
+```
