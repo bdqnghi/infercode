@@ -45,7 +45,7 @@ def form_model_path(opt):
     for k, v in model_traits.items():
         model_path.append(k + "_" + v)
     
-    return opt.dataset + "_" + opt.model_name + "_" + "sampled_softmax" + "_" + "-".join(model_path)
+    return opt.dataset + "_" + "sampled_softmax" + "_" + "-".join(model_path)
 
 
 def get_best_f1_score(opt):
