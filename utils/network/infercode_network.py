@@ -4,10 +4,11 @@ import tensorflow as tf
 # from utils import softmax
 # from utils import get_shape
 import numpy as np
+from .base_layer import BaseLayer
 
-
-class InferCodeModel():
+class InferCodeModel(BaseLayer):
     def __init__(self, opt):
+        super().__init__(opt)
         self.include_token = opt.include_token
         self.num_conv = opt.num_conv
         self.output_size = opt.output_size
@@ -26,16 +27,10 @@ class InferCodeModel():
         # self.node_dim = self.node_type_dim
 
         self.loss_function = opt.loss
-        self.node_type_lookup = opt.node_type_lookup
-        self.node_token_lookup = opt.node_token_lookup
-        self.subtree_lookup = opt.subtree_lookup
 
         self.num_subtrees = len(self.subtree_lookup.keys())
         self.num_sampling = opt.num_sampling
         
-
-        self.placeholders = {}
-        self.weights = {}
         self.init_net()
         self.feed_forward()
 
