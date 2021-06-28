@@ -3,11 +3,14 @@
 InferCode works based on the key idea of using an encoder to predict subtrees as a pretext task. Then the weights learned from the encoder can be used to transfer for other downstream tasks. This is to alleviate the need for the huge amount of labeled data to build decent code learning models in Software Engineering. With this concept, representation learning models for  source code can now learn from unlabeled data. 
 
 ## Process
+- Download the datasets
 - Convert raw source code into SrcML AST as the protobuf format.
 - Generate subtrees: First, need to generate pseudo-labels for self-supervised learning. In this case, the pseudo-lables are the subtrees.
 - Train the model: Once the subtrees are generated (the directory subtree_features), we can start to train the model.
 - Infer vector from raw code: Once the encoder is trained, we can use it to generate vector for any source code snippet. Unfortunately, our tool could not receive raw source code directly, the tool can only receive the AST. It is because we need to rely on an external tool to generate the AST representation of the code. So we need to convert the code into the AST first.
 
+## Datasets
+- SrcML AST format of java-small: https://ai4code.s3.ap-southeast-1.amazonaws.com/java-small-pkl.zip
 
 ### Convert raw source code into SrcML AST
 
@@ -54,8 +57,6 @@ The script ```infer.sh``` will generate a file ``embeddings.csv`` which contains
 ```
 From the above lines, the code snippet ``../java-small-pkl/training/cassandra/PrimaryKeyRestrictionSetTest_testboundsAsClusteringWithSingleEqAndSliceRestrictions.pkl`` has the embedding of 50 dimesions ``1.1499425 -0.19412728 0.025818767 -0.2866059 0.19273856 -0.06809299 1.1991358 0.40147448 -0.97792214 -0.68117386 -0.0483394 -0.27027488 0.31322715 0.27028129 -0.5513973 0.28848505 -0.24859701 0.034147665 1.804145 2.4824371 -0.5267946 -0.23878224 -0.40670702 -0.7706362 -0.09361468 1.2538036 0.5394761 -0.1507038 -0.3530482 -0.30349588 0.53271616 -0.36247018 1.4977133 1.4030226 -0.08373651 0.4650672 0.28952408 0.047818244 -0.39104933 -0.4957824 0.31893227 0.28905505 -0.11106472 1.3183858 -0.8878206 -0.3408521 -0.77557135 -0.77547204 -0.39631933 -0.08504311``
 
-## Datasets
-- SrcML AST format of java-small: https://ai4code.s3.ap-southeast-1.amazonaws.com/java-small-pkl.zip
 
 
 ## Notes
