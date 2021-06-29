@@ -2,24 +2,20 @@
 
 InferCode works based on the key idea of using an encoder to predict subtrees as a pretext task. Then the weights learned from the encoder can be used to transfer for other downstream tasks. This is to alleviate the need for the huge amount of labeled data to build decent code learning models in Software Engineering. With this concept, representation learning models for  source code can now learn from unlabeled data. 
 
-## Process
-- Download the datasets
-- Convert raw source code into SrcML AST as the protobuf format.
-- Generate subtrees: First, need to generate pseudo-labels for self-supervised learning. In this case, the pseudo-lables are the subtrees.
-- Train the model: Once the subtrees are generated (the directory subtree_features), we can start to train the model.
-- Infer vector from raw code: Once the encoder is trained, we can use it to generate vector for any source code snippet. Unfortunately, our tool could not receive raw source code directly, the tool can only receive the AST. It is because we need to rely on an external tool to generate the AST representation of the code. So we need to convert the code into the AST first.
-
+## Training Process
 ## Datasets
-- SrcML AST format of java-small: https://ai4code.s3.ap-southeast-1.amazonaws.com/java-small-pkl.zip
+- SrcML AST format of java-small data: https://ai4code.s3.ap-southeast-1.amazonaws.com/java-small-pkl.zip
+- SrcML AST format of OJ data: https://ai4code.s3.ap-southeast-1.amazonaws.com/OJ_raw_pkl.pkl
 
 ### Convert raw source code into SrcML AST
+First, we need to convert the raw dataset into the SrcML AST. We have packaged the tool into docker and write a python script to execute the docker command. To generate the SrcML AST, run:
 
 ```python
 python3 generate_srcml_pkl.py --input_path java-small/training --output_path java-small-pkl/training
 ```
 
 ### Generate Subtrees
-We have packaged the tool to generate the subtrees into a docker image. To generate the subtrees, run:
+Next, we need to genearte the subtrees as the pseudo-label for training. We have packaged the tool to generate the subtrees into a docker image. To generate the subtrees, run:
 
 ```python
 python3 generate_subtrees.py --input_path java-small --output_path java-small-subtrees --node_types_path node_types.csv"
@@ -38,15 +34,19 @@ Each file in the output folder contains the subtrees, each subtree is in this fo
 The subtrees are sequentialized using the DFS algorithm.
 
 
-## Running the model
-We have included our pretrained model on the java-small dataset in the directory ``model/``.
+## Training the model
+To start training, run:
+```bash
+source train.sh
+```
 
-1. To train the model:
-    - ```source train.sh```
-    
-2. To test the model:
-    - ```source infer.sh```
-  
+## Inferring code vector from pretrained model
+We have included our pretrained model on the java-small dataset in the directory ``model/``. To test the model, run:
+
+```bash
+source infer.sh
+```
+
 The script ```infer.sh``` will generate a file ``embeddings.csv`` which contains the embeddings of the code snippets, for example:
 
 ```
