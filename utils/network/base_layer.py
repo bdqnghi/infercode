@@ -12,7 +12,10 @@ class BaseLayer():
     def __init__(self, opt):
         self.node_type_lookup = self.load_node_type_vocab(opt.node_type_vocabulary_path)
         self.node_token_lookup = self.load_node_type_vocab(opt.token_vocabulary_path)
+
+        
         self.subtree_lookup = self.load_subtree_vocab(opt.subtree_vocabulary_path)
+        self.num_subtrees = len(self.subtree_lookup.keys())
 
         self.batch_size = opt.batch_size
 

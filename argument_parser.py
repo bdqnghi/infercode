@@ -64,11 +64,11 @@ def parse_arguments():
     parser.add_argument('--token_vocabulary_path', default="vocab/token_vocab.csv",
                         help='the path to node token vocab')
     parser.add_argument('--subtree_vocabulary_path', default="subtree_features/OJ_stmt_features_train.csv",
-                        help='the path to subtree vocab')
+                        help='the path to subtree vocab', required=False)
     parser.add_argument('--output_embedding_path', default="embeddings.csv",
                         help='path to output embeddings')
-    parser.add_argument('--task', type=int, default=1,
-                        choices=range(0, 2), help='0 for training, 1 for testing')
+    parser.add_argument('--training', type=int, default=1,
+                        choices=range(0, 2), help='0 for testing, 1 for training')
     parser.add_argument('--loss', type=int, default=0,
                         choices=range(0, 3), help='loss function, 0 for softmax, 1 for sampled softmax, 2 for nce')
     parser.add_argument('--num_sampling', type=int, default=2, help="number of subtrees to be sampled for sampled softmax")

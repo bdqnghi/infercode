@@ -27,9 +27,9 @@ class InferCodeModel(BaseLayer):
         # self.node_dim = self.node_type_dim
 
         self.loss_function = opt.loss
-
-        self.num_subtrees = len(self.subtree_lookup.keys())
         self.num_sampling = opt.num_sampling
+
+        self.training = opt.training
         
         self.init_net()
         self.feed_forward()

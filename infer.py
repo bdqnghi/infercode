@@ -57,7 +57,7 @@ def main(opt):
     if ckpt and ckpt.model_checkpoint_path:
         print("Continue training with old model : " + str(checkfile))
   
-    validation_dataset = TreeLoader(opt, training=False)
+    validation_dataset = TreeLoader(opt)
   
     print("Initializing tree caps model...........")
     infercode = InferCodeModel(opt)
@@ -107,7 +107,7 @@ def main(opt):
             
 
             
-            with open(opt.output_embedding_path, "w") as f:
+            with open(opt.output_embedding_path, "a") as f:
                 for i, vector in enumerate(scores[0]):
                     vector_score = []
                     for score in vector:

@@ -23,7 +23,7 @@ from .base_tree_utils import BaseTreeUtils
 
 class TreeLoader(BaseTreeUtils):
    
-    def __init__(self, opt, training=True):
+    def __init__(self, opt):
         super().__init__(opt)
         print("Loading existing data file: ", str(opt.data_path))
         self.all_subtrees_bucket, self.random_subtrees_bucket, self.bucket_sizes, self.trees = pickle.load(open(opt.data_path, "rb"))
@@ -32,7 +32,7 @@ class TreeLoader(BaseTreeUtils):
         self.tree_size_threshold_upper = opt.tree_size_threshold_upper
         self.batch_size = opt.batch_size
 
-        self.is_training = training
+        self.is_training = opt.training
    
 
     def extract_training_data(self, tree_data):
