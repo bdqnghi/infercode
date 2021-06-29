@@ -74,7 +74,7 @@ def parse_arguments():
     parser.add_argument('--num_sampling', type=int, default=2, help="number of subtrees to be sampled for sampled softmax")
     parser.add_argument('--num_files_threshold', type=int, default=20000)
     parser.add_argument('--num_conv', type=int, default=1)
-    parser.add_argument('--output_size', type=int, default=30)
+    parser.add_argument('--output_size', type=int, default=50)
     parser.add_argument('--model', default="java-small")
     parser.add_argument('--include_token', type=int,
                         default=1, help='including token for initializing or not, 1 for including, 0 for excluding')
