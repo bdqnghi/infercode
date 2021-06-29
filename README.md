@@ -57,7 +57,7 @@ The script ```infer.sh``` will generate a file ``embeddings.csv`` which contains
 ```
 From the above lines, the code snippet ``../java-small-pkl/training/cassandra/PrimaryKeyRestrictionSetTest_testboundsAsClusteringWithSingleEqAndSliceRestrictions.pkl`` has the embedding of 50 dimesions ``1.1499425 -0.19412728 0.025818767 -0.2866059 0.19273856 -0.06809299 1.1991358 0.40147448 -0.97792214 -0.68117386 -0.0483394 -0.27027488 0.31322715 0.27028129 -0.5513973 0.28848505 -0.24859701 0.034147665 1.804145 2.4824371 -0.5267946 -0.23878224 -0.40670702 -0.7706362 -0.09361468 1.2538036 0.5394761 -0.1507038 -0.3530482 -0.30349588 0.53271616 -0.36247018 1.4977133 1.4030226 -0.08373651 0.4650672 0.28952408 0.047818244 -0.39104933 -0.4957824 0.31893227 0.28905505 -0.11106472 1.3183858 -0.8878206 -0.3408521 -0.77557135 -0.77547204 -0.39631933 -0.08504311``
 
-
+To process and infer code embedding for your own dataset, please refer to this page [PROCESS YOUR OWN DATA](GENERATE.md).
 
 ## Notes
 - For a fair comparison with InferCode in the future, please consider
