@@ -4,7 +4,8 @@ InferCode works based on the key idea of using an encoder to predict subtrees as
 
 ## Datasets
 - SrcML AST format of java-small data: https://ai4code.s3.ap-southeast-1.amazonaws.com/java-small-pkl.zip
-- SrcML AST format of OJ data: https://ai4code.s3.ap-southeast-1.amazonaws.com/OJ_raw_pkl.pkl
+- SrcML AST format of OJ data: https://ai4code.s3.ap-southeast-1.amazonaws.com/OJ_raw_pkl.zip
+- Raw OJ data from Mou et al.: https://ai4code.s3.ap-southeast-1.amazonaws.com/OJ_raw.zip
 
 ## Quick run
 If you want to have a quick run to see how the code work, first download the small version of the pre-processed OJ data from this url : https://ai4code.s3.ap-southeast-1.amazonaws.com/OJ_raw_pkl_small.zip, unzip it, then run:
@@ -22,7 +23,7 @@ Then you can see an ```embeddings.csv``` file that have the content similar to t
 ```
 Each line is the a file name that contain the code snippet and its corresponding code vectors.
 
-## Training Process
+## End-to-End Training Process
 
 
 ### Convert raw source code into SrcML AST
