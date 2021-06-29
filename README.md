@@ -35,14 +35,17 @@ The subtrees are sequentialized using the DFS algorithm.
 
 ## Training the model
 To start training, run:
-
-    - ```source train.sh```
+```bash
+source train.sh
+```
 
 ## Inferring code vector from pretrained model
 We have included our pretrained model on the java-small dataset in the directory ``model/``. To test the model, run:
 
-    - ```source infer.sh```
-  
+```bash
+source infer.sh
+```
+
 The script ```infer.sh``` will generate a file ``embeddings.csv`` which contains the embeddings of the code snippets, for example:
 
 ```
