@@ -2,6 +2,7 @@ MODEL=java-small
 DATA_PATH=OJ_raw_pkl_test/OJ_raw_pkl_test.pkl
 NODE_TYPE_VOCAB_PATH=vocab/type_vocab.csv
 NODE_TOKEN_VOCAB_PATH=vocab/${MODEL}/token_vocab.csv
+OUTPUT_EMBEDDING_PATH=embedding.csv
 BATCH_SIZE=3
 WORKER=4
 CHECKPOINT_EVERY=300

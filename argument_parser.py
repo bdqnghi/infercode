@@ -65,6 +65,8 @@ def parse_arguments():
                         help='the path to node token vocab')
     parser.add_argument('--subtree_vocabulary_path', default="subtree_features/OJ_stmt_features_train.csv",
                         help='the path to subtree vocab')
+    parser.add_argument('--output_embedding_path', default="embeddings.csv",
+                        help='path to output embeddings')
     parser.add_argument('--task', type=int, default=1,
                         choices=range(0, 2), help='0 for training, 1 for testing')
     parser.add_argument('--loss', type=int, default=0,

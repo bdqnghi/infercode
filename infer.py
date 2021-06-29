@@ -106,9 +106,9 @@ def main(opt):
             )
             
 
-            for i, vector in enumerate(scores[0]):
-                file_name = "embeddings.csv"
-                with open(file_name, "a") as f:
+            
+            with open(opt.output_embedding_path, "w") as f:
+                for i, vector in enumerate(scores[0]):
                     vector_score = []
                     for score in vector:
                         vector_score.append(str(score))
