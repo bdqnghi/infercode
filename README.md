@@ -41,7 +41,7 @@ python3 extract_all_subtrees --input ../java-small-subtrees --output ../subtrees
 ```
 
 ### Preprocess the data for training
-```python
+```bash
 cd processing_script
 source preprocess_data.sh
 ```
