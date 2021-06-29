@@ -4,7 +4,8 @@ InferCode works based on the key idea of using an encoder to predict subtrees as
 
 ## Training Process
 ## Datasets
-- SrcML AST format of java-small: https://ai4code.s3.ap-southeast-1.amazonaws.com/java-small-pkl.zip
+- SrcML AST format of java-small data: https://ai4code.s3.ap-southeast-1.amazonaws.com/java-small-pkl.zip
+- SrcML AST format of OJ data: https://ai4code.s3.ap-southeast-1.amazonaws.com/OJ_raw_pkl.pkl
 
 ### Convert raw source code into SrcML AST
 First, we need to convert the raw dataset into the SrcML AST. We have packaged the tool into docker and write a python script to execute the docker command. To generate the SrcML AST, run:
