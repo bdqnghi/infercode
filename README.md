@@ -8,10 +8,34 @@ InferCode works based on the key idea of using an encoder to predict subtrees as
 - Raw OJ data from Mou et al.: https://ai4code.s3.ap-southeast-1.amazonaws.com/OJ_raw.zip
 
 ## Quick run
-If you want to have a quick run to see how the code work, first download the small version of the pre-processed OJ data from this url : https://ai4code.s3.ap-southeast-1.amazonaws.com/OJ_raw_pkl_small.zip, unzip it, then run:
-
+If you want to have a quick run to see how to infer the code vectors from some code snippets, please follow these steps:
+- ```git clone git@github.com:bdqnghi/infercode.git```
+- Download the small version of the OJ data from Peking University from this link: https://ai4code.s3.ap-southeast-1.amazonaws.com/OJ_raw_small.zip , then unzip it.
 ```bash
-source infer.sh
+cd infercode
+wget https://ai4code.s3.ap-southeast-1.amazonaws.com/OJ_raw_small.zip
+unzip OJ_raw_small
+```
+- Next, convert the all of the code snippets in OJ_raw_small to SrcML AST format, run: 
+
+```python
+python3 generate_srcml_pkl.py --input_path OJ_raw_small --output_path OJ_raw_pkl_small
+```
+You will see an ```OJ_raw_pkl_small``` folder that is generated after this command.
+
+- Next, we need to pre-process the data, run:
+```bash
+cd processing_script
+python3 preprocess_data.py --input_data_directory ../OJ_raw_pkl_small --output_path ../OJ_raw_pkl_small/OJ_raw_pkl_small.pkl  \
+--node_type_vocabulary_path ../vocab/type_vocab.csv --token_vocabulary_path ../vocab/java-small/token_vocab.csv
+```
+You will see a pickle file in the path ```OJ_raw_pkl_small/OJ_raw_pkl_small.pkl``` that is generated after this command. This file is the data that has been pre-processed for the deep learning training/inferring purpose.
+
+- Finally, we can infer the code vectors from the pre-processed data:
+- 
+```bash
+python3 infer.py --data_path OJ_raw_pkl_small/OJ_raw_pkl_small.pkl --subtree_vocabulary_path subtrees_vocab/java-small_subtrees_vocab.csv \
+--node_type_vocabulary_path vocab/type_vocab.csv --token_vocabulary_path vocab/java-small/token_vocab.csv
 ```
 
 Then you can see an ```embeddings.csv``` file that have the content similar to this:
