@@ -15,10 +15,10 @@ python3 generate_srcml_pkl.py --input_path java-small/training --output_path jav
 ```
 
 ### Generate Subtrees
-Next, we need to genearte the subtrees as the pseudo-label for training. We have packaged the tool to generate the subtrees into a docker image. To generate the subtrees, run:
+Next, we need to generate the subtrees as the pseudo-label for training. We have packaged the tool to generate the subtrees into a docker image. To generate the subtrees, run:
 
 ```python
-python3 generate_subtrees.py --input_path java-small --output_path java-small-subtrees --node_types_path node_types.csv"
+python3 generate_subtrees.py --input_path java-small --output_path java-small-subtrees --node_types_path node_types.csv
 ```
 
 Note that you need to install Docker for the command to work.
@@ -33,14 +33,26 @@ Each file in the output folder contains the subtrees, each subtree is in this fo
 
 The subtrees are sequentialized using the DFS algorithm.
 
+Once we have all of the subtrees for all of the samples in our training data, we need to merge them into a set of subtree vocabulary, to do so, run:
 
-## Training the model
+```python
+cd processing_script
+python3 extract_all_subtrees --input ../java-small-subtrees --output ../subtrees_vocab/java-small-subtrees-vocab.txt
+```
+
+### Preprocess the data for training
+```bash
+cd processing_script
+source preprocess_data.sh
+```
+
+### Training the model
 To start training, run:
 ```bash
 source train.sh
 ```
 
-## Inferring code vector from pretrained model
+### Inferring code vector from pretrained model
 We have included our pretrained model on the java-small dataset in the directory ``model/``. To test the model, run:
 
 ```bash
@@ -56,8 +68,6 @@ The script ```infer.sh``` will generate a file ``embeddings.csv`` which contains
 .....
 ```
 From the above lines, the code snippet ``../java-small-pkl/training/cassandra/PrimaryKeyRestrictionSetTest_testboundsAsClusteringWithSingleEqAndSliceRestrictions.pkl`` has the embedding of 50 dimesions ``1.1499425 -0.19412728 0.025818767 -0.2866059 0.19273856 -0.06809299 1.1991358 0.40147448 -0.97792214 -0.68117386 -0.0483394 -0.27027488 0.31322715 0.27028129 -0.5513973 0.28848505 -0.24859701 0.034147665 1.804145 2.4824371 -0.5267946 -0.23878224 -0.40670702 -0.7706362 -0.09361468 1.2538036 0.5394761 -0.1507038 -0.3530482 -0.30349588 0.53271616 -0.36247018 1.4977133 1.4030226 -0.08373651 0.4650672 0.28952408 0.047818244 -0.39104933 -0.4957824 0.31893227 0.28905505 -0.11106472 1.3183858 -0.8878206 -0.3408521 -0.77557135 -0.77547204 -0.39631933 -0.08504311``
-
-
 
 ## Notes
 - For a fair comparison with InferCode in the future, please consider
