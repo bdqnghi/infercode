@@ -2,7 +2,6 @@ MODEL=java-small
 DATA_PATH=OJ_raw_pkl_test/OJ_raw_pkl_test.pkl
 NODE_TYPE_VOCAB_PATH=vocab/type_vocab.csv
 NODE_TOKEN_VOCAB_PATH=vocab/${MODEL}/token_vocab.csv
-SUBTREE_VOCAB_PATH=subtrees_vocab/${MODEL}_subtrees_vocab_train.csv
 BATCH_SIZE=3
 WORKER=4
 CHECKPOINT_EVERY=300
@@ -20,7 +19,7 @@ EPOCH=20
 PYTHON=python3
 ${PYTHON} infer.py \
 --data_path ${DATA_PATH} \
---subtree_vocabulary_path ${SUBTREE_VOCAB_PATH} --cuda ${CUDA} \
+--subtree_vocabulary_path --cuda ${CUDA} \
 --batch_size ${BATCH_SIZE} --checkpoint_every ${CHECKPOINT_EVERY} \
 --node_type_dim ${NODE_TYPE_DIM} --node_token_dim ${NODE_TOKEN_DIM} \
 --num_conv ${NUM_CONV} \
