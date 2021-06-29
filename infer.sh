@@ -2,7 +2,7 @@ MODEL=java-small
 DATA_PATH=OJ_raw_pkl_small/OJ_raw_pkl_small.pkl
 NODE_TYPE_VOCAB_PATH=vocab/type_vocab.csv
 NODE_TOKEN_VOCAB_PATH=vocab/${MODEL}/token_vocab.csv
-SUBTREE_VOCAB_PATH=subtrees_vocab/${MODEL}_subtrees_vocab_train.csv
+SUBTREE_VOCAB_PATH=subtrees_vocab/${MODEL}_subtrees_vocab.csv
 OUTPUT_EMBEDDING_PATH=embedding.csv
 BATCH_SIZE=3
 WORKER=4
@@ -22,11 +22,11 @@ PYTHON=python3
 ${PYTHON} infer.py \
 --data_path ${DATA_PATH} \
 --subtree_vocabulary_path ${SUBTREE_VOCAB_PATH} --cuda ${CUDA} \
---batch_size ${BATCH_SIZE} --checkpoint_every ${CHECKPOINT_EVERY} \
+--batch_size ${BATCH_SIZE} \
 --node_type_dim ${NODE_TYPE_DIM} --node_token_dim ${NODE_TOKEN_DIM} \
 --num_conv ${NUM_CONV} \
 --node_type_vocabulary_path ${NODE_TYPE_VOCAB_PATH} \
 --token_vocabulary_path ${NODE_TOKEN_VOCAB_PATH} \
---training ${TRAINING} --epochs ${EPOCH} --worker ${WORKER} \
+--training ${TRAINING} --worker ${WORKER} \
 --include_token ${INCLUDE_TOKEN} --output_size ${CONV_DIM} --model ${MODEL} \
 --tree_size_threshold_upper ${TREE_SIZE_THRESHOLD_UPPER} --tree_size_threshold_lower ${TREE_SIZE_THRESHOLD_LOWER}

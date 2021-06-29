@@ -44,7 +44,7 @@ class TreeProcessor(BaseTreeUtils):
    
     def __init__(self, opt):
         super().__init__(opt)
-        tree_directory = opt.data_directory
+        tree_directory = opt.input_data_directory
         subtree_directory = opt.subtree_directory
         all_subtrees_path = opt.subtree_vocabulary_path
         self.process_data_for_training = opt.training
