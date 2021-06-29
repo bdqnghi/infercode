@@ -23,22 +23,6 @@ csv.field_size_limit(sys.maxsize)
 
 excluded_tokens = [",","{",";","}",")","(",'"',"'","`",""," ","[]","[","]","/",":",".","''","'.'","b", "\\", "'['", "']","''"]
 
-def _onehot(i, total):
-    zeros = np.zeros(total)
-    zeros[i] = 1.0
-    return zeros
-
-def _soft_onehot(list_i, total):
-    zeros = np.zeros(total)
-    for i in list_i:
-        zeros[i] = 1
-    return zeros
-
-def softmax(x):
-    """Compute softmax values for each sets of scores in x."""
-    e_x = np.exp(x - np.max(x))
-    return e_x / e_x.sum(axis=0) # only difference
-
 
 def process_token(token):
     for t in excluded_tokens:
@@ -56,12 +40,6 @@ def remove_noisy_tokens(tokens):
     return temp_tokens
 
 
-def softmax(x):
-    """Compute softmax values for each sets of scores in x."""
-    e_x = np.exp(x - np.max(x))
-    return e_x / e_x.sum(axis=0) # only difference
-
-
 class TreeProcessor(BaseTreeUtils):
    
     def __init__(self, opt):
@@ -69,13 +47,12 @@ class TreeProcessor(BaseTreeUtils):
         tree_directory = opt.data_directory
         subtree_directory = opt.subtree_directory
         all_subtrees_path = opt.subtree_vocabulary_path
-   
-
-        base_name =os.path.basename(tree_directory)
-        parent_base_name = os.path.basename(os.path.dirname(tree_directory))
-        base_path = str(os.path.dirname(tree_directory))
-        self.saved_input_filename = "%s/%s-%s.pkl" % (base_path, parent_base_name, base_name)
-
+        self.process_data_for_training = opt.training
+        if self.process_data_for_training == 1:
+            print("Processing data for training!!")
+        else:
+            print("Processing data for inferring!!")
+        self.output_path = opt.output_path
         # if os.path.exists(saved_input_filename):
         #     print("Loading existing data file: ", str(saved_input_filename))
         #     self.train_buckets, self.val_buckets, self.bucket_sizes, self.trees = pickle.load(open(saved_input_filename, "rb"))
@@ -88,7 +65,7 @@ class TreeProcessor(BaseTreeUtils):
         self.train_buckets, self.val_buckets, self.bucket_sizes = self.put_trees_into_bucket(self.trees)
         print("Serializing......")
         self.data = (self.train_buckets, self.val_buckets, self.bucket_sizes, self.trees)
-        pickle.dump(self.data, open(self.saved_input_filename, "wb" ) )
+        pickle.dump(self.data, open(self.output_path, "wb" ) )
 
 
     def load_subtrees(self, subtree_file_path):
@@ -135,8 +112,6 @@ class TreeProcessor(BaseTreeUtils):
         return file_subtrees_dict, subtree_ids
 
 
-
-
     def load_program_data(self, tree_directory, subtree_vocab_directory):
         # trees is to store meta data of trees
         trees = {}
@@ -144,12 +119,15 @@ class TreeProcessor(BaseTreeUtils):
         # trees_dict = {}
         all_subtrees_dict = {}
 
-        for subdir , dirs, files in os.walk(subtree_vocab_directory): 
-            for file in tqdm(files):
-                subtree_file_path = os.path.join(subdir,file)
-                subtree_file_name = os.path.basename(subtree_file_path)
-                subtree_file_name = subtree_file_name.replace(".ids.csv", "")
-                all_subtrees_dict[subtree_file_name] = subtree_file_path
+        # This condition is to check if we need to load the subtrees or not
+        # For training, we need to load the subtrees. For testing, we dont need
+        if self.process_data_for_training:
+            for subdir , dirs, files in os.walk(subtree_vocab_directory): 
+                for file in tqdm(files):
+                    subtree_file_path = os.path.join(subdir,file)
+                    subtree_file_name = os.path.basename(subtree_file_path)
+                    subtree_file_name = subtree_file_name.replace(".ids.csv", "")
+                    all_subtrees_dict[subtree_file_name] = subtree_file_path
 
         for subdir , dirs, files in os.walk(tree_directory): 
             for file in tqdm(files):
@@ -160,38 +138,36 @@ class TreeProcessor(BaseTreeUtils):
                 
                     file_name = os.path.basename(pkl_file_path).replace(".pkl", "")
                     
-                    if file_name in all_subtrees_dict:
-                        subtree_file_path = all_subtrees_dict[file_name]
-                        print(subtree_file_path)
+                    srcml_representation = self.load_tree_from_pickle_file(pkl_file_path)
+                    # print(pb_representation)
+                    root = srcml_representation.element
 
-                        if os.path.exists(subtree_file_path):
-                            print("Loading subtrees from : ", subtree_file_path)
-                            file_subtrees_dict, subtrees_ids = self.load_subtrees(subtree_file_path)
-                            # print(file_subtrees_dict)
-                            if len(subtrees_ids) > 0:
+                    tree, size, tokens = self._traverse_tree(root)
+                    tree_data = {
+                        "tree": tree,
+                        "tokens": tokens,
+                        "size": size,
+                        "file_path": pkl_file_path
+                    }
 
-                                # label = int(pkl_file_path_splits[len(pkl_file_path_splits)-2]) - 1 # uncomment this line later if there are bugs
-                                # print(pkl_file_path)
-                                pb_representation = self.load_tree_from_pickle_file(pkl_file_path)
-                                # print(pb_representation)
-                                root = pb_representation.element
+                    if self.process_data_for_training == 1:
+                        if file_name in all_subtrees_dict:
+                            subtree_file_path = all_subtrees_dict[file_name]
+                            print(subtree_file_path)
 
-                                tree, size, tokens = self._traverse_tree(root)
-                                
-                                # print(tokens)
-                                tree_data = {
-                                    "tree": tree,
-                                    "tokens": tokens,
-                                    "subtrees_dict": file_subtrees_dict,
-                                    "subtrees_ids": subtrees_ids,
-                                    "size": size,
-                                    "file_path": pkl_file_path
-                                }
+                            if os.path.exists(subtree_file_path):
+                                print("Loading subtrees from : ", subtree_file_path)
+                                file_subtrees_dict, subtrees_ids = self.load_subtrees(subtree_file_path)
+                                # print(file_subtrees_dict)
+                                if len(subtrees_ids) > 0:
 
-                                trees[pkl_file_path] = tree_data
-                                # trees.append(tree_data)
-                    else:
-                        print("Missing subtrees : ", file_name)
+                                    tree_data["subtrees_dict"] = file_subtrees_dict
+                                    tree_data["subtrees_ids"] = subtrees_ids
+                                    
+                                    
+                        else:
+                            print("Missing subtrees : ", file_name)
+                    trees[pkl_file_path] = tree_data
                           
         return trees
 
@@ -277,16 +253,21 @@ class TreeProcessor(BaseTreeUtils):
         random_subtrees_bucket = defaultdict(list)
 
         for tree_path, tree_data in trees.items():
+
             tree_size = tree_data["size"]
             chosen_bucket_idx = np.argmax(bucket_sizes > tree_size)
-            print("Putting these ids to bucket : " + str(tree_data["subtrees_ids"]))
-            for subtree_id in tree_data["subtrees_ids"]:
-                temp_bucket_data = {}
-                temp_bucket_data["file_path"] = tree_path
-                temp_bucket_data["subtree_id"] = subtree_id
-                
-                train_buckets[chosen_bucket_idx].append(temp_bucket_data)
+            
+            if self.process_data_for_training == 1:
+                print("Putting these ids to bucket : " + str(tree_data["subtrees_ids"]))
+                for subtree_id in tree_data["subtrees_ids"]:
+                    temp_bucket_data = {}
+                    temp_bucket_data["file_path"] = tree_path
+                    temp_bucket_data["subtree_id"] = subtree_id
+                    
+                    all_subtrees_bucket[chosen_bucket_idx].append(temp_bucket_data)
 
-            random_subtrees_bucket[chosen_bucket_idx].append(random.choice(all_subtrees_bucket[chosen_bucket_idx]))
+                random_subtrees_bucket[chosen_bucket_idx].append(random.choice(all_subtrees_bucket[chosen_bucket_idx]))
+            else:
+                random_subtrees_bucket[chosen_bucket_idx].append(tree_data)
 
         return all_subtrees_bucket, random_subtrees_bucket, bucket_sizes

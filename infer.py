@@ -44,7 +44,7 @@ def form_model_path(opt):
     for k, v in model_traits.items():
         model_path.append(k + "_" + v)
     
-    return opt.dataset + "_" + "sampled_softmax" + "_" + "-".join(model_path)
+    return opt.model + "_" + "sampled_softmax" + "_" + "-".join(model_path)
 
 
 def main(opt):

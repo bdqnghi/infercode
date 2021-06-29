@@ -88,8 +88,52 @@ class TreeLoader(BaseTreeUtils):
      
         return node_indexes, node_types, node_tokens, node_tokens_text, children_indices, children_node_types, children_node_tokens, token_ids, size, file_path
 
-                
-    def make_batch(self, batch_data):
+    def make_batch_for_inferring(self, batch_data):
+        batch_node_indexes = []
+        batch_node_types = []
+        batch_node_tokens = []
+        batch_node_tokens_text = []
+        batch_children_indices = []
+        batch_children_node_types = []
+        batch_children_node_tokens = []
+        batch_tree_size = []
+        batch_file_path = []
+        batch_token_ids = []
+        for tree_data in batch_data:
+            node_indexes, node_types, node_tokens, node_tokens_text, children_indices, children_node_types, children_node_tokens, token_ids, size, file_path = self.extract_training_data(tree_data)
+            
+            # random_subtree_id = self.random_sampling_subtree(tree_data["subtrees_ids"])
+
+            batch_node_indexes.append(node_indexes)
+            batch_node_types.append(node_types)
+            batch_node_tokens.append(node_tokens)
+            batch_node_tokens_text.append(node_tokens_text)
+            batch_children_indices.append(children_indices)
+            batch_children_node_types.append(children_node_types)
+            batch_children_node_tokens.append(children_node_tokens)
+            batch_tree_size.append(size)
+            batch_file_path.append(file_path)
+            batch_token_ids.append(token_ids)
+
+        # print(batch_token_ids)
+        batch_token_ids = pad_sequences(batch_token_ids, padding='post', value=self.look_up_for_id_of_token("<PAD>"))
+        batch_node_types, batch_node_tokens, batch_children_indices, batch_children_node_types, batch_children_node_tokens = self._pad_batch(batch_node_types, batch_node_tokens, batch_children_indices, batch_children_node_types, batch_children_node_tokens)
+        
+        batch_obj = {
+            "batch_node_indexes": batch_node_indexes,
+            "batch_node_types": np.asarray(batch_node_types),
+            "batch_node_tokens": np.asarray(batch_node_tokens),
+            "batch_node_tokens_text": batch_node_tokens_text,
+            "batch_children_indices": np.asarray(batch_children_indices),
+            "batch_children_node_types": np.asarray(batch_children_node_types),
+            "batch_children_node_tokens": np.asarray(batch_children_node_tokens),
+            "batch_token_ids": batch_token_ids,
+            "batch_tree_size": batch_tree_size,
+            "batch_file_path": batch_file_path,
+        }
+        return batch_obj
+
+    def make_batch_for_training(self, batch_data):
         batch_node_indexes = []
         batch_node_types = []
         batch_node_tokens = []
@@ -126,21 +170,27 @@ class TreeLoader(BaseTreeUtils):
         
         batch_obj = {
             "batch_node_indexes": batch_node_indexes,
-            "batch_node_types": batch_node_types,
-            "batch_node_tokens": batch_node_tokens,
+            "batch_node_types": np.asarray(batch_node_types),
+            "batch_node_tokens": np.asarray(batch_node_tokens),
             "batch_node_tokens_text": batch_node_tokens_text,
-            "batch_children_indices": batch_children_indices,
-            "batch_children_node_types": batch_children_node_types,
-            "batch_children_node_tokens": batch_children_node_tokens,
+            "batch_children_indices": np.asarray(batch_children_indices),
+            "batch_children_node_types": np.asarray(batch_children_node_types),
+            "batch_children_node_tokens": np.asarray(batch_children_node_tokens),
             "batch_token_ids": batch_token_ids,
-            "batch_length_targets": batch_length_targets,
             "batch_tree_size": batch_tree_size,
             "batch_file_path": batch_file_path,
-            "batch_subtree_id": batch_subtree_id
+            "batch_subtree_id": np.reshape("batch_subtree_id", (self.batch_size, 1))
         }
         return batch_obj
+        
+    def make_batch(self, batch_data):
+        if self.is_training:
+            return self.make_batch_for_training(batch_data)
+        else:
+            return self.make_batch_for_inferring(batch_data)
 
-    def _pad_batch(self, batch_node_types, batch_node_tokens, batch_children_indices, batch_children_node_types, batch_children_node_tokens):
+    def _pad_batch(self, batch_node_types, batch_node_tokens, batch_children_indices, 
+                    batch_children_node_types, batch_children_node_tokens):
         # if not nodes:
             # return [], [], []
         # batch_node_types
@@ -218,8 +268,8 @@ class TreeLoader(BaseTreeUtils):
             #     bucket_data = bucket_data[:sampling_size]
     
             for i, tree_data in enumerate(bucket_data):
-                
                 size = self.trees[tree_data["file_path"]]["size"]
+
                 # if self.is_training:
                 if size > self.tree_size_threshold_lower and size < self.tree_size_threshold_upper:
                     elements.append(tree_data)
@@ -228,30 +278,9 @@ class TreeLoader(BaseTreeUtils):
                 #     elements.append(tree_data)
                 #     samples += 1
 
-                    
                 if samples >= self.batch_size:
-                    
                     batch_obj = self.make_batch(elements)
-                    
-                    batch_node_indicators = self._produce_mask_vector(batch_obj["batch_node_types"]) 
-                    # for node in batch_nodes:
-                    #     print(len(node))
-                    batch = {}
-                    batch["batch_node_indexes"] = batch_obj["batch_node_indexes"]
-                    batch["batch_node_types"] = np.asarray(batch_obj["batch_node_types"])
-                    batch["batch_node_tokens"] = np.asarray(batch_obj["batch_node_tokens"])
-                    batch["batch_node_tokens_text"] = batch_obj["batch_node_tokens_text"]
-                    batch["batch_children_indices"] = np.asarray(batch_obj["batch_children_indices"])
-                    batch["batch_children_node_types"] = np.asarray(batch_obj["batch_children_node_types"])
-                    batch["batch_children_node_tokens"] = np.asarray(batch_obj["batch_children_node_tokens"])
-                    batch["batch_tree_size"] = batch_obj["batch_tree_size"]
-                    batch["batch_file_path"] = batch_obj["batch_file_path"]
-                    batch["batch_node_indicators"] = batch_node_indicators
-                    batch["batch_token_ids"] = batch_obj["batch_token_ids"]
-                    batch["batch_length_targets"] = batch_obj["batch_length_targets"]
-                    batch["batch_subtree_id"] = np.reshape(batch_obj["batch_subtree_id"], (self.batch_size, 1))
-
-            
-                    yield batch
+                
+                    yield batch_obj
                     elements = []
                     samples = 0
