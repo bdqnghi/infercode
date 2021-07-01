@@ -27,15 +27,14 @@ You will see an ```OJ_raw_pkl_small``` folder that is generated after this comma
 ```bash
 cd processing_script
 python3 preprocess_data.py --input_data_directory ../OJ_raw_pkl_small --output_path ../OJ_raw_pkl_small/OJ_raw_pkl_small.pkl  \
---node_type_vocabulary_path ../vocab/type_vocab.csv --token_vocabulary_path ../vocab/java-small/token_vocab.csv
+--node_type_vocabulary_path ../vocab/type_vocab.csv --token_vocabulary_path ../vocab/java-small/token_vocab.csv --training 0
 ```
 You will see a pickle file in the path ```OJ_raw_pkl_small/OJ_raw_pkl_small.pkl``` that is generated after this command. This file is the data that has been pre-processed for the deep learning training/inferring purpose.
 
 - Finally, we can infer the code vectors from the pre-processed data:
-- 
 ```bash
 python3 infer.py --data_path OJ_raw_pkl_small/OJ_raw_pkl_small.pkl --subtree_vocabulary_path subtrees_vocab/java-small_subtrees_vocab.csv \
---node_type_vocabulary_path vocab/type_vocab.csv --token_vocabulary_path vocab/java-small/token_vocab.csv
+--node_type_vocabulary_path vocab/type_vocab.csv --token_vocabulary_path vocab/java-small/token_vocab.csv --training 0
 ```
 
 Then you can see an ```embeddings.csv``` file that have the content similar to this:
