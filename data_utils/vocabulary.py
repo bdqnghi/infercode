@@ -188,11 +188,10 @@ class Vocabulary(Sized):
             )
 
             loaded = self.__load_model_from_filepath(model_filename+'.model')
-            print(loaded)
             assert loaded, 'Sentencepiece failed to load model.'
 
     def create_vocabulary(self, tokens: Union[Iterable[str], Iterable[List[str]], typing.Counter[str]], 
-                        model_filename: str="bpe", model_type: str="bpe") -> None:
+                        model_filename: str, model_type: str) -> None:
         with TemporaryDirectory() as dir:
             data_path = os.path.join(dir, 'tmpvocab.model')
             with open(data_path, 'w') as f:

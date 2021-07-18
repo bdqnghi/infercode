@@ -1,5 +1,3 @@
-from bidict import bidict
-import pickle
 import sys
 from pathlib import Path
 # To import upper level modules
@@ -212,6 +210,7 @@ class ASTUtil():
         batch_children_node_type_id = []
         batch_children_node_tokens = []
         batch_children_node_tokens_id = []
+        batch_subtree_id = []
 
         for tree_indices in all_tree_indices:
             
@@ -227,6 +226,10 @@ class ASTUtil():
             batch_children_node_type_id.append(tree_indices["children_node_type_id"])
             batch_children_node_tokens.append(tree_indices["children_node_tokens"])
             batch_children_node_tokens_id.append(tree_indices["children_node_tokens_id"])
+
+            if "subtree_id" in tree_indices:
+                batch_subtree_id.append(tree_indices["subtree_id"])
+            # batch_subtree_id.append([5, 2])
         
         # [[]]
         batch_node_index = self._pad_batch_2D(batch_node_index)
@@ -248,8 +251,10 @@ class ASTUtil():
             "batch_children_index": np.asarray(batch_children_index),
             "batch_children_node_type_id": np.asarray(batch_children_node_type_id),
             "batch_children_node_tokens_id": np.asarray(batch_children_node_tokens_id),
+            "batch_subtree_id": np.reshape(batch_subtree_id, (len(all_tree_indices), 1))
         }
 
+        # These item does not need to be converted to numpy array, they are for debugging purpose only
         batch_obj["batch_node_type"] = batch_node_type
         batch_obj["batch_node_tokens"] = batch_node_tokens
         batch_obj["batch_children_node_tokens"] = batch_children_node_tokens
@@ -313,16 +318,3 @@ class ASTUtil():
         batch = [[[s + [0] * (max_4th_D - len(s)) for s in c] for c in sample] for sample in batch]
         batch = np.asarray(batch)
         return batch
-
-
-
-    def load_subtree_vocab(self, subtree_vocabulary_path):
-        subtree_lookup = {}
-        with open(subtree_vocabulary_path, "r") as f4:
-            data = f4.readlines()
-            for i, line in enumerate(data):
-                splits = line.replace("\n", "").split(",")
-                subtree_lookup[splits[0]] = i
-
-        subtree_lookup = bidict(subtree_lookup)
-        return subtree_lookup

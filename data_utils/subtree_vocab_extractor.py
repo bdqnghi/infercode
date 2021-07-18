@@ -1,33 +1,28 @@
-from bidict import bidict
-import pickle
 import sys
 from pathlib import Path
 # To import upper level modules
 sys.path.append(str(Path('.').absolute().parent))
-from os import path
 from .vocabulary import Vocabulary
-from tree_sitter import Language, Parser
 from pathlib import Path
-import glob, os
-from tqdm import trange
+import os
 from tqdm import *
-import numpy as np
 from .ast_util import ASTUtil
 
 
 class SubtreeVocabExtractor():
 
 
-    def __init__(self, input_data_path: str, output_subtree_vocab_path: str,
-                node_type_vocab_model_path: str, node_token_vocab_model_path: str, language: str):
+    def __init__(self, input_data_path: str, output_subtree_vocab_prefix: str,
+                node_type_vocab_model_path: str, node_token_vocab_model_path: str, ast_util: ASTUtil):
 
         self.input_data_path = input_data_path
-        self.output_subtree_vocab_path = output_subtree_vocab_path
+        self.output_subtree_vocab_prefix = output_subtree_vocab_prefix
         self.subtree_vocab = Vocabulary(100000)
-        self.ast_util = ASTUtil(node_type_vocab_model_path=node_type_vocab_model_path, 
-                                node_token_vocab_model_path=node_token_vocab_model_path, language=language)
+        self.ast_util = ast_util
+        # self.ast_util = ASTUtil(node_type_vocab_model_path=node_type_vocab_model_path, 
+        #                         node_token_vocab_model_path=node_token_vocab_model_path, language=language)
 
-    def process(self):
+    def create_vocab(self):
         all_subtrees_vocab = []
         for subdir , dirs, files in os.walk(self.input_data_path): 
             for file in tqdm(files):
@@ -48,8 +43,12 @@ class SubtreeVocabExtractor():
         # Concat the list of nodes in a subtree into a string
         for s in all_subtrees_vocab_filtered:
             all_subtrees_vocab_concat.append("-".join(s))
-                
-        self.subtree_vocab.create_vocabulary(tokens=all_subtrees_vocab_concat, model_filename=self.output_subtree_vocab_path, model_type="word") 
+        
+        # model_type must be "word" for subtree vocab
+        self.subtree_vocab.create_vocabulary(tokens=all_subtrees_vocab_concat, 
+                                            model_filename=self.output_subtree_vocab_prefix, 
+                                            model_type="word") 
+        return self.subtree_vocab
         
 
 

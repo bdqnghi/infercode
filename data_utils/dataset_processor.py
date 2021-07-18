@@ -1,38 +1,35 @@
 import numpy as np
 import os
-from os import listdir
-from os.path import isfile, join
-from tqdm import trange
 from tqdm import *
-import random
 #import pickle
 from .vocabulary import Vocabulary
 from .ast_util import ASTUtil
-import sys
 from collections import defaultdict
 import pickle
+import logging
 
 class DatasetProcessor():
-   
+    
+    LOGGER = logging.getLogger('DatasetProcessor')
     def __init__(self, input_data_path: str, output_tensors_path: str, 
                 node_type_vocab_model_path: str, node_token_vocab_model_path: str, 
-                subtree_vocab_model_path: str, language: str):
+                subtree_vocab_model_path: str, 
+                ast_util: ASTUtil):
         
         self.input_data_path = input_data_path
         self.output_tensors_path = output_tensors_path
         self.node_type_vocab_model_path = node_type_vocab_model_path
         self.node_token_vocab_model_path = node_token_vocab_model_path
         self.subtree_vocab_model_path = subtree_vocab_model_path
-        self.language = language
         self.subtree_vocab = Vocabulary(10000, subtree_vocab_model_path)
 
-        self.ast_util = ASTUtil(node_type_vocab_model_path=node_type_vocab_model_path, 
-                                        node_token_vocab_model_path=node_token_vocab_model_path, language=language)
+        self.ast_util = ast_util
+        # self.ast_util = ASTUtil(node_type_vocab_model_path=node_type_vocab_model_path, 
+                                        # node_token_vocab_model_path=node_token_vocab_model_path, language=language)
         
 
     def process(self):
 
-        count = 0
         bucket_sizes = np.array(list(range(20 , 7500 , 5)))
         buckets = defaultdict(list)
 
@@ -41,7 +38,6 @@ class DatasetProcessor():
                 
                 file_path = os.path.join(subdir, file)
                 
-                print("-------------------------")
                 with open(file_path, "rb") as f:
                     code_snippet = f.read()
 
@@ -57,7 +53,6 @@ class DatasetProcessor():
                 subtrees_id = []
                 for subtree in subtrees:
                     subtree_str = "-".join(subtree)
-                    # print(subtree_str)
                     subtree_id = self.subtree_vocab.get_id_or_unk_for_text(subtree_str)
                     if len(subtree_id) == 1 and subtree_id[0] != 0:
                         subtrees_id.append(subtree_id[0])
@@ -73,7 +68,11 @@ class DatasetProcessor():
 
                 # count = count + 1
 
-        print("Saving processed data into pickle format.....")
+        self.LOGGER.info("Saving processed data into pickle format.....")
         pickle.dump(buckets, open(self.output_tensors_path, "wb" ) )
+
+        return buckets
+
+
 
   

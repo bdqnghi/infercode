@@ -1,10 +1,8 @@
-import math
 import tensorflow as tf
 import sys
 from pathlib import Path
 # To import upper level modules
 sys.path.append(str(Path('.').absolute().parent))
-import numpy as np
 from data_utils.vocabulary import Vocabulary
 
 class InferCodeModel():
@@ -13,12 +11,12 @@ class InferCodeModel():
         resource_config = config["resource"]
         nn_config = config["neural_network"]
 
-        self.node_type_vocab_model_path = resource_config["node_type_vocab_model_path"]
-        self.node_type_vocab_word_list_path = resource_config["node_type_vocab_word_list_path"]
-        self.node_token_vocab_model_path = resource_config["node_token_vocab_model_path"]
-        self.node_token_vocab_word_list_path = resource_config["node_token_vocab_word_list_path"]
-        self.subtree_vocab_model_path = resource_config["subtree_vocab_model_path"]
-        self.subtree_vocab_word_list_path = resource_config["subtree_vocab_word_list_path"]
+        self.node_type_vocab_model_path = resource_config["node_type_vocab_model_prefix"] + ".model"
+        self.node_type_vocab_word_list_path = resource_config["node_type_vocab_model_prefix"] + ".vocab"
+        self.node_token_vocab_model_path = resource_config["node_token_vocab_model_prefix"] + ".model"
+        self.node_token_vocab_word_list_path = resource_config["node_token_vocab_model_prefix"] + ".vocab"
+        self.subtree_vocab_model_path = resource_config["subtree_vocab_model_prefix"] + ".model"
+        self.subtree_vocab_word_list_path = resource_config["subtree_vocab_model_prefix"] + ".vocab"
         self.language = resource_config["language"]
 
 
@@ -144,11 +142,11 @@ class InferCodeModel():
             # self.loss = self.loss_layer(self.logits, self.placeholders["labels"])
 
             sampled_softmax_loss = tf.nn.sampled_softmax_loss(weights=self.weights["subtree_embeddings"], 
-                                                                biases=self.weights["subtree_embeddings_bias"], 
-                                                                labels=self.placeholders["labels"], 
-                                                                inputs=self.code_vector, 
-                                                                num_sampled=1000, 
-                                                                num_classes=self.num_subtrees)
+                                                              biases=self.weights["subtree_embeddings_bias"], 
+                                                              labels=self.placeholders["labels"], 
+                                                              inputs=self.code_vector, 
+                                                              num_sampled=10, 
+                                                              num_classes=self.num_subtrees)
             self.loss = tf.reduce_mean(input_tensor=sampled_softmax_loss)
 
 

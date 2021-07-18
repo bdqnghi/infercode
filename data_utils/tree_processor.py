@@ -1,22 +1,11 @@
 import numpy as np
 import os
-from os import listdir
-from os.path import isfile, join
-import collections
-import re
-from tqdm import trange
 from tqdm import *
 import random
 #import pickle
 from collections import defaultdict
-from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import OneHotEncoder
 import pickle
-from utils import identifier_splitting
-import hashlib
 import csv
-import copy
-from bidict import bidict
 from .base_tree_utils import BaseTreeUtils
 import sys
 csv.field_size_limit(sys.maxsize)
@@ -27,7 +16,7 @@ class TreeProcessor(BaseTreeUtils):
         super().__init__(opt)
         tree_directory = opt.input_data_directory
         subtree_directory = opt.subtree_directory
-        all_subtrees_path = opt.subtree_vocabulary_path
+        opt.subtree_vocabulary_path
         self.process_data_for_training = opt.training
         if self.process_data_for_training == 1:
             print("Processing data for training!!")
