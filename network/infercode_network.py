@@ -4,8 +4,11 @@ from pathlib import Path
 # To import upper level modules
 sys.path.append(str(Path('.').absolute().parent))
 from data_utils.vocabulary import Vocabulary
+import logging
 
 class InferCodeModel():
+    LOGGER = logging.getLogger('InferCodeModel')
+
     def __init__(self, config):
         # super().__init__(opt)
         resource_config = config["resource"]
@@ -21,7 +24,6 @@ class InferCodeModel():
 
 
         self.num_types = sum(1 for line in open(self.node_type_vocab_word_list_path))
-        print("Num types: ", self.num_types)
         self.type_vocab = Vocabulary(self.num_types, self.node_type_vocab_model_path)
 
         self.num_tokens = sum(1 for line in open(self.node_token_vocab_word_list_path))
@@ -62,10 +64,10 @@ class InferCodeModel():
             
             self.weights["node_type_embeddings"] = tf.Variable(tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform")([self.num_types, self.node_type_dim]), name='node_type_embeddings')
             if self.include_token == 1:
-                print("Including token weights..........")            
+                self.LOGGER.info("Including token weights..........")            
                 self.weights["node_token_embeddings"] = tf.Variable(tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform")([self.num_tokens, self.node_token_dim]), name='node_token_embeddings')
             else:
-                print("Excluding token weights..........")
+                self.LOGGER.info("Excluding token weights..........")
 
             self.placeholders["children_index"] = tf.compat.v1.placeholder(tf.int32, shape=(None, None, None), name='children_index') # batch_size x max_num_nodes x max_children
             self.placeholders["children_node_type"] = tf.compat.v1.placeholder(tf.int32, shape=(None, None, None), name='children_node_type') # batch_size x max_num_nodes x max_children
@@ -98,7 +100,7 @@ class InferCodeModel():
 
 
             if self.include_token == 1:
-                print("Including token information..........")
+                self.LOGGER.info("Including token information..........")
                 # shape = (batch_size, max_tree_size, node_token_dim)
                 # Example with batch size = 12: shape = (12, 48, 50))
                 self.parent_node_token_embeddings = self.compute_parent_node_tokens_tensor(self.placeholders["node_tokens"], self.weights["node_token_embeddings"])
@@ -124,7 +126,7 @@ class InferCodeModel():
 
 
             else:
-                print("Excluding token information..........")
+                self.LOGGER.info("Excluding token information..........")
                 # Example with batch size = 12: shape = (12, 48, (30 + 50))) = (12, 48, 80)
                 self.parent_node_embeddings = self.parent_node_type_embeddings
                 self.children_embeddings = self.children_node_type_embeddings

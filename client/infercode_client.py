@@ -10,9 +10,7 @@ tf.disable_v2_behavior()
 
 class InferCodeClient():
 
-    def __init__(self):
-        config = configparser.ConfigParser()
-        config.read("inferring_config.ini")
+    def __init__(self, config):
 
         resource_config = config["resource"]
         nn_config = config["neural_network"]
@@ -47,19 +45,15 @@ class InferCodeClient():
     def encode(self, batch_code_snippets):
         tensors = self.snippets_to_tensors(batch_code_snippets)
         
-        # print(tensors["batch_subtree_id"])
-        # embeddings = self.sess.run(
-        #     [self.infercode_model.code_vector],
-        #     feed_dict={
-        #         self.infercode_model.placeholders["node_type"]: tensors["batch_node_type_id"],
-        #         self.infercode_model.placeholders["node_tokens"]:  tensors["batch_node_tokens_id"],
-        #         self.infercode_model.placeholders["children_index"]:  tensors["batch_children_index"],
-        #         self.infercode_model.placeholders["children_node_type"]: tensors["batch_children_node_type_id"],
-        #         self.infercode_model.placeholders["children_node_tokens"]: tensors["batch_children_node_tokens_id"],
-        #         self.infercode_model.placeholders["dropout_rate"]: 0.0
-        #     }
-        # )
-        print(tensors["batch_subtree_id"])
-      
-
-        return error[0]
+        embeddings = self.sess.run(
+            [self.infercode_model.code_vector],
+            feed_dict={
+                self.infercode_model.placeholders["node_type"]: tensors["batch_node_type_id"],
+                self.infercode_model.placeholders["node_tokens"]:  tensors["batch_node_tokens_id"],
+                self.infercode_model.placeholders["children_index"]:  tensors["batch_children_index"],
+                self.infercode_model.placeholders["children_node_type"]: tensors["batch_children_node_type_id"],
+                self.infercode_model.placeholders["children_node_tokens"]: tensors["batch_children_node_tokens_id"],
+                self.infercode_model.placeholders["dropout_rate"]: 0.0
+            }
+        )
+        return embeddings[0]

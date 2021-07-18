@@ -11,19 +11,18 @@ from data_utils.subtree_vocab_extractor import SubtreeVocabExtractor
 from data_utils.dataset_processor import DatasetProcessor
 from data_utils.threaded_iterator import ThreadedIterator
 from data_utils.data_loader import DataLoader
-import configparser
+from keras_radam.training import RAdamOptimizer
 from network.infercode_network import InferCodeModel
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
+logging.basicConfig(level=logging.INFO)
 
 class InferCodeTrainer():
 
     LOGGER = logging.getLogger('InferCodeTrainer')
 
-    def __init__(self):
-        config = configparser.ConfigParser()
-        config.read("training_config.ini")
-
+    def __init__(self, config):
+        
         resource_config = config["resource"]
         nn_config = config["neural_network"]
 
@@ -43,11 +42,20 @@ class InferCodeTrainer():
         
         self.data_loader = DataLoader(self.ast_util, self.batch_size)
 
+        # ------------Set up the neural network------------
         self.infercode_model = InferCodeModel(config)
+        self.loss_node = self.infercode_model.loss
+        optimizer = RAdamOptimizer(float(nn_config["lr"]))
+
+        update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+        with tf.control_dependencies(update_ops):
+            self.training_point = optimizer.minimize(self.loss_node)
+        self.saver = tf.train.Saver(save_relative_paths=True, max_to_keep=5)
 
         self.init = tf.global_variables_initializer()
         self.sess = tf.Session()
         self.sess.run(self.init)
+        # -------------------------------------------------
 
     def process_or_load_data(self):
         '''
@@ -116,10 +124,10 @@ class InferCodeTrainer():
     def train(self):
         for epoch in range(1,  self.epochs + 1):
             train_batch_iterator = ThreadedIterator(self.data_loader.make_minibatch_iterator(self.training_buckets), max_queue_size=1)
-            print(epoch)
             for train_step, train_batch_data in enumerate(train_batch_iterator):
-                error = self.sess.run(
-                    [self.infercode_model.loss],
+                _, err = self.sess.run(
+                    [self.training_point,
+                    self.infercode_model.loss],
                     feed_dict={
                         self.infercode_model.placeholders["node_type"]: train_batch_data["batch_node_type_id"],
                         self.infercode_model.placeholders["node_tokens"]:  train_batch_data["batch_node_tokens_id"],
@@ -130,10 +138,8 @@ class InferCodeTrainer():
                         self.infercode_model.placeholders["dropout_rate"]: 0.4
                     }
                 )
-                print(error)  
-           
-     
 
-        # return embeddings[0]
-
-   # 
+                self.LOGGER.info(f"Training at epoch {epoch} and step {train_step} with loss {err}")
+                if train_step % checkpoint_every == 0 and train_step > 0:
+                #     saver.save(sess, checkfile)                  
+                #     print('Checkpoint saved, epoch:' + str(epoch) + ', step: ' + str(train_step) + ', loss: ' + str(err) + '.')

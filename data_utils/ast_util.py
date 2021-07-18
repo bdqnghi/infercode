@@ -250,14 +250,18 @@ class ASTUtil():
             "batch_node_tokens_id": np.asarray(batch_node_tokens_id),
             "batch_children_index": np.asarray(batch_children_index),
             "batch_children_node_type_id": np.asarray(batch_children_node_type_id),
-            "batch_children_node_tokens_id": np.asarray(batch_children_node_tokens_id),
-            "batch_subtree_id": np.reshape(batch_subtree_id, (len(all_tree_indices), 1))
+            "batch_children_node_tokens_id": np.asarray(batch_children_node_tokens_id)
         }
 
         # These item does not need to be converted to numpy array, they are for debugging purpose only
         batch_obj["batch_node_type"] = batch_node_type
         batch_obj["batch_node_tokens"] = batch_node_tokens
         batch_obj["batch_children_node_tokens"] = batch_children_node_tokens
+
+        if len(batch_subtree_id) != 0:
+            batch_subtree_id = np.reshape(batch_subtree_id, (len(all_tree_indices), 1))
+
+        batch_obj["batch_subtree_id"] = batch_subtree_id
 
         return batch_obj
 
