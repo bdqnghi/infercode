@@ -37,6 +37,8 @@ Then we can have the output embeddings
 0.01541999  0.03995579]]
 ```
     
+## Notes
+- Our old implementation can be found in [old_version](old_version/). 
     
 ## Citation
 If you find this work useful for your research, please consider citing our paper:
