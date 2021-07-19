@@ -13,8 +13,11 @@ This is a Tensorflow Implementation for "InferCode: Self-Supervised Learning of 
 from client.infercode_client import InferCodeClient
 infercode = InferCodeClient()
 vectors = infercode.encode(["for (i = 0; i < n; i++)", "struct book{ int num; char s[27]; }shu[1000];"])
-print(vectors)
-
+print(vectors)  
+```
+    
+Then we have the output embeddings:
+```bash
 [[ 0.00455336  0.00277071  0.00299444 -0.00264732  0.00424443  0.02380365
 0.00802475  0.01927063  0.00889819  0.01684897  0.03249155  0.01853252
 0.00930241  0.02532686  0.00152953  0.0027509   0.00200306 -0.00042401
@@ -33,9 +36,10 @@ print(vectors)
 -0.00721357  0.01265837  0.029279    0.00394636  0.00475944  0.0057507
 0.02005564  0.00345545  0.01078242  0.00763404  0.01771503  0.02223164
 0.01541999  0.03995579]]
-
-```    
+```
     
+## Notes
+- Our old implementation can be found in [old_version](old_version/). 
     
 ## Citation
 If you find this work useful for your research, please consider citing our paper:
