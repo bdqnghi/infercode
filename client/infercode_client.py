@@ -30,6 +30,8 @@ class InferCodeClient():
         self.sess = tf.Session()
         self.sess.run(self.init)
 
+    # def from_pretrained(self, model_path):
+
 
     def snippets_to_tensors(self, batch_code_snippets):
         batch_tree_indexes = []
