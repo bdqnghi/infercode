@@ -1,10 +1,11 @@
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import sys
 from pathlib import Path
 # To import upper level modules
 sys.path.append(str(Path('.').absolute().parent))
 from data_utils.vocabulary import Vocabulary
 import logging
+from keras_radam.training import RAdamOptimizer
 
 class InferCodeModel():
     LOGGER = logging.getLogger('InferCodeModel')
@@ -13,6 +14,7 @@ class InferCodeModel():
         # super().__init__(opt)
         resource_config = config["resource"]
         nn_config = config["neural_network"]
+        training_config = config["training_params"]
 
         self.node_type_vocab_model_path = resource_config["node_type_vocab_model_prefix"] + ".model"
         self.node_type_vocab_word_list_path = resource_config["node_type_vocab_model_prefix"] + ".vocab"
@@ -38,18 +40,16 @@ class InferCodeModel():
         self.include_token = int(nn_config["include_token"])
         self.num_conv = int(nn_config["num_conv"])
         self.output_size = int(nn_config["output_size"])
-        
         self.node_type_dim = int(nn_config["node_type_dim"])
-        self.batch_size = int(nn_config["batch_size"])
-
         self.node_token_dim = int(nn_config["node_token_dim"])
         self.node_type_dim = int(nn_config["node_type_dim"])
-
         self.node_dim = int(nn_config["output_size"])
         self.subtree_dim = int(nn_config["output_size"])
-      
-        self.loss_function = nn_config["loss"]
-        
+
+        self.batch_size = int(training_config["batch_size"])
+
+        self.optimizer = RAdamOptimizer(float(training_config["lr"]))
+
         self.init_net()
         self.feed_forward()
 
@@ -151,6 +151,10 @@ class InferCodeModel():
                                                               num_classes=self.num_subtrees)
             self.loss = tf.reduce_mean(input_tensor=sampled_softmax_loss)
 
+    
+            update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+            with tf.control_dependencies(update_ops):
+                self.training_point = self.optimizer.minimize(self.loss)
 
     def aggregation_layer(self, nodes_representation, w_attention):
         # nodes_representation is (batch_size, max_graph_size, self.node_dim)

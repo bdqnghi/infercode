@@ -11,7 +11,6 @@ from data_utils.subtree_vocab_extractor import SubtreeVocabExtractor
 from data_utils.dataset_processor import DatasetProcessor
 from data_utils.threaded_iterator import ThreadedIterator
 from data_utils.data_loader import DataLoader
-from keras_radam.training import RAdamOptimizer
 from network.infercode_network import InferCodeModel
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
@@ -24,7 +23,7 @@ class InferCodeTrainer():
     def __init__(self, config):
         
         resource_config = config["resource"]
-        nn_config = config["neural_network"]
+        training_config = config["training_params"]
 
         self.data_path = resource_config["data_path"]
         self.output_processed_data_path = resource_config["output_processed_data_path"]
@@ -33,8 +32,8 @@ class InferCodeTrainer():
         self.subtree_vocab_model_prefix = resource_config["subtree_vocab_model_prefix"]
         self.language = resource_config["language"]
 
-        self.epochs = int(nn_config["epochs"])
-        self.batch_size = int(nn_config["batch_size"])
+        self.epochs = int(training_config["epochs"])
+        self.batch_size = int(training_config["batch_size"])
 
         self.ast_util, self.training_buckets = self.process_or_load_data()
         # self.ast_util = ASTUtil(node_type_vocab_model_path=self.node_type_vocab_model_prefix + ".model", 
@@ -44,12 +43,7 @@ class InferCodeTrainer():
 
         # ------------Set up the neural network------------
         self.infercode_model = InferCodeModel(config)
-        self.loss_node = self.infercode_model.loss
-        optimizer = RAdamOptimizer(float(nn_config["lr"]))
-
-        update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
-        with tf.control_dependencies(update_ops):
-            self.training_point = optimizer.minimize(self.loss_node)
+      
         self.saver = tf.train.Saver(save_relative_paths=True, max_to_keep=5)
 
         self.init = tf.global_variables_initializer()
@@ -126,7 +120,7 @@ class InferCodeTrainer():
             train_batch_iterator = ThreadedIterator(self.data_loader.make_minibatch_iterator(self.training_buckets), max_queue_size=1)
             for train_step, train_batch_data in enumerate(train_batch_iterator):
                 _, err = self.sess.run(
-                    [self.training_point,
+                    [self.infercode_model.training_point,
                     self.infercode_model.loss],
                     feed_dict={
                         self.infercode_model.placeholders["node_type"]: train_batch_data["batch_node_type_id"],
@@ -140,6 +134,6 @@ class InferCodeTrainer():
                 )
 
                 self.LOGGER.info(f"Training at epoch {epoch} and step {train_step} with loss {err}")
-                if train_step % checkpoint_every == 0 and train_step > 0:
+                # if train_step % checkpoint_every == 0 and train_step > 0:
                 #     saver.save(sess, checkfile)                  
                 #     print('Checkpoint saved, epoch:' + str(epoch) + ', step: ' + str(train_step) + ', loss: ' + str(err) + '.')
