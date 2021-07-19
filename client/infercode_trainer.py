@@ -14,7 +14,6 @@ from data_utils.data_loader import DataLoader
 from network.infercode_network import InferCodeModel
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
-logging.basicConfig(level=logging.INFO)
 
 class InferCodeTrainer():
 
@@ -42,12 +41,18 @@ class InferCodeTrainer():
         self.data_loader = DataLoader(self.ast_util, self.batch_size)
 
         # ------------Set up the neural network------------
+        self.checkfile = os.path.join(self.model_checkpoint, 'cnn_tree.ckpt')
+        ckpt = tf.train.get_checkpoint_state(self.model_checkpoint)
+        if ckpt and ckpt.model_checkpoint_path:
+            self.LOGGER.info("Continue training with old model : " + str(self.checkfile))
+
         self.infercode_model = InferCodeModel(config)
         self.saver = tf.train.Saver(save_relative_paths=True, max_to_keep=5)
         self.init = tf.global_variables_initializer()
         self.sess = tf.Session()
         self.sess.run(self.init)
         # -------------------------------------------------
+
 
     def process_or_load_data(self):
         """
@@ -132,6 +137,7 @@ class InferCodeTrainer():
                 )
 
                 self.LOGGER.info(f"Training at epoch {epoch} and step {train_step} with loss {err}")
-                if train_step % self.checkpoint_every == 100 and train_step > 0:
-                    self.saver.save(sess, checkfile)                  
-                    print('Checkpoint saved, epoch:' + str(epoch) + ', step: ' + str(train_step) + ', loss: ' + str(err) + '.')
+                v = train_step % self.checkpoint_every
+                if train_step % self.checkpoint_every == 0:
+                    self.saver.save(self.sess, self.checkfile)                  
+                    self.LOGGER.info(f"Checkpoint saved, epoch {epoch} and step {train_step} with loss {err}")
