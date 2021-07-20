@@ -17,8 +17,9 @@ class DataLoader():
         bucket_ids = list(buckets.keys())
         random.shuffle(bucket_ids)
         for bucket_idx in bucket_ids:
-
+            self.LOGGER.debug("Switching bucket...")
             trees = buckets[bucket_idx]
+            self.LOGGER.debug(f"Num items in bucket {len(trees)}")
             random.shuffle(trees)
             
             batch_trees = []

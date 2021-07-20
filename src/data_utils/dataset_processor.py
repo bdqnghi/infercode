@@ -30,7 +30,7 @@ class DatasetProcessor():
 
     def process(self):
 
-        bucket_sizes = np.array(list(range(20 , 7500 , 5)))
+        bucket_sizes = np.array(list(range(20 , 7500 , 20)))
         buckets = defaultdict(list)
 
         for subdir , dirs, files in os.walk(self.input_data_path): 

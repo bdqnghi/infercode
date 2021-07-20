@@ -40,6 +40,9 @@ Then we have the output embeddings:
     
 ## Notes
 - Our old implementation can be found in [old_version](old_version/). 
+- For a fair comparison with InferCode, please consider:
+    + The code encoder part, we used Tree-based CNN as the encoder. There should be a better code encoder in the future given the fast progressing of AI research. 
+    + The pretext task, inventing a new pretext task also affects on the quality of the code embeddings.
     
 ## Citation
 If you find this work useful for your research, please consider citing our paper:
