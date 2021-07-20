@@ -87,6 +87,11 @@ class Vocabulary(Sized):
             self.__sp_model = spm.SentencePieceProcessor()
             self.__sp_model.Load(model_file)
     #endregion
+    def get_vocabulary(self):
+        return dict([[self.__sp_model.id_to_piece(id), id] for id in range(self.__sp_model.get_piece_size())])
+
+    def get_vocabulary_size(self):
+        return self.__sp_model.get_piece_size()
 
     def get_pad(self) -> str:
         """ Get padding token. """

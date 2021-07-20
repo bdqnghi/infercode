@@ -3,52 +3,36 @@ import sys
 from pathlib import Path
 # To import upper level modules
 sys.path.append(str(Path('.').absolute().parent))
-from data_utils.vocabulary import Vocabulary
 import logging
 from keras_radam.training import RAdamOptimizer
 
 class InferCodeModel():
     LOGGER = logging.getLogger('InferCodeModel')
 
-    def __init__(self, config):
-        # super().__init__(opt)
-        resource_config = config["resource"]
-        nn_config = config["neural_network"]
-        training_config = config["training_params"]
-
-        self.node_type_vocab_model_path = resource_config["node_type_vocab_model_prefix"] + ".model"
-        self.node_type_vocab_word_list_path = resource_config["node_type_vocab_model_prefix"] + ".vocab"
-        self.node_token_vocab_model_path = resource_config["node_token_vocab_model_prefix"] + ".model"
-        self.node_token_vocab_word_list_path = resource_config["node_token_vocab_model_prefix"] + ".vocab"
-        self.subtree_vocab_model_path = resource_config["subtree_vocab_model_prefix"] + ".model"
-        self.subtree_vocab_word_list_path = resource_config["subtree_vocab_model_prefix"] + ".vocab"
-        self.language = resource_config["language"]
-
-
-        self.num_types = sum(1 for line in open(self.node_type_vocab_word_list_path))
-        self.type_vocab = Vocabulary(self.num_types, self.node_type_vocab_model_path)
-
-        self.num_tokens = sum(1 for line in open(self.node_token_vocab_word_list_path))
-        self.token_vocab = Vocabulary(self.num_tokens, self.node_token_vocab_model_path)
-        
-        self.num_subtrees = sum(1 for line in open(self.subtree_vocab_word_list_path))
-        self.subtree_vocab = Vocabulary(self.num_subtrees, self.subtree_vocab_model_path)
+    def __init__(self, num_types, num_tokens, num_subtrees, 
+                num_conv: int=2, node_type_dim:int=50 , node_token_dim: int=50,
+                conv_output_dim=50, include_token=1, batch_size=10, learning_rate: float=0.001):
+     
+        self.num_types = num_types
+        self.num_tokens = num_tokens
+        self.num_subtrees = num_subtrees
 
         self.placeholders = {}
         self.weights = {}
     
-        self.include_token = int(nn_config["include_token"])
-        self.num_conv = int(nn_config["num_conv"])
-        self.output_size = int(nn_config["output_size"])
-        self.node_type_dim = int(nn_config["node_type_dim"])
-        self.node_token_dim = int(nn_config["node_token_dim"])
-        self.node_type_dim = int(nn_config["node_type_dim"])
-        self.node_dim = int(nn_config["output_size"])
-        self.subtree_dim = int(nn_config["output_size"])
+        self.include_token = include_token
+        self.num_conv = num_conv
+        self.conv_output_dim = conv_output_dim
+        self.node_type_dim = node_type_dim
+        self.node_token_dim = node_token_dim
 
-        self.batch_size = int(training_config["batch_size"])
+        # node_dim is equal to conv_output_dim and subtree_dim
+        self.node_dim = conv_output_dim
+        self.subtree_dim = conv_output_dim
 
-        self.optimizer = RAdamOptimizer(float(training_config["lr"]))
+        self.batch_size = batch_size
+
+        self.optimizer = RAdamOptimizer(learning_rate)
 
         self.init_net()
         self.feed_forward()
@@ -80,10 +64,10 @@ class InferCodeModel():
             self.weights["subtree_embeddings_bias"] = tf.Variable(tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform")([self.num_subtrees]), name='subtree_embeddings_bias')
 
             for i in range(self.num_conv):
-                self.weights["w_t_" + str(i)] = tf.Variable(tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform")([self.node_dim, self.output_size]), name='w_t_' + str(i))
-                self.weights["w_l_" + str(i)] = tf.Variable(tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform")([self.node_dim, self.output_size]), name='w_l_' + str(i))
-                self.weights["w_r_" + str(i)] = tf.Variable(tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform")([self.node_dim, self.output_size]), name='w_r_' + str(i))
-                self.weights["b_conv_" + str(i)] = tf.Variable(tf.zeros([self.output_size,]),name='b_conv_' + str(i))
+                self.weights["w_t_" + str(i)] = tf.Variable(tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform")([self.node_dim, self.conv_output_dim]), name='w_t_' + str(i))
+                self.weights["w_l_" + str(i)] = tf.Variable(tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform")([self.node_dim, self.conv_output_dim]), name='w_l_' + str(i))
+                self.weights["w_r_" + str(i)] = tf.Variable(tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform")([self.node_dim, self.conv_output_dim]), name='w_r_' + str(i))
+                self.weights["b_conv_" + str(i)] = tf.Variable(tf.zeros([self.conv_output_dim,]),name='b_conv_' + str(i))
 
             self.weights["w_attention"] = tf.Variable(tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform")([self.node_dim, 1]), name="w_attention")
       
@@ -195,7 +179,7 @@ class InferCodeModel():
 
 
     # def aggregation_layer(self, conv):
-    #     # conv is (batch_size, max_tree_size, output_size)
+    #     # conv is (batch_size, max_tree_size, conv_output_dim)
     #     with tf.name_scope("global_attention"):
     #         batch_size = tf.shape(conv)[0]
     #         max_tree_size = tf.shape(conv)[1]
@@ -261,7 +245,7 @@ class InferCodeModel():
 
             with tf.compat.v1.name_scope('weights'):
                 # stack weight matrices on top to make a weight tensor
-                # (3, node_dim, output_size)
+                # (3, node_dim, conv_output_dim)
                 weights = tf.stack([w_t, w_r, w_l], axis=0)
 
             with tf.compat.v1.name_scope('combine'):
@@ -277,10 +261,10 @@ class InferCodeModel():
                 result = tf.matmul(result, coef, transpose_a=True)
                 result = tf.reshape(result, (batch_size, max_tree_size, 3, node_dim))
 
-                # output is (batch_size, max_tree_size, output_size)
+                # output is (batch_size, max_tree_size, conv_output_dim)
                 result = tf.tensordot(result, weights, [[2, 3], [0, 1]])
 
-                # output is (batch_size, max_tree_size, output_size)
+                # output is (batch_size, max_tree_size, conv_output_dim)
 
                 output = tf.nn.leaky_relu(result + b_conv)
                 # output = tf.compat.v1.nn.swish(result + b_conv)
