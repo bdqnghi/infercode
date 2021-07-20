@@ -5,11 +5,11 @@ import sys
 from pathlib import Path
 # To import upper level modules
 sys.path.append(str(Path('.').absolute().parent))
-from src.data_utils.ast_util import ASTUtil
+from infercode.data_utils.ast_util import ASTUtil
 import configparser
 import tensorflow.compat.v1 as tf
-from src.network.infercode_network import InferCodeModel
-from src.data_utils.vocabulary import Vocabulary
+from infercode.network.infercode_network import InferCodeModel
+from infercode.data_utils.vocabulary import Vocabulary
 tf.disable_v2_behavior()
 
 class InferCodeClient():
