@@ -1,0 +1,2653 @@
+[
+  {
+    "type": "binary_operation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_operation",
+          "named": true
+        },
+        {
+          "type": "boolean",
+          "named": true
+        },
+        {
+          "type": "ellipsis",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "left_paren",
+          "named": true
+        },
+        {
+          "type": "nil",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "right_paren",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "tableconstructor",
+          "named": true
+        },
+        {
+          "type": "unary_operation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "boolean",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "class_description",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "comment",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "do_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "break_statement",
+          "named": true
+        },
+        {
+          "type": "do_end",
+          "named": true
+        },
+        {
+          "type": "do_start",
+          "named": true
+        },
+        {
+          "type": "do_statement",
+          "named": true
+        },
+        {
+          "type": "for_statement",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "function_statement",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "repeat_statement",
+          "named": true
+        },
+        {
+          "type": "return_statement",
+          "named": true
+        },
+        {
+          "type": "variable_declaration",
+          "named": true
+        },
+        {
+          "type": "while_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "documentation_brief",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "documentation_class",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "emmy_class",
+          "named": true
+        },
+        {
+          "type": "emmy_field",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "documentation_config",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_operation",
+          "named": true
+        },
+        {
+          "type": "boolean",
+          "named": true
+        },
+        {
+          "type": "ellipsis",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "left_paren",
+          "named": true
+        },
+        {
+          "type": "nil",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "right_paren",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "tableconstructor",
+          "named": true
+        },
+        {
+          "type": "unary_operation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "documentation_tag",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "emmy_class",
+    "named": true,
+    "fields": {
+      "description": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "class_description",
+            "named": true
+          }
+        ]
+      },
+      "parent": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "emmy_type",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "emmy_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "emmy_documentation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "emmy_class",
+          "named": true
+        },
+        {
+          "type": "emmy_eval",
+          "named": true
+        },
+        {
+          "type": "emmy_field",
+          "named": true
+        },
+        {
+          "type": "emmy_header",
+          "named": true
+        },
+        {
+          "type": "emmy_ignore",
+          "named": true
+        },
+        {
+          "type": "emmy_note",
+          "named": true
+        },
+        {
+          "type": "emmy_parameter",
+          "named": true
+        },
+        {
+          "type": "emmy_return",
+          "named": true
+        },
+        {
+          "type": "emmy_see",
+          "named": true
+        },
+        {
+          "type": "emmy_todo",
+          "named": true
+        },
+        {
+          "type": "emmy_usage",
+          "named": true
+        },
+        {
+          "type": "emmy_varargs",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "emmy_eval",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_operation",
+          "named": true
+        },
+        {
+          "type": "boolean",
+          "named": true
+        },
+        {
+          "type": "ellipsis",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "left_paren",
+          "named": true
+        },
+        {
+          "type": "nil",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "right_paren",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "tableconstructor",
+          "named": true
+        },
+        {
+          "type": "unary_operation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "emmy_field",
+    "named": true,
+    "fields": {
+      "description": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "field_description",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "emmy_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "emmy_note",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "emmy_parameter",
+    "named": true,
+    "fields": {
+      "description": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "parameter_description",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "emmy_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "emmy_return",
+    "named": true,
+    "fields": {
+      "description": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "emmy_return_description",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "emmy_type",
+            "named": true
+          },
+          {
+            "type": "|",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "emmy_return_description",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "emmy_see",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "emmy_todo",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "emmy_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "emmy_type_list",
+          "named": true
+        },
+        {
+          "type": "emmy_type_map",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "emmy_type_list",
+    "named": true,
+    "fields": {
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "emmy_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "emmy_type_map",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "emmy_type",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "emmy_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "emmy_usage",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "emmy_varargs",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "field",
+    "named": true,
+    "fields": {
+      "field_left_bracket": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "field_left_bracket",
+            "named": true
+          }
+        ]
+      },
+      "field_right_bracket": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "field_right_bracket",
+            "named": true
+          }
+        ]
+      },
+      "key": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ".",
+            "named": false
+          },
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "binary_operation",
+            "named": true
+          },
+          {
+            "type": "boolean",
+            "named": true
+          },
+          {
+            "type": "ellipsis",
+            "named": true
+          },
+          {
+            "type": "function",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "left_paren",
+            "named": true
+          },
+          {
+            "type": "nil",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "right_paren",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "tableconstructor",
+            "named": true
+          },
+          {
+            "type": "unary_operation",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": ".",
+            "named": false
+          },
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "binary_operation",
+            "named": true
+          },
+          {
+            "type": "boolean",
+            "named": true
+          },
+          {
+            "type": "ellipsis",
+            "named": true
+          },
+          {
+            "type": "function",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "left_paren",
+            "named": true
+          },
+          {
+            "type": "nil",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "right_paren",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "tableconstructor",
+            "named": true
+          },
+          {
+            "type": "unary_operation",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "field_description",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "field_left_bracket",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "field_right_bracket",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "fieldlist",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "field",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "for_generic",
+    "named": true,
+    "fields": {
+      "expression_list": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": ",",
+            "named": false
+          },
+          {
+            "type": ".",
+            "named": false
+          },
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "binary_operation",
+            "named": true
+          },
+          {
+            "type": "boolean",
+            "named": true
+          },
+          {
+            "type": "ellipsis",
+            "named": true
+          },
+          {
+            "type": "function",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "left_paren",
+            "named": true
+          },
+          {
+            "type": "nil",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "right_paren",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "tableconstructor",
+            "named": true
+          },
+          {
+            "type": "unary_operation",
+            "named": true
+          }
+        ]
+      },
+      "identifier_list": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "for_in",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "for_numeric",
+    "named": true,
+    "fields": {
+      "finish": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": ".",
+            "named": false
+          },
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "binary_operation",
+            "named": true
+          },
+          {
+            "type": "boolean",
+            "named": true
+          },
+          {
+            "type": "ellipsis",
+            "named": true
+          },
+          {
+            "type": "function",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "left_paren",
+            "named": true
+          },
+          {
+            "type": "nil",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "right_paren",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "tableconstructor",
+            "named": true
+          },
+          {
+            "type": "unary_operation",
+            "named": true
+          }
+        ]
+      },
+      "start": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": ".",
+            "named": false
+          },
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "binary_operation",
+            "named": true
+          },
+          {
+            "type": "boolean",
+            "named": true
+          },
+          {
+            "type": "ellipsis",
+            "named": true
+          },
+          {
+            "type": "function",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "left_paren",
+            "named": true
+          },
+          {
+            "type": "nil",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "right_paren",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "tableconstructor",
+            "named": true
+          },
+          {
+            "type": "unary_operation",
+            "named": true
+          }
+        ]
+      },
+      "step": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ".",
+            "named": false
+          },
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "binary_operation",
+            "named": true
+          },
+          {
+            "type": "boolean",
+            "named": true
+          },
+          {
+            "type": "ellipsis",
+            "named": true
+          },
+          {
+            "type": "function",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "left_paren",
+            "named": true
+          },
+          {
+            "type": "nil",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "right_paren",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "tableconstructor",
+            "named": true
+          },
+          {
+            "type": "unary_operation",
+            "named": true
+          }
+        ]
+      },
+      "var": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "for_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "break_statement",
+          "named": true
+        },
+        {
+          "type": "do_statement",
+          "named": true
+        },
+        {
+          "type": "for_do",
+          "named": true
+        },
+        {
+          "type": "for_end",
+          "named": true
+        },
+        {
+          "type": "for_generic",
+          "named": true
+        },
+        {
+          "type": "for_numeric",
+          "named": true
+        },
+        {
+          "type": "for_start",
+          "named": true
+        },
+        {
+          "type": "for_statement",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "function_statement",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "repeat_statement",
+          "named": true
+        },
+        {
+          "type": "return_statement",
+          "named": true
+        },
+        {
+          "type": "variable_declaration",
+          "named": true
+        },
+        {
+          "type": "while_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "function_body",
+          "named": true
+        },
+        {
+          "type": "function_body_paren",
+          "named": true
+        },
+        {
+          "type": "function_end",
+          "named": true
+        },
+        {
+          "type": "function_start",
+          "named": true
+        },
+        {
+          "type": "parameter_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function_arguments",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_operation",
+          "named": true
+        },
+        {
+          "type": "boolean",
+          "named": true
+        },
+        {
+          "type": "ellipsis",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "left_paren",
+          "named": true
+        },
+        {
+          "type": "nil",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "right_paren",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "tableconstructor",
+          "named": true
+        },
+        {
+          "type": "unary_operation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function_body",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "break_statement",
+          "named": true
+        },
+        {
+          "type": "do_statement",
+          "named": true
+        },
+        {
+          "type": "for_statement",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "function_statement",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "repeat_statement",
+          "named": true
+        },
+        {
+          "type": "return_statement",
+          "named": true
+        },
+        {
+          "type": "variable_declaration",
+          "named": true
+        },
+        {
+          "type": "while_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function_call",
+    "named": true,
+    "fields": {
+      "args": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "function_arguments",
+            "named": true
+          },
+          {
+            "type": "string_argument",
+            "named": true
+          },
+          {
+            "type": "table_argument",
+            "named": true
+          }
+        ]
+      },
+      "prefix": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": ".",
+            "named": false
+          },
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "binary_operation",
+            "named": true
+          },
+          {
+            "type": "boolean",
+            "named": true
+          },
+          {
+            "type": "ellipsis",
+            "named": true
+          },
+          {
+            "type": "function",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "left_paren",
+            "named": true
+          },
+          {
+            "type": "nil",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "right_paren",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "tableconstructor",
+            "named": true
+          },
+          {
+            "type": "unary_operation",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "function_call_paren",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "self_call_colon",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "table_colon",
+          "named": true
+        },
+        {
+          "type": "table_dot",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function_statement",
+    "named": true,
+    "fields": {
+      "documentation": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "emmy_documentation",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "function_name",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "function_body",
+          "named": true
+        },
+        {
+          "type": "function_body_paren",
+          "named": true
+        },
+        {
+          "type": "function_end",
+          "named": true
+        },
+        {
+          "type": "function_start",
+          "named": true
+        },
+        {
+          "type": "local",
+          "named": true
+        },
+        {
+          "type": "parameter_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "identifier_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "if_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_operation",
+          "named": true
+        },
+        {
+          "type": "boolean",
+          "named": true
+        },
+        {
+          "type": "break_statement",
+          "named": true
+        },
+        {
+          "type": "do_statement",
+          "named": true
+        },
+        {
+          "type": "ellipsis",
+          "named": true
+        },
+        {
+          "type": "for_statement",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "function_statement",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_else",
+          "named": true
+        },
+        {
+          "type": "if_elseif",
+          "named": true
+        },
+        {
+          "type": "if_end",
+          "named": true
+        },
+        {
+          "type": "if_start",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "if_then",
+          "named": true
+        },
+        {
+          "type": "left_paren",
+          "named": true
+        },
+        {
+          "type": "nil",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "repeat_statement",
+          "named": true
+        },
+        {
+          "type": "return_statement",
+          "named": true
+        },
+        {
+          "type": "right_paren",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "tableconstructor",
+          "named": true
+        },
+        {
+          "type": "unary_operation",
+          "named": true
+        },
+        {
+          "type": "variable_declaration",
+          "named": true
+        },
+        {
+          "type": "while_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "local",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "module_return_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "binary_operation",
+          "named": true
+        },
+        {
+          "type": "boolean",
+          "named": true
+        },
+        {
+          "type": "ellipsis",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "left_paren",
+          "named": true
+        },
+        {
+          "type": "nil",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "right_paren",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "tableconstructor",
+          "named": true
+        },
+        {
+          "type": "unary_operation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "parameter_description",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "parameter_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ellipsis",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "program",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "do_statement",
+          "named": true
+        },
+        {
+          "type": "documentation_brief",
+          "named": true
+        },
+        {
+          "type": "documentation_class",
+          "named": true
+        },
+        {
+          "type": "documentation_config",
+          "named": true
+        },
+        {
+          "type": "documentation_tag",
+          "named": true
+        },
+        {
+          "type": "for_statement",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "function_statement",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "module_return_statement",
+          "named": true
+        },
+        {
+          "type": "repeat_statement",
+          "named": true
+        },
+        {
+          "type": "variable_declaration",
+          "named": true
+        },
+        {
+          "type": "while_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "repeat_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_operation",
+          "named": true
+        },
+        {
+          "type": "boolean",
+          "named": true
+        },
+        {
+          "type": "break_statement",
+          "named": true
+        },
+        {
+          "type": "do_statement",
+          "named": true
+        },
+        {
+          "type": "ellipsis",
+          "named": true
+        },
+        {
+          "type": "for_statement",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "function_statement",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "left_paren",
+          "named": true
+        },
+        {
+          "type": "nil",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "repeat_start",
+          "named": true
+        },
+        {
+          "type": "repeat_statement",
+          "named": true
+        },
+        {
+          "type": "repeat_until",
+          "named": true
+        },
+        {
+          "type": "return_statement",
+          "named": true
+        },
+        {
+          "type": "right_paren",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "tableconstructor",
+          "named": true
+        },
+        {
+          "type": "unary_operation",
+          "named": true
+        },
+        {
+          "type": "variable_declaration",
+          "named": true
+        },
+        {
+          "type": "while_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "return_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "binary_operation",
+          "named": true
+        },
+        {
+          "type": "boolean",
+          "named": true
+        },
+        {
+          "type": "ellipsis",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "left_paren",
+          "named": true
+        },
+        {
+          "type": "nil",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "right_paren",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "tableconstructor",
+          "named": true
+        },
+        {
+          "type": "unary_operation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "table_argument",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "fieldlist",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "tableconstructor",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "fieldlist",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "unary_operation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_operation",
+          "named": true
+        },
+        {
+          "type": "boolean",
+          "named": true
+        },
+        {
+          "type": "ellipsis",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "left_paren",
+          "named": true
+        },
+        {
+          "type": "nil",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "right_paren",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "tableconstructor",
+          "named": true
+        },
+        {
+          "type": "unary_operation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "variable_declaration",
+    "named": true,
+    "fields": {
+      "documentation": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "emmy_documentation",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "variable_declarator",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ".",
+            "named": false
+          },
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "binary_operation",
+            "named": true
+          },
+          {
+            "type": "boolean",
+            "named": true
+          },
+          {
+            "type": "ellipsis",
+            "named": true
+          },
+          {
+            "type": "function",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "left_paren",
+            "named": true
+          },
+          {
+            "type": "nil",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "right_paren",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "tableconstructor",
+            "named": true
+          },
+          {
+            "type": "unary_operation",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "local",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "variable_declarator",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_operation",
+          "named": true
+        },
+        {
+          "type": "boolean",
+          "named": true
+        },
+        {
+          "type": "ellipsis",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "left_paren",
+          "named": true
+        },
+        {
+          "type": "nil",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "right_paren",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "tableconstructor",
+          "named": true
+        },
+        {
+          "type": "unary_operation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "while_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_operation",
+          "named": true
+        },
+        {
+          "type": "boolean",
+          "named": true
+        },
+        {
+          "type": "break_statement",
+          "named": true
+        },
+        {
+          "type": "do_statement",
+          "named": true
+        },
+        {
+          "type": "ellipsis",
+          "named": true
+        },
+        {
+          "type": "for_statement",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "function_statement",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "left_paren",
+          "named": true
+        },
+        {
+          "type": "nil",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "repeat_statement",
+          "named": true
+        },
+        {
+          "type": "return_statement",
+          "named": true
+        },
+        {
+          "type": "right_paren",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "tableconstructor",
+          "named": true
+        },
+        {
+          "type": "unary_operation",
+          "named": true
+        },
+        {
+          "type": "variable_declaration",
+          "named": true
+        },
+        {
+          "type": "while_do",
+          "named": true
+        },
+        {
+          "type": "while_end",
+          "named": true
+        },
+        {
+          "type": "while_start",
+          "named": true
+        },
+        {
+          "type": "while_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "\u0000",
+    "named": false
+  },
+  {
+    "type": "#",
+    "named": false
+  },
+  {
+    "type": "%",
+    "named": false
+  },
+  {
+    "type": "&",
+    "named": false
+  },
+  {
+    "type": "*",
+    "named": false
+  },
+  {
+    "type": "+",
+    "named": false
+  },
+  {
+    "type": ",",
+    "named": false
+  },
+  {
+    "type": "-",
+    "named": false
+  },
+  {
+    "type": "--",
+    "named": false
+  },
+  {
+    "type": ".",
+    "named": false
+  },
+  {
+    "type": "..",
+    "named": false
+  },
+  {
+    "type": "/",
+    "named": false
+  },
+  {
+    "type": "//",
+    "named": false
+  },
+  {
+    "type": ";",
+    "named": false
+  },
+  {
+    "type": "<",
+    "named": false
+  },
+  {
+    "type": "<<",
+    "named": false
+  },
+  {
+    "type": "<=",
+    "named": false
+  },
+  {
+    "type": "=",
+    "named": false
+  },
+  {
+    "type": "==",
+    "named": false
+  },
+  {
+    "type": ">",
+    "named": false
+  },
+  {
+    "type": ">=",
+    "named": false
+  },
+  {
+    "type": ">>",
+    "named": false
+  },
+  {
+    "type": "[",
+    "named": false
+  },
+  {
+    "type": "[]",
+    "named": false
+  },
+  {
+    "type": "]",
+    "named": false
+  },
+  {
+    "type": "^",
+    "named": false
+  },
+  {
+    "type": "and",
+    "named": false
+  },
+  {
+    "type": "break_statement",
+    "named": true
+  },
+  {
+    "type": "do_end",
+    "named": true
+  },
+  {
+    "type": "do_start",
+    "named": true
+  },
+  {
+    "type": "ellipsis",
+    "named": true
+  },
+  {
+    "type": "emmy_header",
+    "named": true
+  },
+  {
+    "type": "emmy_ignore",
+    "named": true
+  },
+  {
+    "type": "false",
+    "named": false
+  },
+  {
+    "type": "for_do",
+    "named": true
+  },
+  {
+    "type": "for_end",
+    "named": true
+  },
+  {
+    "type": "for_in",
+    "named": true
+  },
+  {
+    "type": "for_start",
+    "named": true
+  },
+  {
+    "type": "function_body_paren",
+    "named": true
+  },
+  {
+    "type": "function_call_paren",
+    "named": true
+  },
+  {
+    "type": "function_end",
+    "named": true
+  },
+  {
+    "type": "function_start",
+    "named": true
+  },
+  {
+    "type": "identifier",
+    "named": true
+  },
+  {
+    "type": "if_else",
+    "named": true
+  },
+  {
+    "type": "if_elseif",
+    "named": true
+  },
+  {
+    "type": "if_end",
+    "named": true
+  },
+  {
+    "type": "if_start",
+    "named": true
+  },
+  {
+    "type": "if_then",
+    "named": true
+  },
+  {
+    "type": "left_paren",
+    "named": true
+  },
+  {
+    "type": "local",
+    "named": false
+  },
+  {
+    "type": "nil",
+    "named": true
+  },
+  {
+    "type": "not",
+    "named": false
+  },
+  {
+    "type": "number",
+    "named": true
+  },
+  {
+    "type": "or",
+    "named": false
+  },
+  {
+    "type": "repeat_start",
+    "named": true
+  },
+  {
+    "type": "repeat_until",
+    "named": true
+  },
+  {
+    "type": "return",
+    "named": false
+  },
+  {
+    "type": "right_paren",
+    "named": true
+  },
+  {
+    "type": "self_call_colon",
+    "named": true
+  },
+  {
+    "type": "string",
+    "named": true
+  },
+  {
+    "type": "string_argument",
+    "named": true
+  },
+  {
+    "type": "table<",
+    "named": false
+  },
+  {
+    "type": "table_colon",
+    "named": true
+  },
+  {
+    "type": "table_dot",
+    "named": true
+  },
+  {
+    "type": "true",
+    "named": false
+  },
+  {
+    "type": "while_do",
+    "named": true
+  },
+  {
+    "type": "while_end",
+    "named": true
+  },
+  {
+    "type": "while_start",
+    "named": true
+  },
+  {
+    "type": "{",
+    "named": false
+  },
+  {
+    "type": "|",
+    "named": false
+  },
+  {
+    "type": "}",
+    "named": false
+  },
+  {
+    "type": "~",
+    "named": false
+  },
+  {
+    "type": "~=",
+    "named": false
+  }
+]

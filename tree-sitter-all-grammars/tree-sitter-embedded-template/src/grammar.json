@@ -1,0 +1,145 @@
+{
+  "name": "embedded_template",
+  "rules": {
+    "template": {
+      "type": "REPEAT",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "directive"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "output_directive"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "comment_directive"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "content"
+          }
+        ]
+      }
+    },
+    "directive": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "<%"
+            },
+            {
+              "type": "STRING",
+              "value": "<%_"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "code"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "%>"
+            },
+            {
+              "type": "STRING",
+              "value": "-%>"
+            },
+            {
+              "type": "STRING",
+              "value": "_%>"
+            }
+          ]
+        }
+      ]
+    },
+    "output_directive": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "<%="
+            },
+            {
+              "type": "STRING",
+              "value": "<%-"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "code"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "%>"
+            },
+            {
+              "type": "STRING",
+              "value": "-%>"
+            }
+          ]
+        }
+      ]
+    },
+    "comment_directive": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "<%#"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "code"
+          },
+          "named": true,
+          "value": "comment"
+        },
+        {
+          "type": "STRING",
+          "value": "%>"
+        }
+      ]
+    }
+  },
+  "extras": [
+    {
+      "type": "PATTERN",
+      "value": "\\s"
+    }
+  ],
+  "conflicts": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "code"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "content"
+    }
+  ],
+  "inline": [],
+  "supertypes": []
+}
+

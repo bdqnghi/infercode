@@ -1,0 +1,785 @@
+{
+  "name": "eno",
+  "rules": {
+    "document": {
+      "type": "REPEAT",
+      "content": {
+        "type": "SYMBOL",
+        "name": "_instruction"
+      }
+    },
+    "_commentOrEmpty": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "comment"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_emptyLine"
+        }
+      ]
+    },
+    "_elementOrFieldsetOrList": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_escapedOrUnescapedKey"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "elementOperator"
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "copyOperator"
+                },
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "token"
+                  },
+                  "named": true,
+                  "value": "template"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_endOfLine"
+        }
+      ]
+    },
+    "_emptyLine": {
+      "type": "PATTERN",
+      "value": "[ \\t\\uFEFF\\u2060\\u200B]*\\n"
+    },
+    "_escapedOrUnescapedKey": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "key"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "escapeOperator"
+            },
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "escapedKey"
+              },
+              "named": true,
+              "value": "key"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "escapeOperator"
+            }
+          ]
+        }
+      ]
+    },
+    "_escapedOrUnescapedSectionKey": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "sectionKey"
+          },
+          "named": true,
+          "value": "key"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "escapeOperator"
+            },
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "escapedKey"
+              },
+              "named": true,
+              "value": "key"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "escapeOperator"
+            }
+          ]
+        }
+      ]
+    },
+    "_instruction": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_commentOrEmpty"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "element"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "empty"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "field"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "fieldset"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "list"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "multilineField"
+          },
+          "named": true,
+          "value": "field"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "section"
+        }
+      ]
+    },
+    "comment": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "REPEAT1",
+        "content": {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "commentOperator"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "token"
+                  },
+                  "named": true,
+                  "value": "comment"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_endOfLine"
+            }
+          ]
+        }
+      }
+    },
+    "continuation": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "directContinuationOperator"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "spacedContinuationOperator"
+            }
+          ]
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "token"
+          },
+          "named": true,
+          "value": "value"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_endOfLine"
+        }
+      ]
+    },
+    "element": {
+      "type": "SYMBOL",
+      "name": "_elementOrFieldsetOrList"
+    },
+    "empty": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_escapedOrUnescapedKey"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_endOfLine"
+        }
+      ]
+    },
+    "entry": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_escapedOrUnescapedKey"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "entryOperator"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "token"
+              },
+              "named": true,
+              "value": "value"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_endOfLine"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_commentOrEmpty"
+                }
+              },
+              {
+                "type": "SYMBOL",
+                "name": "continuation"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "field": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_escapedOrUnescapedKey"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "elementOperator"
+            },
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "token"
+              },
+              "named": true,
+              "value": "value"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_endOfLine"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "REPEAT",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "_commentOrEmpty"
+                    }
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "continuation"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_escapedOrUnescapedKey"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "elementOperator"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_endOfLine"
+            },
+            {
+              "type": "REPEAT1",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "REPEAT",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "_commentOrEmpty"
+                    }
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "continuation"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "fieldset": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_elementOrFieldsetOrList"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_commentOrEmpty"
+                }
+              },
+              {
+                "type": "SYMBOL",
+                "name": "entry"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "item": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "itemOperator"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "token"
+              },
+              "named": true,
+              "value": "value"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_endOfLine"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_commentOrEmpty"
+                }
+              },
+              {
+                "type": "SYMBOL",
+                "name": "continuation"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "key": {
+      "type": "PATTERN",
+      "value": "[^`>:=<\\-#|\\\\\\s]|[^`>:=<\\-#|\\\\\\s][^:=<\\n]*[^:=<\\s]"
+    },
+    "list": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_elementOrFieldsetOrList"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_commentOrEmpty"
+                }
+              },
+              {
+                "type": "SYMBOL",
+                "name": "item"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "multilineField": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "multilineFieldOperator"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "multilineFieldKey"
+          },
+          "named": true,
+          "value": "key"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_endOfLine"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "multilineFieldValue"
+              },
+              "named": true,
+              "value": "value"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_multilineFieldEnd"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "multilineFieldOperator"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "multilineFieldKey"
+          },
+          "named": true,
+          "value": "key"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_endOfLine"
+        }
+      ]
+    },
+    "multilineFieldValue": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "_multilineFieldLine"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_endOfLine"
+          }
+        ]
+      }
+    },
+    "section": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_sectionDescend"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "sectionOperator"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_escapedOrUnescapedSectionKey"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "copyOperator"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "deepCopyOperator"
+                    }
+                  ]
+                },
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "token"
+                  },
+                  "named": true,
+                  "value": "template"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_endOfLine"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_instruction"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_sectionAscend"
+        }
+      ]
+    },
+    "sectionKey": {
+      "type": "PATTERN",
+      "value": "[^`<\\s]|[^`<\\s][^<\\n]*[^<\\s]"
+    },
+    "token": {
+      "type": "PATTERN",
+      "value": "\\S|\\S[^\\n]*\\S"
+    },
+    "directContinuationOperator": {
+      "type": "STRING",
+      "value": "|"
+    },
+    "spacedContinuationOperator": {
+      "type": "STRING",
+      "value": "\\"
+    },
+    "commentOperator": {
+      "type": "STRING",
+      "value": ">"
+    },
+    "copyOperator": {
+      "type": "STRING",
+      "value": "<"
+    },
+    "deepCopyOperator": {
+      "type": "STRING",
+      "value": "<<"
+    },
+    "entryOperator": {
+      "type": "STRING",
+      "value": "="
+    },
+    "itemOperator": {
+      "type": "STRING",
+      "value": "-"
+    },
+    "elementOperator": {
+      "type": "STRING",
+      "value": ":"
+    },
+    "sectionOperator": {
+      "type": "PATTERN",
+      "value": "#+"
+    }
+  },
+  "extras": [
+    {
+      "type": "PATTERN",
+      "value": "[ \\t\\uFEFF\\u2060\\u200B]"
+    }
+  ],
+  "conflicts": [
+    [
+      "_elementOrFieldsetOrList",
+      "field"
+    ],
+    [
+      "element",
+      "field",
+      "fieldset",
+      "list"
+    ],
+    [
+      "element",
+      "fieldset"
+    ],
+    [
+      "element",
+      "fieldset",
+      "list"
+    ],
+    [
+      "field"
+    ],
+    [
+      "fieldset"
+    ],
+    [
+      "entry"
+    ],
+    [
+      "item"
+    ],
+    [
+      "list"
+    ]
+  ],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "_endOfLine"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_multilineFieldEnd"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_multilineFieldLine"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_sectionAscend"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_sectionDescend"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "escapedKey"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "escapeOperator"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "multilineFieldKey"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "multilineFieldOperator"
+    }
+  ],
+  "inline": [
+    "_commentOrEmpty",
+    "_elementOrFieldsetOrList",
+    "_instruction"
+  ],
+  "supertypes": []
+}
+

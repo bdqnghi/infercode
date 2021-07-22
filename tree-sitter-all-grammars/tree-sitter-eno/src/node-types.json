@@ -1,0 +1,412 @@
+[
+  {
+    "type": "comment",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "commentOperator",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "continuation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "directContinuationOperator",
+          "named": true
+        },
+        {
+          "type": "spacedContinuationOperator",
+          "named": true
+        },
+        {
+          "type": "value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "document",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "element",
+          "named": true
+        },
+        {
+          "type": "empty",
+          "named": true
+        },
+        {
+          "type": "field",
+          "named": true
+        },
+        {
+          "type": "fieldset",
+          "named": true
+        },
+        {
+          "type": "list",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "element",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "copyOperator",
+          "named": true
+        },
+        {
+          "type": "elementOperator",
+          "named": true
+        },
+        {
+          "type": "escapeOperator",
+          "named": true
+        },
+        {
+          "type": "key",
+          "named": true
+        },
+        {
+          "type": "template",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "empty",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "escapeOperator",
+          "named": true
+        },
+        {
+          "type": "key",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "entry",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "continuation",
+          "named": true
+        },
+        {
+          "type": "entryOperator",
+          "named": true
+        },
+        {
+          "type": "escapeOperator",
+          "named": true
+        },
+        {
+          "type": "key",
+          "named": true
+        },
+        {
+          "type": "value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "field",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "key",
+          "named": true
+        },
+        {
+          "type": "multilineFieldOperator",
+          "named": true
+        },
+        {
+          "type": "value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "fieldset",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "copyOperator",
+          "named": true
+        },
+        {
+          "type": "elementOperator",
+          "named": true
+        },
+        {
+          "type": "entry",
+          "named": true
+        },
+        {
+          "type": "escapeOperator",
+          "named": true
+        },
+        {
+          "type": "key",
+          "named": true
+        },
+        {
+          "type": "template",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "item",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "continuation",
+          "named": true
+        },
+        {
+          "type": "itemOperator",
+          "named": true
+        },
+        {
+          "type": "value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "copyOperator",
+          "named": true
+        },
+        {
+          "type": "elementOperator",
+          "named": true
+        },
+        {
+          "type": "escapeOperator",
+          "named": true
+        },
+        {
+          "type": "item",
+          "named": true
+        },
+        {
+          "type": "key",
+          "named": true
+        },
+        {
+          "type": "template",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "section",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "copyOperator",
+          "named": true
+        },
+        {
+          "type": "deepCopyOperator",
+          "named": true
+        },
+        {
+          "type": "element",
+          "named": true
+        },
+        {
+          "type": "empty",
+          "named": true
+        },
+        {
+          "type": "escapeOperator",
+          "named": true
+        },
+        {
+          "type": "field",
+          "named": true
+        },
+        {
+          "type": "fieldset",
+          "named": true
+        },
+        {
+          "type": "key",
+          "named": true
+        },
+        {
+          "type": "list",
+          "named": true
+        },
+        {
+          "type": "section",
+          "named": true
+        },
+        {
+          "type": "sectionOperator",
+          "named": true
+        },
+        {
+          "type": "template",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "value",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "key",
+    "named": true
+  },
+  {
+    "type": "sectionKey",
+    "named": true
+  },
+  {
+    "type": "token",
+    "named": true
+  },
+  {
+    "type": "directContinuationOperator",
+    "named": true
+  },
+  {
+    "type": "spacedContinuationOperator",
+    "named": true
+  },
+  {
+    "type": "commentOperator",
+    "named": true
+  },
+  {
+    "type": "copyOperator",
+    "named": true
+  },
+  {
+    "type": "deepCopyOperator",
+    "named": true
+  },
+  {
+    "type": "entryOperator",
+    "named": true
+  },
+  {
+    "type": "itemOperator",
+    "named": true
+  },
+  {
+    "type": "elementOperator",
+    "named": true
+  },
+  {
+    "type": "sectionOperator",
+    "named": true
+  }
+]
