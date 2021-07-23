@@ -47,8 +47,8 @@ command -v npm >/dev/null 2>&1 || {
 	source $NVM_DIR/nvm.sh 
 }
 
-# vhdl embedded_template systemrdl toml typescript markdown wat eno funnel vue r haskell wast tsx
-for lang in bash c cpp c-sharp css elm go html java javascript kotlin lua php python ruby rust scala solidity verilog yaml; do
+add-parser() {
+   lang=$1
    if [ ! -d node_modules/tree-sitter-$lang ]; then
 	   npm install tree-sitter-$lang
    fi
@@ -60,7 +60,14 @@ for lang in bash c cpp c-sharp css elm go html java javascript kotlin lua php py
 	   tree-sitter parse grammar.js
    fi
    cd -  > /dev/null
-done
+}
+export -f add-parser
+
+command -v parallel >/dev/null 2>&1 || {
+	sudo apt-get install parallel -y
+}
+# vhdl embedded_template systemrdl toml typescript markdown wat eno funnel vue r haskell wast tsx
+parallel add-parser ::: bash c cpp c-sharp css elm go html java javascript kotlin lua php python ruby rust scala solidity verilog yaml
 mkdir -p $HOME/.tree-sitter/bin
 cp $HOME/.cache/tree-sitter/lib/*.so $HOME/.tree-sitter/bin
 
