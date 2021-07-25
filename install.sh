@@ -11,7 +11,7 @@ command -v pip >/dev/null 2>&1 || {
 }
 
 # Install infercode
-pip install infercode
+#pip3 install infercode
 
 command -v cargo >/dev/null 2>&1 || {
 	# install Rust
@@ -30,7 +30,7 @@ command -v git  >/dev/null 2>&1 || {
 
 command -v tree-sitter >/dev/null 2>&1 || {
 	git clone https://github.com/tree-sitter/tree-sitter $HOME/tree-sitter
-	cd $HOME/tree-sitter/cli && source $HOME/.cargo/env && cargo install --path .
+	cd $HOME/tree-sitter/cli && cargo install --path .
 }
 
 command -v npm >/dev/null 2>&1 || {
@@ -49,7 +49,7 @@ command -v npm >/dev/null 2>&1 || {
 
 add-parser() {
    lang=$1
-   if [ ! -d node_modules/tree-sitter-$lang ]; then
+   if [ ! -d $HOME/node_modules/tree-sitter-$lang ]; then
 	   npm install tree-sitter-$lang
    fi
    cd node_modules/tree-sitter-$lang > /dev/null
@@ -67,7 +67,10 @@ command -v parallel >/dev/null 2>&1 || {
 	sudo apt-get install parallel -y
 }
 # vhdl embedded_template systemrdl toml typescript markdown wat eno funnel vue r haskell wast tsx
-parallel add-parser ::: bash c cpp c-sharp css elm go html java javascript kotlin lua php python ruby rust scala solidity verilog yaml
+#parallel add-parser ::: bash c cpp c-sharp css elm go html java javascript kotlin lua php python ruby rust scala solidity verilog yaml
+for lang in bash c cpp c-sharp css elm go html java javascript kotlin lua php python ruby rust scala solidity verilog yaml; do
+	add-parser $lang
+done
 mkdir -p $HOME/.tree-sitter/bin
 cp $HOME/.cache/tree-sitter/lib/*.so $HOME/.tree-sitter/bin
 
