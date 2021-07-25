@@ -47,19 +47,25 @@ command -v npm >/dev/null 2>&1 || {
 	source $NVM_DIR/nvm.sh 
 }
 
-add-parser() {
+npm-parser() {
    lang=$1
-   if [ ! -d $HOME/node_modules/tree-sitter-$lang ]; then
+   if [ ! -d node_modules/tree-sitter-$lang ]; then
 	   npm install tree-sitter-$lang
    fi
-   cd node_modules/tree-sitter-$lang > /dev/null
-   if [ ! -f $lang/grammar.js ]; then
-	   tree-sitter generate
+}
+export -f npm-parser
+add-parser() {
+   lang=$1
+   if [ -d node_modules/tree-sitter-$lang ]; then
+	   cd node_modules/tree-sitter-$lang > /dev/null
+	   if [ ! -f grammar.js ]; then
+		   tree-sitter generate
+	   fi
+	   if [ ! -f $HOME/.cache/tree-sitter/lib/$lang.so ]; then
+		   tree-sitter parse grammar.js
+	   fi
+	   cd -  > /dev/null
    fi
-   if [ ! -f $HOME/.cache/tree-sitter/lib/$lang.so ]; then
-	   tree-sitter parse grammar.js
-   fi
-   cd -  > /dev/null
 }
 export -f add-parser
 
@@ -68,6 +74,9 @@ command -v parallel >/dev/null 2>&1 || {
 }
 # vhdl embedded_template systemrdl toml typescript markdown wat eno funnel vue r haskell wast tsx
 #parallel add-parser ::: bash c cpp c-sharp css elm go html java javascript kotlin lua php python ruby rust scala solidity verilog yaml
+for lang in bash c cpp c-sharp css elm go html java javascript kotlin lua php python ruby rust scala solidity verilog yaml; do
+	npm-parser $lang
+done
 for lang in bash c cpp c-sharp css elm go html java javascript kotlin lua php python ruby rust scala solidity verilog yaml; do
 	add-parser $lang
 done
