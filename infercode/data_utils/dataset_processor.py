@@ -17,16 +17,22 @@ class DatasetProcessor():
     
     LOGGER = logging.getLogger('DatasetProcessor')
     def __init__(self, input_data_path: str, output_tensors_path: str, 
+                node_type_vocab_model_prefix: str,
                 node_token_vocab_model_prefix: str, 
                 subtree_vocab_model_prefix: str, language: str):
         
         self.language = language
         self.input_data_path = input_data_path
         self.output_tensors_path = output_tensors_path
+        self.node_type_vocab_model_prefix = node_type_vocab_model_prefix
         self.node_token_vocab_model_prefix = node_token_vocab_model_prefix
         self.subtree_vocab_model_prefix = subtree_vocab_model_prefix
 
         self.ast_parser = ASTParser(language=self.language)
+        self.ast_util = ASTUtil(node_type_vocab_model_path=self.node_type_vocab_model_prefix + ".model", 
+                                node_token_vocab_model_path=self.node_token_vocab_model_prefix + ".model",
+                                ast_parser=self.ast_parser)
+
         self.subtree_util = SubtreeUtil(ast_parser=self.ast_parser)
 
 
@@ -57,7 +63,7 @@ class DatasetProcessor():
                 with open(file_path, "rb") as f:
                     code_snippet = f.read()
 
-                tree_representation, tree_size = self.tensor_util.simplify_ast(code_snippet)
+                tree_representation, tree_size = self.ast_util.simplify_ast(code_snippet)
 
                 tree_indexes = self.tensor_util.transform_tree_to_index(tree_representation)
                 tree_indexes["size"] = tree_size 
@@ -70,6 +76,7 @@ class DatasetProcessor():
                 for subtree in subtrees:
                     subtree_str = "-".join(subtree)
                     subtree_id = self.subtree_vocab.get_id_or_unk_for_text(subtree_str)
+                    
                     if len(subtree_id) == 1 and subtree_id[0] != 0:
                         subtrees_id.append(subtree_id[0])
 
@@ -92,12 +99,16 @@ class DatasetProcessor():
     def init_vocabs(self):
         if not os.path.exists(self.node_token_vocab_model_prefix + ".model"):
             self.LOGGER.info("Generating token vocabulary")
-            self.token_vocab_extractor.create_vocab()
+            self.token_vocab = self.token_vocab_extractor.create_vocab()
+        else:
+            self.token_vocab = Vocabulary(100000, self.node_token_vocab_model_prefix + ".model")
+
         if not os.path.exists(self.subtree_vocab_model_prefix + ".model"):
             self.LOGGER.info("Generating subtree vocabulary")
-            subtree_vocab = subtree_vocab_extractor.create_vocab()
-
-      
+            self.subtree_vocab = self.subtree_vocab_extractor.create_vocab()
+        else:
+            self.subtree_vocab = Vocabulary(100000, self.subtree_vocab_model_prefix + ".model")
+    
     def process_or_load_data(self):
 
         if not os.path.exists(self.output_tensors_path):

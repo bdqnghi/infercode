@@ -60,6 +60,7 @@ class InferCodeTrainer():
 
         self.data_processor = DatasetProcessor(input_data_path=self.data_path, 
                                                output_tensors_path=self.output_processed_data_path, 
+                                               node_type_vocab_model_prefix=self.node_type_vocab_model_prefix, 
                                                node_token_vocab_model_prefix=self.node_token_vocab_model_prefix, 
                                                subtree_vocab_model_prefix=self.subtree_vocab_model_prefix, 
                                                language=self.language)
