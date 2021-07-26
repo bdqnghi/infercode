@@ -29,12 +29,7 @@ class DatasetProcessor():
         self.subtree_vocab_model_prefix = subtree_vocab_model_prefix
 
         self.ast_parser = ASTParser(language=self.language)
-        self.ast_util = ASTUtil(node_type_vocab_model_path=self.node_type_vocab_model_prefix + ".model", 
-                                node_token_vocab_model_path=self.node_token_vocab_model_prefix + ".model",
-                                ast_parser=self.ast_parser)
-
         self.subtree_util = SubtreeUtil(ast_parser=self.ast_parser)
-
 
         self.token_vocab_extractor = TokenVocabExtractor(input_data_path=self.input_data_path, 
                                                         node_token_vocab_prefix=self.node_token_vocab_model_prefix, 
@@ -46,6 +41,11 @@ class DatasetProcessor():
      
         self.init_vocabs()
         self.tensor_util = TensorUtil()
+
+        # AST Util can only be initialized after extracted the token vocab
+        self.ast_util = ASTUtil(node_type_vocab_model_path=self.node_type_vocab_model_prefix + ".model", 
+                                node_token_vocab_model_path=self.node_token_vocab_model_prefix + ".model",
+                                ast_parser=self.ast_parser)
 
 
 
@@ -71,7 +71,7 @@ class DatasetProcessor():
                 # Extract all subtrees from the code snippet
                 subtrees = self.subtree_util.extract_subtrees(code_snippet)
                 
-                # ----------Convert subtree strings to id----------
+                # ----------Convert subtree string to id----------
                 subtrees_id = []
                 for subtree in subtrees:
                     subtree_str = "-".join(subtree)
