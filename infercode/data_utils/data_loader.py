@@ -5,13 +5,14 @@ import sys
 from pathlib import Path
 # To import upper level modules
 sys.path.append(str(Path('.').absolute().parent))
+from .tensor_util import TensorUtil
 
 class DataLoader():
     LOGGER = logging.getLogger('DataLoader')
 
-    def __init__(self, ast_util, batch_size):
-        self.ast_util = ast_util
+    def __init__(self, batch_size):
         self.batch_size = batch_size
+        self.tensor_util = TensorUtil()
 
     def make_minibatch_iterator(self, buckets):
         bucket_ids = list(buckets.keys())
@@ -28,7 +29,7 @@ class DataLoader():
                 batch_trees.append(tree)
                 samples += 1
                 if samples >= self.batch_size:
-                    batch_obj = self.ast_util.trees_to_batch_tensors(batch_trees)
+                    batch_obj = self.tensor_util.trees_to_batch_tensors(batch_trees)
                 
                     yield batch_obj
                     batch_trees = []

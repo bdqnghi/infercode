@@ -6,19 +6,19 @@ from .vocabulary import Vocabulary
 from pathlib import Path
 import os
 from tqdm import *
-from .ast_util import ASTUtil
+from .subtree_util import SubtreeUtil
 
 
 class SubtreeVocabExtractor():
 
 
     def __init__(self, input_data_path: str, output_subtree_vocab_prefix: str,
-                node_type_vocab_model_path: str, node_token_vocab_model_path: str, ast_util: ASTUtil):
+                subtree_util: SubtreeUtil):
 
         self.input_data_path = input_data_path
         self.output_subtree_vocab_prefix = output_subtree_vocab_prefix
         self.subtree_vocab = Vocabulary(100000)
-        self.ast_util = ast_util
+        self.subtree_util = subtree_util
         # self.ast_util = ASTUtil(node_type_vocab_model_path=node_type_vocab_model_path, 
         #                         node_token_vocab_model_path=node_token_vocab_model_path, language=language)
 
@@ -30,7 +30,7 @@ class SubtreeVocabExtractor():
                 
                 with open(file_path, "rb") as f:
                     code_snippet = f.read()
-                subtrees = self.ast_util.extract_subtrees(code_snippet)
+                subtrees = self.subtree_util.extract_subtrees(code_snippet)
                 all_subtrees_vocab.extend(subtrees)
         
         all_subtrees_vocab_filtered = []

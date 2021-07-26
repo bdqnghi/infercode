@@ -4,6 +4,11 @@ from tqdm import *
 #import pickle
 from .vocabulary import Vocabulary
 from .ast_util import ASTUtil
+from .tensor_util import TensorUtil
+from .ast_parser import ASTParser
+from .subtree_util import SubtreeUtil
+from .subtree_vocab_extractor import SubtreeVocabExtractor
+from .token_vocab_extractor import TokenVocabExtractor
 from collections import defaultdict
 import pickle
 import logging
@@ -12,23 +17,34 @@ class DatasetProcessor():
     
     LOGGER = logging.getLogger('DatasetProcessor')
     def __init__(self, input_data_path: str, output_tensors_path: str, 
-                node_type_vocab_model_path: str, node_token_vocab_model_path: str, 
-                subtree_vocab_model_path: str, 
-                ast_util: ASTUtil):
+                node_token_vocab_model_prefix: str, 
+                subtree_vocab_model_prefix: str, language: str):
         
+        self.language = language
         self.input_data_path = input_data_path
         self.output_tensors_path = output_tensors_path
-        self.node_type_vocab_model_path = node_type_vocab_model_path
-        self.node_token_vocab_model_path = node_token_vocab_model_path
-        self.subtree_vocab_model_path = subtree_vocab_model_path
-        self.subtree_vocab = Vocabulary(10000, subtree_vocab_model_path)
+        self.node_token_vocab_model_prefix = node_token_vocab_model_prefix
+        self.subtree_vocab_model_prefix = subtree_vocab_model_prefix
 
-        self.ast_util = ast_util
-        # self.ast_util = ASTUtil(node_type_vocab_model_path=node_type_vocab_model_path, 
-                                        # node_token_vocab_model_path=node_token_vocab_model_path, language=language)
-        
+        self.ast_parser = ASTParser(language=self.language)
+        self.subtree_util = SubtreeUtil(ast_parser=self.ast_parser)
 
-    def process(self):
+
+        self.token_vocab_extractor = TokenVocabExtractor(input_data_path=self.input_data_path, 
+                                                        node_token_vocab_prefix=self.node_token_vocab_model_prefix, 
+                                                        model_type="bpe")
+        self.subtree_vocab_extractor = SubtreeVocabExtractor(input_data_path=self.input_data_path, 
+                                                            output_subtree_vocab_prefix=self.subtree_vocab_model_prefix,
+                                                            subtree_util=self.subtree_util)
+    
+     
+        self.init_vocabs()
+        self.tensor_util = TensorUtil()
+
+
+
+    # Trees with similar size should be put into the same bucket
+    def put_trees_into_buckets(self):
 
         bucket_sizes = np.array(list(range(20 , 7500 , 20)))
         buckets = defaultdict(list)
@@ -41,13 +57,13 @@ class DatasetProcessor():
                 with open(file_path, "rb") as f:
                     code_snippet = f.read()
 
-                tree_representation, tree_size = self.ast_util.simplify_ast(code_snippet)
+                tree_representation, tree_size = self.tensor_util.simplify_ast(code_snippet)
 
-                tree_indexes = self.ast_util.transform_tree_to_index(tree_representation)
+                tree_indexes = self.tensor_util.transform_tree_to_index(tree_representation)
                 tree_indexes["size"] = tree_size 
 
                 # Extract all subtrees from the code snippet
-                subtrees = self.ast_util.extract_subtrees(code_snippet)
+                subtrees = self.subtree_util.extract_subtrees(code_snippet)
                 
                 # ----------Convert subtree strings to id----------
                 subtrees_id = []
@@ -66,7 +82,6 @@ class DatasetProcessor():
                     chosen_bucket_idx = np.argmax(bucket_sizes > tree_size)
                     buckets[chosen_bucket_idx].append(tree_indexes)
 
-                # count = count + 1
 
         self.LOGGER.info("Saving processed data into pickle format.....")
         pickle.dump(buckets, open(self.output_tensors_path, "wb" ) )
@@ -74,5 +89,21 @@ class DatasetProcessor():
         return buckets
 
 
+    def init_vocabs(self):
+        if not os.path.exists(self.node_token_vocab_model_prefix + ".model"):
+            self.LOGGER.info("Generating token vocabulary")
+            self.token_vocab_extractor.create_vocab()
+        if not os.path.exists(self.subtree_vocab_model_prefix + ".model"):
+            self.LOGGER.info("Generating subtree vocabulary")
+            subtree_vocab = subtree_vocab_extractor.create_vocab()
 
-  
+      
+    def process_or_load_data(self):
+
+        if not os.path.exists(self.output_tensors_path):
+            self.LOGGER.info("Processing the dataset")
+            training_buckets = self.put_trees_into_buckets()
+        else:
+            training_buckets = pickle.load(open(self.output_tensors_path, "rb"))
+
+        return training_buckets
