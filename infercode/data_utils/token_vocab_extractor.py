@@ -20,12 +20,12 @@ class TokenVocabExtractor():
         all_tokens = []
         for subdir , dirs, files in os.walk(self.input_data_path): 
             for file in tqdm(files):
-                if file.endswith(file_types)
-                file_path = os.path.join(subdir, file)
-                with open(file_path, "r") as f:
-                    data = str(f.read())
-                    data = data.replace("\n", "")
-                    tokens = identifiersplitting.split_identifier_into_parts(data)
-                    all_tokens.append(tokens)
+                if file.endswith(file_types):
+                    file_path = os.path.join(subdir, file)
+                    with open(file_path, "r") as f:
+                        data = str(f.read())
+                        data = data.replace("\n", "")
+                        tokens = identifiersplitting.split_identifier_into_parts(data)
+                        all_tokens.append(tokens)
         self.token_vocab.create_vocabulary(tokens=all_tokens, model_filename=self.node_token_vocab_model_prefix, model_type=self.model_type)        
         return self.token_vocab
