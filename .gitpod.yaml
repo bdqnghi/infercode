@@ -1,0 +1,3 @@
+tasks:
+   - before: pip3 install infercode && cp -r .tree-sitter ~
+     command: cd tests && python test_infer.py
