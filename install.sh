@@ -10,9 +10,6 @@ command -v pip >/dev/null 2>&1 || {
 	sudo apt install python3 python3-pip -y
 }
 
-# Install infercode
-#pip3 install infercode
-
 command -v cargo >/dev/null 2>&1 || {
 	# install Rust
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > rustup.sh
@@ -83,3 +80,8 @@ done
 mkdir -p $HOME/.tree-sitter/bin
 cp $HOME/.cache/tree-sitter/lib/*.so $HOME/.tree-sitter/bin
 
+# Install infercode
+pip3 install infercode
+
+cd tests
+python3 test_infer.py
