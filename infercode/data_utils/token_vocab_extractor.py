@@ -16,9 +16,11 @@ class TokenVocabExtractor():
         self.token_vocab = Vocabulary(100000)
 
     def create_vocab(self):
+        file_types = (".java", ".c", ".cpp", ".sh", ".cs", ".js", ".lua", ".py", ".rb", ".rs", ".r", ".scala", ".hs", ".kt", ".sol", ".html", ".css", ".md")
         all_tokens = []
         for subdir , dirs, files in os.walk(self.input_data_path): 
             for file in tqdm(files):
+                if file.endswith(file_types)
                 file_path = os.path.join(subdir, file)
                 with open(file_path, "r") as f:
                     data = str(f.read())
