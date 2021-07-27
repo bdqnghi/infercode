@@ -12,11 +12,11 @@ from .subtree_util import SubtreeUtil
 class SubtreeVocabExtractor():
 
 
-    def __init__(self, input_data_path: str, output_subtree_vocab_prefix: str,
+    def __init__(self, input_data_path: str, subtree_vocab_model_prefix: str,
                 subtree_util: SubtreeUtil):
 
         self.input_data_path = input_data_path
-        self.output_subtree_vocab_prefix = output_subtree_vocab_prefix
+        self.subtree_vocab_model_prefix = subtree_vocab_model_prefix
         self.subtree_vocab = Vocabulary(100000)
         self.subtree_util = subtree_util
         # self.ast_util = ASTUtil(node_type_vocab_model_path=node_type_vocab_model_path, 
@@ -46,7 +46,7 @@ class SubtreeVocabExtractor():
         
         # model_type must be "word" for subtree vocab
         self.subtree_vocab.create_vocabulary(tokens=all_subtrees_vocab_concat, 
-                                            model_filename=self.output_subtree_vocab_prefix, 
+                                            model_filename=self.subtree_vocab_model_prefix, 
                                             model_type="word") 
         return self.subtree_vocab
         

@@ -9,9 +9,9 @@ import os
 
 class TokenVocabExtractor():
 
-    def __init__(self, input_data_path: str, node_token_vocab_prefix: str, model_type: str="bpe") -> None:
+    def __init__(self, input_data_path: str, node_token_vocab_model_prefix: str, model_type: str="bpe") -> None:
         self.input_data_path = input_data_path
-        self.node_token_vocab_prefix = node_token_vocab_prefix
+        self.node_token_vocab_model_prefix = node_token_vocab_model_prefix
         self.model_type = model_type
         self.token_vocab = Vocabulary(100000)
 
@@ -25,5 +25,5 @@ class TokenVocabExtractor():
                     data = data.replace("\n", "")
                     tokens = identifiersplitting.split_identifier_into_parts(data)
                     all_tokens.append(tokens)
-        self.token_vocab.create_vocabulary(tokens=all_tokens, model_filename=self.node_token_vocab_prefix, model_type=self.model_type)        
+        self.token_vocab.create_vocabulary(tokens=all_tokens, model_filename=self.node_token_vocab_model_prefix, model_type=self.model_type)        
         return self.token_vocab

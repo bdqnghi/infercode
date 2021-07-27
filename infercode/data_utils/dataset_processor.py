@@ -32,10 +32,10 @@ class DatasetProcessor():
         self.subtree_util = SubtreeUtil(ast_parser=self.ast_parser)
 
         self.token_vocab_extractor = TokenVocabExtractor(input_data_path=self.input_data_path, 
-                                                        node_token_vocab_prefix=self.node_token_vocab_model_prefix, 
+                                                        node_token_vocab_model_prefix=self.node_token_vocab_model_prefix, 
                                                         model_type="bpe")
         self.subtree_vocab_extractor = SubtreeVocabExtractor(input_data_path=self.input_data_path, 
-                                                            output_subtree_vocab_prefix=self.subtree_vocab_model_prefix,
+                                                            subtree_vocab_model_prefix=self.subtree_vocab_model_prefix,
                                                             subtree_util=self.subtree_util)
     
      
