@@ -13,13 +13,13 @@ install_requires=[
     "sentencepiece==0.1.95",
     "tensorflow==2.4.0",
     "tqdm==4.55.1",
-    "tree_sitter==0.2.1",
+    "tree_sitter==0.19.0",
     "utils==1.0.1"
 ]
 
 setup(
   name = 'infercode',
-  version = '0.0.10',
+  version = '0.0.11',
   py_modules = ['infercode'],
   description = 'Map any code snippet into vector',
   author = 'Nghi D. Q. Bui and Yijun Yu',
