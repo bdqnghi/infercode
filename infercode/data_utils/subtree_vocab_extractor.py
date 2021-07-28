@@ -23,13 +23,15 @@ class SubtreeVocabExtractor():
         self.language_util = LanguageUtil()
         # self.ast_util = ASTUtil(node_type_vocab_model_path=node_type_vocab_model_path, 
         #                         node_token_vocab_model_path=node_token_vocab_model_path, language=language)
+        self.temp_subtrees_file = "temp_subtrees.csv"
+        if os.path.exists(self.temp_subtrees_file):
+            os.remove(self.temp_subtrees_file)
 
     def detect_language_of_file(self, file_path: str):
         _, file_extension = os.path.splitext(file_path)
         return self.language_util.get_language_by_file_extension(file_extension)
 
     def create_vocab_from_dir(self, input_data_path: str):
-        all_subtrees_vocab = []
         for subdir , dirs, files in os.walk(input_data_path): 
             for file in tqdm(files):
                 file_path = os.path.join(subdir, file)
@@ -46,8 +48,16 @@ class SubtreeVocabExtractor():
                         # Concat the list of nodes in a subtree into a string
                         subtree_str = "-".join(s)
                         if subtree_str not in all_subtrees_vocab:
-                            all_subtrees_vocab.append(subtree_str)
-    
+                            # Write to a temporary file as keeping a large array may cause memory overflow
+                            with open(self.temp_subtrees_file, "a") as f:
+                                # all_subtrees_vocab.append(subtree_str)
+                                f.write(subtree_str)
+                                f.write("\n")
+        
+        # all_subtrees_vocab = []
+        with open(self.temp_subtrees_file, "r") as f1:
+            all_subtrees_vocab = f1.read().splitlines()
+
         # model_type must be "word" for subtree vocab
         self.subtree_vocab.create_vocabulary(tokens=all_subtrees_vocab, 
                                             model_filename=self.subtree_vocab_model_prefix, 
