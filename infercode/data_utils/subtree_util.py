@@ -11,8 +11,8 @@ class SubtreeUtil():
     import logging
     LOGGER = logging.getLogger('SubtreeUtil')
     
-    def __init__(self, ast_parser):
-        self.ast_parser = ast_parser
+    # def __init__(self, ast_parser):
+        # self.ast_parser = ast_parser
 
     def extract_subtree(self, subtree_root):
         queue = [subtree_root]
@@ -30,8 +30,8 @@ class SubtreeUtil():
             
         return subtree_nodes
 
-    def extract_subtrees(self, text):
-        tree = self.ast_parser.parse(text)
+    def extract_subtrees(self, tree):
+        # tree = self.ast_parser.parse(text, language)
         root = tree.root_node
         
         all_subtrees = []

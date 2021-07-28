@@ -22,8 +22,8 @@ class ASTUtil():
         self.token_vocab = Vocabulary(100000, node_token_vocab_model_path)
 
     # Simplify the AST 
-    def simplify_ast(self, text):
-        tree = self.ast_parser.parse(text)
+    def simplify_ast(self, tree):
+        # tree = self.ast_parser.parse(text)
         root = tree.root_node
 
         ignore_types = ["\n"]

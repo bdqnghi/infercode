@@ -8,38 +8,40 @@ from tree_sitter import Language, Parser
 from pathlib import Path
 import glob, os
 import numpy as np
-
+from bidict import bidict
 
 class LanguageUtil():
 
     def __init__(self):
-        self.languages = [
-                "java", 
-                "c", 
-                "c_sharp", 
-                "cpp", 
-                "bash", 
-                "go",
-                "javascript",
-                "lua",
-                "php",
-                "python",
-                "ruby",
-                "rust",
-                "r",
-                "scala",
-                "haskell",
-                "lua",
-                "kotlin",
-                "solidity"
-                "bash",
-                "html",
-                "css",
-                "markdown"
-        ]
-
+        self.languages = bidict({
+                "java": ".java", 
+                "c": ".c", 
+                "c_sharp": ".cs", 
+                "cpp": ".cpp",
+                "bash": ".sh",
+                "go": ".go",
+                "javascript": ".js",
+                "lua": ".lua",
+                "php": ".php",
+                "python": ".py",
+                "ruby": ".rb",
+                "rust": ".rs",
+                "r": ".r",
+                "scala": ".scala",
+                "haskell": ".hs",
+                "lua": ".lua",
+                "kotlin": ".kt",
+                "solidity": ".sol",
+                "html": ".html",
+                "css": ".css",
+                "markdown": ".md"
+        })
+    
+    def get_language_by_file_extension(self, extension):
+        return self.languages.inverse[extension]
+        
     def get_language_index(self, language):
-        return self.languages.index(language)
+        return self.languages.keys().index(language)
 
     def get_num_languages(self):
-        return len(self.languages)
+        return len(self.languages.keys())
