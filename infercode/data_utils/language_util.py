@@ -26,15 +26,9 @@ class LanguageUtil():
                 "python": ".py",
                 "ruby": ".rb",
                 "rust": ".rs",
-                "r": ".r",
                 "scala": ".scala",
-                "haskell": ".hs",
-                "lua": ".lua",
                 "kotlin": ".kt",
                 "solidity": ".sol",
-                "html": ".html",
-                "css": ".css",
-                "markdown": ".md"
         })
     
     def get_language_by_file_extension(self, extension):
