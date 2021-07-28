@@ -58,6 +58,8 @@ class SubtreeVocabExtractor():
         with open(self.temp_subtrees_file, "r") as f1:
             all_subtrees_vocab = f1.read().splitlines()
 
+        all_subtrees_vocab = list(set(all_subtrees_vocab))
+
         # model_type must be "word" for subtree vocab
         self.subtree_vocab.create_vocabulary(tokens=all_subtrees_vocab, 
                                             model_filename=self.subtree_vocab_model_prefix, 
