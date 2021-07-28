@@ -81,7 +81,7 @@ mkdir -p $HOME/.tree-sitter/bin
 cp $HOME/.cache/tree-sitter/lib/*.so $HOME/.tree-sitter/bin
 
 # Install infercode
-pip3 install infercode
+# pip3 install infercode
 
-cd tests
-python3 test_infer.py
+# cd tests
+# python3 test_infer.py
