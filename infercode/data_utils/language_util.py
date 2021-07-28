@@ -29,6 +29,10 @@ class LanguageUtil():
                 "scala": ".scala",
                 "kotlin": ".kt",
                 "solidity": ".sol",
+                "html": ".html",
+                "css": ".css",
+                "haskell": ".hs",
+                "r": ".r"
         })
     
     def get_language_by_file_extension(self, extension):

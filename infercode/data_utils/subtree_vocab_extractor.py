@@ -40,21 +40,16 @@ class SubtreeVocabExtractor():
                 language = self.detect_language_of_file(file_path)
                 tree = self.ast_parser.parse(code_snippet, language)
                 subtrees = self.subtree_util.extract_subtrees(tree)
-                all_subtrees_vocab.extend(subtrees)
-        
-        all_subtrees_vocab_filtered = []
-        # Keep the subtrees with small size, ignore the large ones      
-        for s in all_subtrees_vocab:
-            if len(s) > 1 and len(s) < 8:
-                all_subtrees_vocab_filtered.append(s)
-
-        all_subtrees_vocab_concat = []        
-        # Concat the list of nodes in a subtree into a string
-        for s in all_subtrees_vocab_filtered:
-            all_subtrees_vocab_concat.append("-".join(s))
-        
+                # Keep the subtrees with small size, ignore the large ones      
+                for s in subtrees:
+                    if len(s) > 1 and len(s) < 8:
+                        # Concat the list of nodes in a subtree into a string
+                        subtree_str = "-".join(s)
+                        if subtree_str not in all_subtrees_vocab:
+                            all_subtrees_vocab.append(subtree_str)
+    
         # model_type must be "word" for subtree vocab
-        self.subtree_vocab.create_vocabulary(tokens=all_subtrees_vocab_concat, 
+        self.subtree_vocab.create_vocabulary(tokens=all_subtrees_vocab, 
                                             model_filename=self.subtree_vocab_model_prefix, 
                                             model_type="word") 
         return self.subtree_vocab
