@@ -34,7 +34,7 @@ class SubtreeVocabExtractor():
             for file in tqdm(files):
                 file_path = os.path.join(subdir, file)
                 
-                with open(file_path, "rb", errors='ignore') as f:
+                with open(file_path, "rb") as f:
                     code_snippet = f.read()
 
                 language = self.detect_language_of_file(file_path)
