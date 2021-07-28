@@ -1,5 +1,5 @@
-pip3 install twine
-python3 -m build --sdist --wheel
-$HOME/.local/bin/twine upload dist/infercode-*
+rm -rf dist/*
+python3 setup.py sdist bdist_wheel
+twine upload dist/infercode-*
 pip uninstall infercode
 pip install infercode

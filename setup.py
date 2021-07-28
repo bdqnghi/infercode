@@ -3,6 +3,7 @@ from setuptools import setup, find_packages
 
 install_requires=[
     "bidict==0.21.2",
+    "coloredlogs == 15.0.1",
     "dpu_utils==0.2.19",
     "keras_radam==0.15.0",
     "numpy==1.19.4",
@@ -12,13 +13,13 @@ install_requires=[
     "sentencepiece==0.1.95",
     "tensorflow==2.4.0",
     "tqdm==4.55.1",
-    "tree_sitter==0.2.1",
+    "tree_sitter==0.19.0",
     "utils==1.0.1"
 ]
 
 setup(
   name = 'infercode',
-  version = '0.0.5',
+  version = '0.0.11',
   py_modules = ['infercode'],
   description = 'Map any code snippet into vector',
   author = 'Nghi D. Q. Bui and Yijun Yu',
@@ -34,5 +35,6 @@ setup(
   ],
   package_dir={"infercode": "infercode"},
   packages=find_packages(where=".", exclude=["tests", "logo", "datasets"]),
+  package_data={'infercode': ['configs/*.ini']},
   install_requires=install_requires
 )
