@@ -47,12 +47,12 @@ class SubtreeVocabExtractor():
                     if len(s) > 1 and len(s) < 8:
                         # Concat the list of nodes in a subtree into a string
                         subtree_str = "-".join(s)
-                        if subtree_str not in all_subtrees_vocab:
-                            # Write to a temporary file as keeping a large array may cause memory overflow
-                            with open(self.temp_subtrees_file, "a") as f:
-                                # all_subtrees_vocab.append(subtree_str)
-                                f.write(subtree_str)
-                                f.write("\n")
+                        # if subtree_str not in all_subtrees_vocab:
+                        # Write to a temporary file as keeping a large array may cause memory overflow
+                        with open(self.temp_subtrees_file, "a") as f:
+                            # all_subtrees_vocab.append(subtree_str)
+                            f.write(subtree_str)
+                            f.write("\n")
         
         # all_subtrees_vocab = []
         with open(self.temp_subtrees_file, "r") as f1:
