@@ -1,3 +1,4 @@
 tasks:
    - before: pip3 install infercode && mkdir -p ~/.tree-sitter/bin && cp -r .tree-sitter-0.19.0/x86_64/*.so ~/.tree-sitter/bin/
      command: cd tests && python test_infer.py
+   - command: git clone https://github.com/tree-sitter/tree-sitter && cd tree-sitter/cli && cargo install --path .
