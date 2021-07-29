@@ -37,7 +37,7 @@ class SubtreeVocabExtractor():
 
         pathqueue = queue.Queue()
         resultqueue = queue.Queue()
-        for i in range(0, 30):
+        for i in range(0, os.cpu_count()):
             thread = SubtreeProcessThread(pathqueue, resultqueue)
             thread.setDaemon(True)
             thread.start()
@@ -54,25 +54,10 @@ class SubtreeVocabExtractor():
                     code_snippet = f.read()
 
                 language = self.detect_language_of_file(file_path)
-                tree = self.ast_parser.parse(code_snippet, language)
+                # tree = self.ast_parser.parse(code_snippet, language)
                 # subtrees = self.subtree_util.extract_subtrees(tree)
-
-                pathqueue.put(tree)
-                # Keep the subtrees with small size, ignore the large ones 
-
-
-                # for s in subtrees:
-                #     if len(s) > 1 and len(s) < 8:
-                #         # Concat the list of nodes in a subtree into a string
-                #         subtree_str = "-".join(s)
-                #         # if subtree_str not in all_subtrees_vocab:
-                #         # Write to a temporary file as keeping a large array may cause memory overflow
-                #         with open(self.temp_subtrees_file, "a") as f:
-                #             # all_subtrees_vocab.append(subtree_str)
-                #             f.write(subtree_str)
-                #             f.write("\n")
+                pathqueue.put((code_snippet, language))
         
-
         pathqueue.join()
         resultqueue.join()
 
@@ -95,16 +80,18 @@ class SubtreeProcessThread(threading.Thread):
         self.in_queue = in_queue
         self.out_queue = out_queue
         self.subtree_util = SubtreeUtil()
+        self.ast_parser = ASTParser()
 
     def run(self):
         while True:
-            path = self.in_queue.get()
-            result = self.process(path)
+            code_snippet, language = self.in_queue.get()
+            result = self.process(code_snippet, language)
             self.out_queue.put(result)
             self.in_queue.task_done()
 
-    def process(self, tree):
+    def process(self, code_snippet, language):
         # Do the processing job here
+        tree = self.ast_parser.parse(code_snippet, language)
         subtrees = self.subtree_util.extract_subtrees(tree)
         return subtrees
 
