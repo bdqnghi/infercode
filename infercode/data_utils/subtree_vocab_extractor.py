@@ -10,6 +10,8 @@ from .subtree_util import SubtreeUtil
 from .ast_parser import ASTParser
 from .language_util import LanguageUtil
 import os
+import queue
+import threading
 
 class SubtreeVocabExtractor():
 
@@ -32,6 +34,18 @@ class SubtreeVocabExtractor():
         return self.language_util.get_language_by_file_extension(file_extension)
 
     def create_vocab_from_dir(self, input_data_path: str):
+
+        pathqueue = queue.Queue()
+        resultqueue = queue.Queue()
+        for i in range(0, 30):
+            thread = SubtreeProcessThread(pathqueue, resultqueue)
+            thread.setDaemon(True)
+            thread.start()
+
+        t = WriteThread(resultqueue, self.temp_subtrees_file)
+        t.setDaemon(True)
+        t.start()
+
         for subdir , dirs, files in os.walk(input_data_path): 
             for file in tqdm(files):
                 file_path = os.path.join(subdir, file)
@@ -41,19 +55,27 @@ class SubtreeVocabExtractor():
 
                 language = self.detect_language_of_file(file_path)
                 tree = self.ast_parser.parse(code_snippet, language)
-                subtrees = self.subtree_util.extract_subtrees(tree)
-                # Keep the subtrees with small size, ignore the large ones      
-                for s in subtrees:
-                    if len(s) > 1 and len(s) < 8:
-                        # Concat the list of nodes in a subtree into a string
-                        subtree_str = "-".join(s)
-                        # if subtree_str not in all_subtrees_vocab:
-                        # Write to a temporary file as keeping a large array may cause memory overflow
-                        with open(self.temp_subtrees_file, "a") as f:
-                            # all_subtrees_vocab.append(subtree_str)
-                            f.write(subtree_str)
-                            f.write("\n")
+                # subtrees = self.subtree_util.extract_subtrees(tree)
+
+                pathqueue.put(tree)
+                # Keep the subtrees with small size, ignore the large ones 
+
+
+                # for s in subtrees:
+                #     if len(s) > 1 and len(s) < 8:
+                #         # Concat the list of nodes in a subtree into a string
+                #         subtree_str = "-".join(s)
+                #         # if subtree_str not in all_subtrees_vocab:
+                #         # Write to a temporary file as keeping a large array may cause memory overflow
+                #         with open(self.temp_subtrees_file, "a") as f:
+                #             # all_subtrees_vocab.append(subtree_str)
+                #             f.write(subtree_str)
+                #             f.write("\n")
         
+
+        pathqueue.join()
+        resultqueue.join()
+
         # all_subtrees_vocab = []
         with open(self.temp_subtrees_file, "r") as f1:
             all_subtrees_vocab = f1.read().splitlines()
@@ -67,6 +89,44 @@ class SubtreeVocabExtractor():
         return self.subtree_vocab
         
 
+class SubtreeProcessThread(threading.Thread):
+    def __init__(self, in_queue, out_queue):
+        threading.Thread.__init__(self)
+        self.in_queue = in_queue
+        self.out_queue = out_queue
+        self.subtree_util = SubtreeUtil()
 
-          
-      
+    def run(self):
+        while True:
+            path = self.in_queue.get()
+            result = self.process(path)
+            self.out_queue.put(result)
+            self.in_queue.task_done()
+
+    def process(self, tree):
+        # Do the processing job here
+        subtrees = self.subtree_util.extract_subtrees(tree)
+        return subtrees
+
+class WriteThread(threading.Thread):
+    def __init__(self, queue, output_path):
+        threading.Thread.__init__(self)
+        self.queue = queue
+        self.output_path = output_path
+
+    def write_subtree(self, subtrees):
+        for s in subtrees:
+            if len(s) > 1 and len(s) < 8:
+                # Concat the list of nodes in a subtree into a string
+                subtree_str = "-".join(s)
+                # if subtree_str not in all_subtrees_vocab:
+                # Write to a temporary file as keeping a large array may cause memory overflow
+                with open(self.output_path, "a") as f:
+                    # all_subtrees_vocab.append(subtree_str)
+                    f.write(subtree_str)
+                    f.write("\n")
+    def run(self):
+        while True:
+            result = self.queue.get()
+            self.write_subtree(result)
+            self.queue.task_done()
