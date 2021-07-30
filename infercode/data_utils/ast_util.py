@@ -15,14 +15,13 @@ class ASTUtil():
     import logging
     LOGGER = logging.getLogger('ASTUtil')
 
-    def __init__(self, node_type_vocab_model_path: str, node_token_vocab_model_path: str, ast_parser):
+    def __init__(self, node_type_vocab_model_path: str, node_token_vocab_model_path: str):
 
-        self.ast_parser = ast_parser
         self.type_vocab = Vocabulary(1000, node_type_vocab_model_path)
         self.token_vocab = Vocabulary(100000, node_token_vocab_model_path)
 
     # Simplify the AST 
-    def simplify_ast(self, tree):
+    def simplify_ast(self, tree, text):
         # tree = self.ast_parser.parse(text)
         root = tree.root_node
 

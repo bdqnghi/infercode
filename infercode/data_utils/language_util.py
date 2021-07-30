@@ -39,7 +39,7 @@ class LanguageUtil():
         return self.languages.inverse[extension]
         
     def get_language_index(self, language):
-        return self.languages.keys().index(language)
+        return list(self.languages.keys()).index(language)
 
     def get_num_languages(self):
         return len(self.languages.keys())

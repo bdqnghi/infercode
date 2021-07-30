@@ -7,6 +7,7 @@ from .ast_util import ASTUtil
 from .tensor_util import TensorUtil
 from .ast_parser import ASTParser
 from .subtree_util import SubtreeUtil
+from .language_util import LanguageUtil
 from .subtree_vocab_extractor import SubtreeVocabExtractor
 from .token_vocab_extractor import TokenVocabExtractor
 from collections import defaultdict
@@ -28,15 +29,13 @@ class DatasetProcessor():
         self.node_token_vocab_model_prefix = node_token_vocab_model_prefix
         self.subtree_vocab_model_prefix = subtree_vocab_model_prefix
 
-        self.ast_parser = ASTParser(language=self.language)
-        self.subtree_util = SubtreeUtil(ast_parser=self.ast_parser)
+        self.ast_parser = ASTParser(language=language)
+        self.subtree_util = SubtreeUtil()
+        self.language_util = LanguageUtil()
 
-        self.token_vocab_extractor = TokenVocabExtractor(input_data_path=self.input_data_path, 
-                                                        node_token_vocab_model_prefix=self.node_token_vocab_model_prefix, 
+        self.token_vocab_extractor = TokenVocabExtractor(node_token_vocab_model_prefix=self.node_token_vocab_model_prefix, 
                                                         model_type="bpe")
-        self.subtree_vocab_extractor = SubtreeVocabExtractor(input_data_path=self.input_data_path, 
-                                                            subtree_vocab_model_prefix=self.subtree_vocab_model_prefix,
-                                                            subtree_util=self.subtree_util)
+        self.subtree_vocab_extractor = SubtreeVocabExtractor(subtree_vocab_model_prefix=self.subtree_vocab_model_prefix, language=language)
     
      
         self.init_vocabs()
@@ -44,10 +43,12 @@ class DatasetProcessor():
 
         # AST Util can only be initialized after extracted the token vocab
         self.ast_util = ASTUtil(node_type_vocab_model_path=self.node_type_vocab_model_prefix + ".model", 
-                                node_token_vocab_model_path=self.node_token_vocab_model_prefix + ".model",
-                                ast_parser=self.ast_parser)
+                                node_token_vocab_model_path=self.node_token_vocab_model_prefix + ".model")
 
 
+    def detect_language_of_file(self, file_path: str):
+        _, file_extension = os.path.splitext(file_path)
+        return self.language_util.get_language_by_file_extension(file_extension)
 
     # Trees with similar size should be put into the same bucket
     def put_trees_into_buckets(self):
@@ -63,7 +64,8 @@ class DatasetProcessor():
                 with open(file_path, "rb") as f:
                     code_snippet = f.read()
 
-                tree_representation, tree_size = self.ast_util.simplify_ast(code_snippet)
+                ast = self.ast_parser.parse(code_snippet)
+                tree_representation, tree_size = self.ast_util.simplify_ast(ast)
 
                 tree_indexes = self.tensor_util.transform_tree_to_index(tree_representation)
                 tree_indexes["size"] = tree_size 
@@ -99,13 +101,13 @@ class DatasetProcessor():
     def init_vocabs(self):
         if not os.path.exists(self.node_token_vocab_model_prefix + ".model"):
             self.LOGGER.info("Generating token vocabulary")
-            self.token_vocab = self.token_vocab_extractor.create_vocab()
+            self.token_vocab = self.token_vocab_extractor.create_vocab_from_dir(self.input_data_path)
         else:
             self.token_vocab = Vocabulary(100000, self.node_token_vocab_model_prefix + ".model")
 
         if not os.path.exists(self.subtree_vocab_model_prefix + ".model"):
             self.LOGGER.info("Generating subtree vocabulary")
-            self.subtree_vocab = self.subtree_vocab_extractor.create_vocab()
+            self.subtree_vocab = self.subtree_vocab_extractor.create_vocab_from_dir(self.input_data_path)
         else:
             self.subtree_vocab = Vocabulary(100000, self.subtree_vocab_model_prefix + ".model")
     

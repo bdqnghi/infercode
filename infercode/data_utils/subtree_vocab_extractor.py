@@ -103,7 +103,7 @@ class SubtreeProcessThread(threading.Thread):
 
     def process(self, code_snippet, language):
         # Do the processing job here
-        tree = self.ast_parser.parse(code_snippet, language)
+        tree = self.ast_parser.parse_with_language(code_snippet, language)
         subtrees = self.subtree_util.extract_subtrees(tree)
         return subtrees
 
