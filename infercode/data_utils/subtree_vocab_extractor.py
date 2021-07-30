@@ -61,7 +61,7 @@ class SubtreeVocabExtractor():
             with open(p, "rb") as f:
                 code_snippet = f.read()
 
-            language = self.detect_language_of_file(file_path)
+            language = self.detect_language_of_file(p)
             # tree = self.ast_parser.parse(code_snippet, language)
             # subtrees = self.subtree_util.extract_subtrees(tree)
             pathqueue.put((code_snippet, language))
