@@ -12,22 +12,25 @@ from .language_util import LanguageUtil
 import os
 import queue
 import threading
+import random
+
+class TimeLimitExpired(Exception): pass
 
 class SubtreeVocabExtractor():
 
 
-    def __init__(self, subtree_vocab_model_prefix: str):
+    def __init__(self, subtree_vocab_model_prefix: str, language: str):
 
         self.subtree_vocab_model_prefix = subtree_vocab_model_prefix
         self.subtree_vocab = Vocabulary(100000)
         self.subtree_util = SubtreeUtil()
-        self.ast_parser = ASTParser()
+        self.ast_parser = ASTParser(language)
         self.language_util = LanguageUtil()
         # self.ast_util = ASTUtil(node_type_vocab_model_path=node_type_vocab_model_path, 
         #                         node_token_vocab_model_path=node_token_vocab_model_path, language=language)
-        self.temp_subtrees_file = "temp_subtrees.csv"
-        if os.path.exists(self.temp_subtrees_file):
-            os.remove(self.temp_subtrees_file)
+        # self.temp_subtrees_file = "temp_subtrees.csv"
+        # if os.path.exists(self.temp_subtrees_file):
+        #     os.remove(self.temp_subtrees_file)
 
     def detect_language_of_file(self, file_path: str):
         _, file_extension = os.path.splitext(file_path)
@@ -38,25 +41,31 @@ class SubtreeVocabExtractor():
         pathqueue = queue.Queue()
         resultqueue = queue.Queue()
         for i in range(0, os.cpu_count()):
-            thread = SubtreeProcessThread(pathqueue, resultqueue)
-            thread.setDaemon(True)
-            thread.start()
+            subtree_thread = SubtreeProcessThread(pathqueue, resultqueue)
+            subtree_thread.setDaemon(True)
+            subtree_thread.start()
+          
 
-        t = WriteThread(resultqueue, self.temp_subtrees_file)
-        t.setDaemon(True)
-        t.start()
-
+        write_thread = WriteThread(resultqueue, self.temp_subtrees_file)
+        write_thread.setDaemon(True)
+        write_thread.start()
+     
+        all_file_paths = []
         for subdir , dirs, files in os.walk(input_data_path): 
             for file in tqdm(files):
                 file_path = os.path.join(subdir, file)
-                
-                with open(file_path, "rb") as f:
-                    code_snippet = f.read()
+                all_file_paths.append(file_path)
 
-                language = self.detect_language_of_file(file_path)
-                # tree = self.ast_parser.parse(code_snippet, language)
-                # subtrees = self.subtree_util.extract_subtrees(tree)
-                pathqueue.put((code_snippet, language))
+        random.shuffle(all_file_paths)
+        subset_file_paths = random.sample(all_file_paths, len(all_file_paths)/3)
+        for p in all_file_paths:
+            with open(p, "rb") as f:
+                code_snippet = f.read()
+
+            language = self.detect_language_of_file(file_path)
+            # tree = self.ast_parser.parse(code_snippet, language)
+            # subtrees = self.subtree_util.extract_subtrees(tree)
+            pathqueue.put((code_snippet, language))
         
         pathqueue.join()
         resultqueue.join()
@@ -88,6 +97,10 @@ class SubtreeProcessThread(threading.Thread):
             result = self.process(code_snippet, language)
             self.out_queue.put(result)
             self.in_queue.task_done()
+
+    def _stop(self):
+        if self.isAlive():
+            Thread._Thread__stop(self)
 
     def process(self, code_snippet, language):
         # Do the processing job here
