@@ -27,7 +27,7 @@ class SubtreeVocabExtractor():
         self.language_util = LanguageUtil()
         # self.ast_util = ASTUtil(node_type_vocab_model_path=node_type_vocab_model_path, 
         #                         node_token_vocab_model_path=node_token_vocab_model_path, language=language)
-        # self.temp_subtrees_file = "temp_subtrees.csv"
+        self.temp_subtrees_file = "temp_subtrees.csv"
         # if os.path.exists(self.temp_subtrees_file):
         #     os.remove(self.temp_subtrees_file)
 
