@@ -56,7 +56,7 @@ class SubtreeVocabExtractor():
                 all_file_paths.append(file_path)
 
         random.shuffle(all_file_paths)
-        subset_file_paths = random.sample(all_file_paths, len(all_file_paths)/3)
+        subset_file_paths = random.sample(all_file_paths, int(len(all_file_paths)/3))
         for p in tqdm(subset_file_paths):
             with open(p, "rb") as f:
                 code_snippet = f.read()
