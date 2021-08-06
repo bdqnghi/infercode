@@ -71,11 +71,11 @@ run cd /root && rm -rf node_modules && source $NVM_DIR/nvm.sh \
 # tree-sitter-wast
 # tree-sitter-tsx
 
-# Install infercode
-run pip install infercode
-
 # Generate tree-sitter parsers' shared libraries
 run source $HOME/.cargo/env && for lang in /root/node_modules/tree-sitter-*; do cd $lang; tree-sitter generate; tree-sitter parse grammar.js; cd - ; done
 run mkdir -p /root/.tree-sitter/bin
 run cp /root/.cache/tree-sitter/lib/*.so /root/.tree-sitter/bin
 
+# Install infercode
+run pip install infercode
+run pip install twine
