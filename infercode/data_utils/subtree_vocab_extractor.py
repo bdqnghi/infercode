@@ -53,19 +53,14 @@ class SubtreeVocabExtractor():
         for subdir , dirs, files in os.walk(input_data_path): 
             for file in tqdm(files):
                 file_path = os.path.join(subdir, file)
-                all_file_paths.append(file_path)
+                with open(file_path, "rb") as f:
+                    code_snippet = f.read()
 
-        random.shuffle(all_file_paths)
-        subset_file_paths = random.sample(all_file_paths, int(len(all_file_paths)/3))
-        for p in tqdm(subset_file_paths):
-            with open(p, "rb") as f:
-                code_snippet = f.read()
-
-            language = self.detect_language_of_file(p)
-            # tree = self.ast_parser.parse(code_snippet, language)
-            # subtrees = self.subtree_util.extract_subtrees(tree)
-            pathqueue.put((code_snippet, language))
-        
+                language = self.detect_language_of_file(p)
+                # tree = self.ast_parser.parse(code_snippet, language)
+                # subtrees = self.subtree_util.extract_subtrees(tree)
+                pathqueue.put((code_snippet, language))
+            
         pathqueue.join()
         resultqueue.join()
 

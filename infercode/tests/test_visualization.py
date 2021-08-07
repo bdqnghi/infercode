@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 # To import upper level modules
 sys.path.append(str(Path('.').absolute().parent))
-from .client.infercode_client import InferCodeClient
+from client.infercode_client import InferCodeClient
 import os
 import numpy as np
 from sklearn.manifold import TSNE
@@ -26,7 +26,7 @@ labels = [1,2,3,4,5,6]
 label_color_dict = dict(zip(labels, colors))
 
 
-for subdir , dirs, files in os.walk("../datasets/OJ_raw_small"): 
+for subdir , dirs, files in os.walk("../../datasets/OJ_raw_small"): 
     for file in tqdm(files):
         file_path = os.path.join(subdir, file)
         file_path_splits = file_path.split("/")

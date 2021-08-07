@@ -35,7 +35,7 @@ class DatasetProcessor():
 
         self.token_vocab_extractor = TokenVocabExtractor(node_token_vocab_model_prefix=self.node_token_vocab_model_prefix, 
                                                         model_type="bpe")
-        self.subtree_vocab_extractor = SubtreeVocabExtractor(subtree_vocab_model_prefix=self.subtree_vocab_model_prefix, language=language)
+        self.subtree_vocab_extractor = SubtreeVocabExtractor(subtree_vocab_model_prefix=self.subtree_vocab_model_prefix)
     
      
         self.init_vocabs()
@@ -55,23 +55,23 @@ class DatasetProcessor():
 
         bucket_sizes = np.array(list(range(20 , 7500 , 20)))
         buckets = defaultdict(list)
-
+                
         for subdir , dirs, files in os.walk(self.input_data_path): 
             for file in tqdm(files):
                 
                 file_path = os.path.join(subdir, file)
                 
-                with open(file_path, "rb") as f:
+                with open(file_path, "r", errors="ignore") as f:
                     code_snippet = f.read()
 
-                ast = self.ast_parser.parse(code_snippet)
-                tree_representation, tree_size = self.ast_util.simplify_ast(ast)
+                ast = self.ast_parser.parse(str.encode(code_snippet))
+                tree_representation, tree_size = self.ast_util.simplify_ast(ast, str.encode(code_snippet))
 
                 tree_indexes = self.tensor_util.transform_tree_to_index(tree_representation)
                 tree_indexes["size"] = tree_size 
 
                 # Extract all subtrees from the code snippet
-                subtrees = self.subtree_util.extract_subtrees(code_snippet)
+                subtrees = self.subtree_util.extract_subtrees(ast)
                 
                 # ----------Convert subtree string to id----------
                 subtrees_id = []
