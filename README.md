@@ -7,13 +7,16 @@
 ## Map Any Code Snippet into Vector Embedding with InferCode. 
 
 This is a Tensorflow Implementation for "InferCode: Self-Supervised Learning of Code Representations by Predicting Subtrees" (ICSE'21). InferCode works based on the key idea of using an encoder to predict subtrees as a pretext task. Then the weights learned from the encoder can be used to transfer for other downstream tasks. This is to alleviate the need for the huge amount of labeled data to build decent code learning models in Software Engineering. With this concept, representation learning models for  source code can now learn from unlabeled data. 
+    
+Out implementation supports 19 languages, which are: java, c, c++, c#, golang, javascript, lua, php, python, ruby, rust, scala, kotlin, solidity, haskell, r, html, css, bash.
 
 ## Usage
 ```python
 from client.infercode_client import InferCodeClient
-infercode = InferCodeClient()
+infercode = InferCodeClient(language="c")
+infercode.init_from_config()
 vectors = infercode.encode(["for (i = 0; i < n; i++)", "struct book{ int num; char s[27]; }shu[1000];"])
-print(vectors)  
+print(vectors)
 ```
     
 Then we have the output embeddings:
