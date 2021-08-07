@@ -13,9 +13,10 @@ from network.infercode_network import InferCodeModel
 from data_utils.vocabulary import Vocabulary
 from data_utils.language_util import LanguageUtil
 from data_utils.tensor_util import TensorUtil
+from .base_client import BaseClient
 tf.disable_v2_behavior()
 
-class InferCodeClient():
+class InferCodeClient(BaseClient):
 
     LOGGER = logging.getLogger('InferCodeTrainer')
 
@@ -23,7 +24,7 @@ class InferCodeClient():
 
         self.language = language
 
-    def init_from_config(self, config):        
+    def init_from_config(self, config=None):        
         
         self.init_params(config)
         self.init_utils()
@@ -34,13 +35,13 @@ class InferCodeClient():
                                               num_tokens=self.node_token_vocab.get_vocabulary_size(), 
                                               num_subtrees=self.subtree_vocab.get_vocabulary_size(),
                                               num_languages=self.language_util.get_num_languages(),
-                                              num_conv=int(nn_config["num_conv"]), 
-                                              node_type_dim=int(nn_config["node_type_dim"]), 
-                                              node_token_dim=int(nn_config["node_token_dim"]),
-                                              conv_output_dim=int(nn_config["conv_output_dim"]), 
-                                              include_token=int(nn_config["include_token"]), 
-                                              batch_size=int(nn_config["batch_size"]), 
-                                              learning_rate=float(nn_config["lr"]))
+                                              num_conv=self.num_conv, 
+                                              node_type_dim=self.node_type_dim, 
+                                              node_token_dim=self.node_token_dim,
+                                              conv_output_dim=self.conv_output_dim, 
+                                              include_token=self.include_token, 
+                                              batch_size=self.batch_size, 
+                                              learning_rate=self.learning_rate)
 
         self.saver = tf.train.Saver(save_relative_paths=True, max_to_keep=5)
         self.init = tf.global_variables_initializer()
@@ -52,8 +53,8 @@ class InferCodeClient():
         if ckpt and ckpt.model_checkpoint_path:
             self.LOGGER.info("Load model successfully : " + str(self.checkfile))
             self.saver.restore(self.sess, ckpt.model_checkpoint_path)
-        # else:
-            # raise ValueError("Could not find the model : " + str(self.checkfile))
+        else:
+            raise ValueError("Could not find the model : " + str(self.checkfile))
 
     def snippets_to_tensors(self, batch_code_snippets):
         batch_tree_indexes = []

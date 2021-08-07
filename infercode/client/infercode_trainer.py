@@ -5,16 +5,17 @@ from pathlib import Path
 # To import upper level modules
 sys.path.append(str(Path('.').absolute().parent))
 import logging
-from infercode.data_utils.ast_util import ASTUtil
-from infercode.data_utils.token_vocab_extractor import TokenVocabExtractor
-from infercode.data_utils.subtree_vocab_extractor import SubtreeVocabExtractor
-from infercode.data_utils.dataset_processor import DatasetProcessor
-from infercode.data_utils.threaded_iterator import ThreadedIterator
-from infercode.data_utils.data_loader import DataLoader
-from infercode.network.infercode_network import InferCodeModel
-from infercode.data_utils.vocabulary import Vocabulary
-from infercode.data_utils.language_util import LanguageUtil
+from data_utils.ast_util import ASTUtil
+from data_utils.token_vocab_extractor import TokenVocabExtractor
+from data_utils.subtree_vocab_extractor import SubtreeVocabExtractor
+from data_utils.dataset_processor import DatasetProcessor
+from data_utils.threaded_iterator import ThreadedIterator
+from data_utils.data_loader import DataLoader
+from network.infercode_network import InferCodeModel
+from data_utils.vocabulary import Vocabulary
+from data_utils.language_util import LanguageUtil
 import tensorflow.compat.v1 as tf
+from .base_client import BaseClient
 tf.disable_v2_behavior()
 
 class InferCodeTrainer(BaseClient):
@@ -28,14 +29,11 @@ class InferCodeTrainer(BaseClient):
     def init_from_config(self, config=None):
         # Load default config if do not provide an external one
         self.init_params(config)
+        self.init_utils()
+        self.init_model_checkpoint()
 
-
-        self.language_util = LanguageUtil()
-        self.language_index = self.language_util.get_language_index(self.language)
-
-        if not os.path.exists(self.model_checkpoint):
-            os.mkdir(model_checkpoint)
-
+        # ------------Set up the neural network------------
+       
         self.training_data_processor = DatasetProcessor(input_data_path=self.data_path, 
                                                output_tensors_path=self.output_processed_data_path, 
                                                node_type_vocab_model_prefix=self.node_type_vocab_model_prefix, 
@@ -46,24 +44,19 @@ class InferCodeTrainer(BaseClient):
 
         # self.ast_util, self.training_buckets = self.process_or_load_data()        
         self.data_loader = DataLoader(self.batch_size)
-
-        self.node_type_vocab = Vocabulary(100000, self.node_type_vocab_model_prefix + ".model")
-        self.node_token_vocab = Vocabulary(100000, self.node_token_vocab_model_prefix + ".model")
-        self.subtree_vocab = Vocabulary(100000, self.subtree_vocab_model_prefix + ".model")
-
-                
+            
         # ------------Set up the neural network------------
         self.infercode_model = InferCodeModel(num_types=self.node_type_vocab.get_vocabulary_size(), 
                                               num_tokens=self.node_token_vocab.get_vocabulary_size(), 
                                               num_subtrees=self.subtree_vocab.get_vocabulary_size(),
                                               num_languages=self.language_util.get_num_languages(),
-                                              num_conv=int(nn_config["num_conv"]), 
-                                              node_type_dim=int(nn_config["node_type_dim"]), 
-                                              node_token_dim=int(nn_config["node_token_dim"]),
-                                              conv_output_dim=int(nn_config["conv_output_dim"]), 
-                                              include_token=int(nn_config["include_token"]), 
-                                              batch_size=int(nn_config["batch_size"]), 
-                                              learning_rate=float(nn_config["lr"]))
+                                              num_conv=self.num_conv, 
+                                              node_type_dim=self.node_type_dim, 
+                                              node_token_dim=self.node_token_dim,
+                                              conv_output_dim=self.conv_output_dim, 
+                                              include_token=self.include_token, 
+                                              batch_size=self.batch_size, 
+                                              learning_rate=self.learning_rate)
 
         self.saver = tf.train.Saver(save_relative_paths=True, max_to_keep=5)
         self.init = tf.global_variables_initializer()
