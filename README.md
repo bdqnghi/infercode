@@ -10,6 +10,14 @@ This is a Tensorflow Implementation for "InferCode: Self-Supervised Learning of 
     
 Out implementation supports 19 languages, which are: java, c, c++, c#, golang, javascript, lua, php, python, ruby, rust, scala, kotlin, solidity, haskell, r, html, css, bash.
 
+## Set up
+```bash
+bash install.sh 
+```
+```python
+pip3 install -r requirements.txt
+```
+    
 ## Usage
 ```python
 from client.infercode_client import InferCodeClient
