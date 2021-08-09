@@ -11,9 +11,11 @@ This is a Tensorflow Implementation for "InferCode: Self-Supervised Learning of 
 Out implementation supports 19 languages, which are: java, c, c++, c#, golang, javascript, lua, php, python, ruby, rust, scala, kotlin, solidity, haskell, r, html, css, bash.
 
 ## Set up
+Initialize the tree-sitter built files for the above 19 languages. Once the script finished, go to ```~/.tree-sitter/bin``` to check, you can see a list of *.so files.
 ```bash
 bash install.sh 
 ```
+Next, install python dependencies.
 ```python
 pip3 install -r requirements.txt
 ```
