@@ -72,7 +72,7 @@ scipy == 1.5.2
 sentencepiece == 0.1.95
 
 # infercode/setup.py: 1
-setuptools == 50.3.0.post20201006
+setuptools == 50.3.0
 
 # infercode/infercode/client/base_client.py: 11
 # infercode/infercode/client/infercode_client.py: 11
