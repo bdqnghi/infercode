@@ -54,7 +54,9 @@ class InferCodeClient(BaseClient):
             self.LOGGER.info("Load model successfully : " + str(self.checkfile))
             self.saver.restore(self.sess, ckpt.model_checkpoint_path)
         else:
-            raise ValueError("Could not find the model : " + str(self.checkfile))
+            error_message = "Could not find the model : " + str(self.checkfile)
+            self.LOGGER.error(error_message)
+            raise ValueError(error_message)
 
     def snippets_to_tensors(self, batch_code_snippets):
         batch_tree_indexes = []

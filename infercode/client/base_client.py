@@ -90,11 +90,14 @@ class BaseClient():
         if not os.path.exists(model_checkpoint):
             pathlib.Path(model_checkpoint).mkdir(parents=True, exist_ok=True)
 
-        if not os.path.exists(model_checkpoint_ckpt):
-            pretrained_model_checkpoint_target = os.path.join(model_checkpoint, "universal_model_med.zip")
-            download_url(self.pretrained_model_url, pretrained_model_checkpoint_target)
-            with zipfile.ZipFile(pretrained_model_checkpoint_target, 'r') as zip_ref:
-                zip_ref.extractall(model_checkpoint)
+        """
+        Comment out this part if training locally
+        """
+        # if not os.path.exists(model_checkpoint_ckpt):
+        #     pretrained_model_checkpoint_target = os.path.join(model_checkpoint, "universal_model_med.zip")
+        #     download_url(self.pretrained_model_url, pretrained_model_checkpoint_target)
+        #     with zipfile.ZipFile(pretrained_model_checkpoint_target, 'r') as zip_ref:
+        #         zip_ref.extractall(model_checkpoint)
 
         self.model_checkpoint = model_checkpoint
         
