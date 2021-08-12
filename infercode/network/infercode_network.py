@@ -4,7 +4,6 @@ from pathlib import Path
 # To import upper level modules
 sys.path.append(str(Path('.').absolute().parent))
 import logging
-from keras_radam.training import RAdamOptimizer
 
 class InferCodeModel():
     LOGGER = logging.getLogger('InferCodeModel')
@@ -33,7 +32,7 @@ class InferCodeModel():
 
         self.batch_size = batch_size
 
-        self.optimizer = RAdamOptimizer(learning_rate)
+        self.optimizer = tf.compat.v1.train.AdamOptimizer(learning_rate)
 
         self.init_net()
         self.feed_forward()
