@@ -24,6 +24,6 @@ class TokenVocabExtractor():
                     data = str(f.read())
                     data = data.replace("\n", " ")
                     tokens = identifiersplitting.split_identifier_into_parts(data)
-                    all_tokens.append(tokens)
+                    all_tokens.extend(tokens)
         self.token_vocab.create_vocabulary(tokens=all_tokens, model_filename=self.node_token_vocab_model_prefix, model_type=self.model_type)        
         return self.token_vocab
