@@ -12,11 +12,10 @@ parser.add_argument('--node_token_vocab_model_prefix', type=str, required=True)
 def main(opt):
     
 
-    token_vocab_extractor = TokenVocabExtractor(input_data_path=opt.data_path, 
-                                                node_token_vocab_model_prefix=opt.node_token_vocab_model_prefix, 
-                                                model_type="bpe")
+    token_vocab_extractor = TokenVocabExtractor(node_token_vocab_model_prefix=opt.node_token_vocab_model_prefix, 
+                                                model_type="word")
 
-    token_vocab_extractor.create_vocab()
+    token_vocab_extractor.create_vocab_from_dir(opt.data_path)
 # python3 extract_token_vocab.py --data_path ../../datasets/OJ_raw_small/ --node_token_vocab_model_prefix OJ_raw_token
 
 if __name__ == "__main__":
