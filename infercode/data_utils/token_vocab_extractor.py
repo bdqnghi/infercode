@@ -16,7 +16,7 @@ class TokenVocabExtractor():
 
     def create_vocab_from_dir(self, input_data_path: str):
         all_tokens = []
-        for subdir , dirs, files in os.walk(self.input_data_path): 
+        for subdir , dirs, files in os.walk(input_data_path): 
             for file in tqdm(files):
                 # if file.endswith(file_types):
                 file_path = os.path.join(subdir, file)
