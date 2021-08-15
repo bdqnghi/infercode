@@ -28,8 +28,8 @@ class SubtreeVocabExtractor():
         # self.ast_util = ASTUtil(node_type_vocab_model_path=node_type_vocab_model_path, 
         #                         node_token_vocab_model_path=node_token_vocab_model_path, language=language)
         self.temp_subtrees_file = "temp_subtrees.csv"
-        # if os.path.exists(self.temp_subtrees_file):
-        #     os.remove(self.temp_subtrees_file)
+        if os.path.exists(self.temp_subtrees_file):
+            os.remove(self.temp_subtrees_file)
 
     def detect_language_of_file(self, file_path: str):
         _, file_extension = os.path.splitext(file_path)
@@ -56,7 +56,7 @@ class SubtreeVocabExtractor():
                 with open(file_path, "rb") as f:
                     code_snippet = f.read()
 
-                language = self.detect_language_of_file(p)
+                language = self.detect_language_of_file(file_path)
                 # tree = self.ast_parser.parse(code_snippet, language)
                 # subtrees = self.subtree_util.extract_subtrees(tree)
                 pathqueue.put((code_snippet, language))
