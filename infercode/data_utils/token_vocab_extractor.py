@@ -14,7 +14,7 @@ class TokenVocabExtractor():
     def __init__(self, node_token_vocab_model_prefix: str, model_type: str="bpe") -> None:
         self.node_token_vocab_model_prefix = node_token_vocab_model_prefix
         self.model_type = model_type
-        self.token_vocab = Vocabulary(100000)
+        self.token_vocab = Vocabulary(1000000)
 
         self.temp_tokens_file = "temp_tokens.csv"
         if os.path.exists(self.temp_tokens_file):

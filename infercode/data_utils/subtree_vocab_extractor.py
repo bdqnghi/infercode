@@ -22,7 +22,7 @@ class SubtreeVocabExtractor():
     def __init__(self, subtree_vocab_model_prefix: str):
 
         self.subtree_vocab_model_prefix = subtree_vocab_model_prefix
-        self.subtree_vocab = Vocabulary(100000)
+        self.subtree_vocab = Vocabulary(1000000)
         self.subtree_util = SubtreeUtil()
         self.language_util = LanguageUtil()
         # self.ast_util = ASTUtil(node_type_vocab_model_path=node_type_vocab_model_path, 
