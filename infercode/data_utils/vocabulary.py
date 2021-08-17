@@ -4,6 +4,7 @@ from collections import Counter
 from tempfile import TemporaryDirectory
 from typing import List, Optional, Sized, Union, Iterable
 import sentencepiece as spm
+from dpu_utils.codeutils import identifiersplitting
 import typing
 
 __all__ = ['BpeVocabulary']
@@ -110,8 +111,8 @@ class Vocabulary(Sized):
 
     def tokenize(self, text: str) -> List[str]:
         """ Tokenize a string. """
-        pieces = self.__sp_model.EncodeAsPieces(text)
-
+        subtokens = " ".join(identifiersplitting.split_identifier_into_parts(text))
+        pieces = self.__sp_model.EncodeAsPieces(subtokens)
         new_pieces = []   # type: List[str]
         for piece in pieces:
             # Split subtokens composed of a digit and comma
