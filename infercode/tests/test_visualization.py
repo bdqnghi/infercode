@@ -55,7 +55,7 @@ for i, point in enumerate(Y[:,0]):
     plt.scatter(x, y, color =color)
 
 
-plt.title("Corder-TBCNN")
+plt.title("Visualization")
 # plt.show()
 
 output = "test.png"

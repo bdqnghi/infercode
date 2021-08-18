@@ -111,8 +111,7 @@ class Vocabulary(Sized):
 
     def tokenize(self, text: str) -> List[str]:
         """ Tokenize a string. """
-        subtokens = " ".join(identifiersplitting.split_identifier_into_parts(text))
-        pieces = self.__sp_model.EncodeAsPieces(subtokens)
+        pieces = self.__sp_model.EncodeAsPieces(text)
         new_pieces = []   # type: List[str]
         for piece in pieces:
             # Split subtokens composed of a digit and comma

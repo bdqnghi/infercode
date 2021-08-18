@@ -55,10 +55,9 @@ class DatasetProcessor():
 
         bucket_sizes = np.array(list(range(20 , 7500 , 20)))
         buckets = defaultdict(list)
-                
+        
         for subdir , dirs, files in os.walk(self.input_data_path): 
             for file in tqdm(files):
-                
                 file_path = os.path.join(subdir, file)
                 
                 with open(file_path, "r", errors="ignore") as f:
@@ -90,7 +89,6 @@ class DatasetProcessor():
                     tree_indexes["subtree_id"] = subtree_id
                     chosen_bucket_idx = np.argmax(bucket_sizes > tree_size)
                     buckets[chosen_bucket_idx].append(tree_indexes)
-
 
         self.LOGGER.info("Saving processed data into pickle format.....")
         pickle.dump(buckets, open(self.output_tensors_path, "wb" ) )
