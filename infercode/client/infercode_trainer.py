@@ -2,18 +2,17 @@ import sys
 import os
 import pickle
 from pathlib import Path
-# To import upper level modules
-sys.path.append(str(Path('.').absolute().parent))
+sys.path.insert(0, '..')
 import logging
-from data_utils.ast_util import ASTUtil
-from data_utils.token_vocab_extractor import TokenVocabExtractor
-from data_utils.subtree_vocab_extractor import SubtreeVocabExtractor
-from data_utils.dataset_processor import DatasetProcessor
-from data_utils.threaded_iterator import ThreadedIterator
-from data_utils.data_loader import DataLoader
-from network.infercode_network import InferCodeModel
-from data_utils.vocabulary import Vocabulary
-from data_utils.language_util import LanguageUtil
+from infercode.data_utils.ast_util import ASTUtil
+from infercode.data_utils.token_vocab_extractor import TokenVocabExtractor
+from infercode.data_utils.subtree_vocab_extractor import SubtreeVocabExtractor
+from infercode.data_utils.dataset_processor import DatasetProcessor
+from infercode.data_utils.threaded_iterator import ThreadedIterator
+from infercode.data_utils.data_loader import DataLoader
+from infercode.network.infercode_network import InferCodeModel
+from infercode.data_utils.vocabulary import Vocabulary
+from infercode.data_utils.language_util import LanguageUtil
 import tensorflow.compat.v1 as tf
 from .base_client import BaseClient
 tf.disable_v2_behavior()
@@ -28,7 +27,9 @@ class InferCodeTrainer(BaseClient):
 
     def init_from_config(self, config=None):
         # Load default config if do not provide an external one
-        self.init_params(config)
+        self.load_configs(config)
+        self.init_params()
+        self.init_resources()
         self.init_utils()
         self.init_model_checkpoint()
 

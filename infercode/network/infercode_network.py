@@ -1,8 +1,5 @@
 import tensorflow.compat.v1 as tf
 import sys
-from pathlib import Path
-# To import upper level modules
-sys.path.append(str(Path('.').absolute().parent))
 import logging
 
 class InferCodeModel():
