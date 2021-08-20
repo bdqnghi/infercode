@@ -60,11 +60,13 @@ Then we have the output embeddings:
 0.01541999  0.03995579]]
 ```
     
-## Notes
-- Our old implementation can be found in [old_version](old_version/). 
-- For a fair comparison with InferCode, please consider:
-    + The code encoder part, we used Tree-based CNN as the encoder. There should be a better code encoder in the future given the fast progressing of AI research. 
-    + The pretext task, inventing a new pretext task also affects the quality of the code embeddings.
+## Compare to the other work
+- There are a few other techniques for code representation learning, but none of them are designed with the intention to have a pretrained model to convert code to vector. For example, [Code2vec](https://arxiv.org/abs/1803.09473) (Alon et al.), despite the attractive name, Code2vec is not suitable to convert code to vector since they trained the model to predict the method name. If one wants to reuse the Code2vec model to convert code to vector, their implementation is not ready for this purpose. Also the objective of their work is also not suitable for this purpose too.
+    
+- There are also other pretrained models for code, such as CodeBert, GraphCodeBert, CuBert, etc, but they did not wrap their implementation into usable implementations.
+
+- None of the above work supports such many languages like InferCode.
+    
     
 ## Citation
 If you find this work useful for your research, please consider citing our paper:
