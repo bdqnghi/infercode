@@ -15,7 +15,7 @@ Initialize the tree-sitter built files for the above 19 languages. Once the scri
 ```bash
 bash install.sh 
 ```
-Install the Pypi package:
+Install the Pypi package (current version is 0.0.15):
 ```python
 pip3 install infercode
 ```
