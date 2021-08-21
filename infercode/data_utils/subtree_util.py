@@ -1,10 +1,4 @@
-import sys
-from pathlib import Path
-# To import upper level modules
-sys.path.append(str(Path('.').absolute().parent))
 from .vocabulary import Vocabulary
-from pathlib import Path
-import os
 from tqdm import *
 
 class SubtreeUtil():

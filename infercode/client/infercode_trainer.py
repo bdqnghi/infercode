@@ -1,18 +1,17 @@
 import sys
 import os
-import pickle
-from pathlib import Path
-sys.path.insert(0, '..')
+infercode_dir = (os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(infercode_dir)
 import logging
-from infercode.data_utils.ast_util import ASTUtil
-from infercode.data_utils.token_vocab_extractor import TokenVocabExtractor
-from infercode.data_utils.subtree_vocab_extractor import SubtreeVocabExtractor
-from infercode.data_utils.dataset_processor import DatasetProcessor
-from infercode.data_utils.threaded_iterator import ThreadedIterator
-from infercode.data_utils.data_loader import DataLoader
-from infercode.network.infercode_network import InferCodeModel
-from infercode.data_utils.vocabulary import Vocabulary
-from infercode.data_utils.language_util import LanguageUtil
+from data_utils.ast_util import ASTUtil
+from data_utils.token_vocab_extractor import TokenVocabExtractor
+from data_utils.subtree_vocab_extractor import SubtreeVocabExtractor
+from data_utils.dataset_processor import DatasetProcessor
+from data_utils.threaded_iterator import ThreadedIterator
+from data_utils.data_loader import DataLoader
+from network.infercode_network import InferCodeModel
+from data_utils.vocabulary import Vocabulary
+from data_utils.language_util import LanguageUtil
 import tensorflow.compat.v1 as tf
 from .base_client import BaseClient
 tf.disable_v2_behavior()
@@ -95,7 +94,7 @@ class InferCodeTrainer(BaseClient):
                 )
 
                 self.LOGGER.info(f"Training at epoch {epoch} and step {train_step} with loss {err}")
-                v = train_step % self.checkpoint_every
+                train_step % self.checkpoint_every
                 if train_step % self.checkpoint_every == 0:
                     self.saver.save(self.sess, self.checkfile)                  
                     self.LOGGER.info(f"Checkpoint saved, epoch {epoch} and step {train_step} with loss {err}")

@@ -4,7 +4,7 @@ import queue
 import threading
 import numpy as np
 from sklearn import preprocessing
-import os, itertools
+import itertools
 
 class ThreadedIterator:
     """An iterator object that computes its elements in a parallel thread to be ready to be consumed.

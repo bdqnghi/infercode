@@ -2,14 +2,15 @@ import os
 import logging
 from pathlib import Path
 import sys
-from infercode.data_utils.ast_util import ASTUtil
-from infercode.data_utils.ast_parser import ASTParser
-import configparser
+infercode_dir = (os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(infercode_dir)
+from data_utils.ast_util import ASTUtil
+from data_utils.ast_parser import ASTParser
 import tensorflow.compat.v1 as tf
-from infercode.network.infercode_network import InferCodeModel
-from infercode.data_utils.vocabulary import Vocabulary
-from infercode.data_utils.language_util import LanguageUtil
-from infercode.data_utils.tensor_util import TensorUtil
+from network.infercode_network import InferCodeModel
+from data_utils.vocabulary import Vocabulary
+from data_utils.language_util import LanguageUtil
+from data_utils.tensor_util import TensorUtil
 from os import path
 import pathlib
 tf.disable_v2_behavior()
@@ -84,7 +85,7 @@ class BaseClient():
 
     def init_model_checkpoint(self):
         home = str(Path.home())
-        cd = os.getcwd()
+        os.getcwd()
         model_checkpoint = path.join(home, ".infercode_data" ,"model_checkpoint", self.model_name)
         model_checkpoint_ckpt = path.join(model_checkpoint, "cnn_tree.ckpt.index")
 
@@ -94,11 +95,11 @@ class BaseClient():
         """
         Comment out this part if training locally
         """
-        if not os.path.exists(model_checkpoint_ckpt):
-            pretrained_model_checkpoint_target = os.path.join(model_checkpoint, "universal_model_med.zip")
-            download_url(self.pretrained_model_url, pretrained_model_checkpoint_target)
-            with zipfile.ZipFile(pretrained_model_checkpoint_target, 'r') as zip_ref:
-                zip_ref.extractall(model_checkpoint)
+        # if not os.path.exists(model_checkpoint_ckpt):
+        #     pretrained_model_checkpoint_target = os.path.join(model_checkpoint, "universal_model_med.zip")
+        #     download_url(self.pretrained_model_url, pretrained_model_checkpoint_target)
+        #     with zipfile.ZipFile(pretrained_model_checkpoint_target, 'r') as zip_ref:
+        #         zip_ref.extractall(model_checkpoint)
 
         self.model_checkpoint = model_checkpoint
         

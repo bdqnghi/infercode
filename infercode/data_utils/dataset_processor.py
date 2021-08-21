@@ -59,12 +59,10 @@ class DatasetProcessor():
         for subdir , dirs, files in os.walk(self.input_data_path): 
             for file in tqdm(files):
                 file_path = os.path.join(subdir, file)
-                
-                with open(file_path, "r", errors="ignore") as f:
+                with open(file_path, "rb") as f:
                     code_snippet = f.read()
-
-                ast = self.ast_parser.parse(str.encode(code_snippet))
-                tree_representation, tree_size = self.ast_util.simplify_ast(ast, str.encode(code_snippet))
+                ast = self.ast_parser.parse(code_snippet)
+                tree_representation, tree_size = self.ast_util.simplify_ast(ast, code_snippet.decode("utf-8"))
 
                 tree_indexes = self.tensor_util.transform_tree_to_index(tree_representation)
                 tree_indexes["size"] = tree_size 

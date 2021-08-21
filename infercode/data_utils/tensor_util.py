@@ -1,12 +1,5 @@
-import sys
-from pathlib import Path
-# To import upper level modules
-sys.path.append(str(Path('.').absolute().parent))
-from os import path
 from .vocabulary import Vocabulary
 from tree_sitter import Language, Parser
-from pathlib import Path
-import glob, os
 import numpy as np
 
 

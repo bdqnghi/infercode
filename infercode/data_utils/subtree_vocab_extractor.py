@@ -1,9 +1,4 @@
-import sys
-from pathlib import Path
-# To import upper level modules
-sys.path.append(str(Path('.').absolute().parent))
 from .vocabulary import Vocabulary
-from pathlib import Path
 import os
 from tqdm import *
 from .subtree_util import SubtreeUtil
@@ -12,7 +7,6 @@ from .language_util import LanguageUtil
 import os
 import queue
 import threading
-import random
 
 class TimeLimitExpired(Exception): pass
 
@@ -49,7 +43,6 @@ class SubtreeVocabExtractor():
         write_thread.setDaemon(True)
         write_thread.start()
      
-        all_file_paths = []
         for subdir , dirs, files in os.walk(input_data_path): 
             for file in tqdm(files):
                 file_path = os.path.join(subdir, file)

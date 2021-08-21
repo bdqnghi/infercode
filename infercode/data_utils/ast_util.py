@@ -2,13 +2,10 @@ import sys
 from pathlib import Path
 # To import upper level modules
 sys.path.append(str(Path('.').absolute().parent))
-from os import path
 from .vocabulary import Vocabulary
 from tree_sitter import Language, Parser
 from pathlib import Path
-import glob, os
 import numpy as np
-import logging
 from dpu_utils.codeutils import identifiersplitting
 
 
@@ -63,20 +60,23 @@ class ASTUtil():
                     has_child = len(child.children) > 0
 
                     if not has_child:
-                        child_token = text[child.start_byte:child.end_byte].decode("utf-8")
+                        child_token = text[child.start_byte:child.end_byte]
                         child_sub_tokens_id = self.token_vocab.get_id_or_unk_for_text(child_token)
                         subtokens = " ".join(identifiersplitting.split_identifier_into_parts(child_token))
                         child_sub_tokens = self.token_vocab.tokenize(subtokens)
 
                     if len(child_sub_tokens_id) == 0:
                         child_sub_tokens_id.append(0)
-       
+                    else:
+                        child_sub_tokens_id = [x for x in child_sub_tokens_id if x != 0]
+
+
                     # print(children_sub_token_ids)
                     child_json = {
                         "node_type": child_type,
                         "node_type_id": child_type_id,
                         "node_tokens": child_sub_tokens,
-                        "node_tokens_id":child_sub_tokens_id,
+                        "node_tokens_id": child_sub_tokens_id,
                         "children": []
                     }
 

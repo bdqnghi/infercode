@@ -1,9 +1,5 @@
 from dpu_utils.codeutils import identifiersplitting
-import sys
 from tqdm import *
-from pathlib import Path
-# To import upper level modules
-sys.path.append(str(Path('.').absolute().parent))
 from .vocabulary import Vocabulary
 import os
 import queue
