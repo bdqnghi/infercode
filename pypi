@@ -1,5 +1,11 @@
 rm -rf dist/*
 python3 setup.py sdist bdist_wheel
+if [ "$1" == "main" ]; then
 twine upload dist/infercode-*
 pip uninstall infercode
 pip install infercode
+else
+twine upload --repository testpypi dist/infercode-*
+pip uninstall infercode
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple infercode
+fi
