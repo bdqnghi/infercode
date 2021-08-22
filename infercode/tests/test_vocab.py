@@ -6,21 +6,17 @@ from data_utils.vocabulary import Vocabulary
 import os
 from dpu_utils.codeutils import identifiersplitting
 
-nodes = []
-with open("../../subtrees.csv","r") as f:
-    data = f.read().splitlines()
 
-print(len(data))
+vocab = Vocabulary(1000000, "../sentencepiece_vocab/tokens/universal_token_subword.model")
+# vocab.create_vocabulary(tokens=data, model_filename="universal_subtrees", model_type="word")
 
-# print(nodes)
-vocab = Vocabulary(1000000)
-vocab.create_vocabulary(tokens=data, model_filename="universal_subtrees", model_type="word")
+text = "void bubbleSort(int arr[], int n) { int i, j; for (i = 0; i < n-1; i++) // Last i elements are already in place for (j = 0; j < n-i-1; j++) if (arr[j] > arr[j+1]) swap(&arr[j], &arr[j+1]); }"
+text = " ".join(identifiersplitting.split_identifier_into_parts(text))
+a = vocab.get_id_or_unk_for_text(text)
+print(a)
 
-# a = vocab.get_id_or_unk_for_text("for i in range(100, 2):")
-# print(a)
-
-# b = vocab.tokenize("for i in range(100, 2):")
-# print(b)
+b = vocab.tokenize(text)
+print(b)
 
 # y = vocab.get_id_or_unk_for_text("do_statement")
 # print(vocab.get_vocabulary())

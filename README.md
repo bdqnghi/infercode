@@ -8,25 +8,30 @@
 
 This is a Tensorflow Implementation for "InferCode: Self-Supervised Learning of Code Representations by Predicting Subtrees" (ICSE'21). InferCode works based on the key idea of using an encoder to predict subtrees as a pretext task. Then the weights learned from the encoder can be used to transfer for other downstream tasks. This is to alleviate the need for the huge amount of labeled data to build decent code learning models in Software Engineering. With this concept, representation learning models for  source code can now learn from unlabeled data. 
     
-Out implementation supports 19 languages, which are: java, c, c++, c#, golang, javascript, lua, php, python, ruby, rust, scala, kotlin, solidity, haskell, r, html, css, bash. We use [tree-sitter](https://github.com/tree-sitter/tree-sitter) as the backbone to parse these languages to AST. This is a bit different from the implementation we reported in our paper, which used [srcml](https://www.srcml.org/) as the AST parser. The reasons are that we found that tree-sitter supports more language than srcml, and tree-sitter also provides a [python biding interface](https://github.com/tree-sitter/py-tree-sitter), which makes it easy to parse any code snippet using python code. A details of our old implementation using srcml can be found in [old_version](old_version/).
+We trained our model on a dataset comprised of 19 languages, which are: java, c, c++, c#, golang, javascript, lua, php, python, ruby, rust, scala, kotlin, solidity, haskell, r, html, css, bash. We use [tree-sitter](https://github.com/tree-sitter/tree-sitter) as the backbone to parse these languages to AST. This is a bit different from the implementation we reported in our paper, which used [srcml](https://www.srcml.org/) as the AST parser. The reasons are that we found that tree-sitter supports more language than srcml, and tree-sitter also provides a [python biding interface](https://github.com/tree-sitter/py-tree-sitter), which makes it easy to parse any code snippet into AST by using python code. A details of our old implementation using srcml can be found in [old_version](old_version/).
 
 ## Set up
-Initialize the tree-sitter built files for the above 19 languages. Once the script finished, go to ```~/.tree-sitter/bin``` to check, you can see a list of *.so files.
-```bash
-bash install.sh 
-```
-Next, install python dependencies.
+Install the Pypi package (current version is 0.0.17):
 ```python
-pip3 install -r requirements.txt
+pip3 install infercode
 ```
     
 ## Usage
 ```python
-from client.infercode_client import InferCodeClient
+from infercode.client.infercode_client import InferCodeClient
+import os
+import logging
+logging.basicConfig(level=logging.INFO)
+
+# Change from -1 to 0 to enable GPU
+os.environ['CUDA_VISIBLE_DEVICES'] = "-1"
+
 infercode = InferCodeClient(language="c")
 infercode.init_from_config()
 vectors = infercode.encode(["for (i = 0; i < n; i++)", "struct book{ int num; char s[27]; }shu[1000];"])
+
 print(vectors)
+
 ```
     
 Then we have the output embeddings:
@@ -50,12 +55,15 @@ Then we have the output embeddings:
 0.02005564  0.00345545  0.01078242  0.00763404  0.01771503  0.02223164
 0.01541999  0.03995579]]
 ```
+Note that for the very first initial step, the script will download our pretrained model and store it into ```~/.infercode_data/model_checkpoint```.
     
-## Notes
-- Our old implementation can be found in [old_version](old_version/). 
-- For a fair comparison with InferCode, please consider:
-    + The code encoder part, we used Tree-based CNN as the encoder. There should be a better code encoder in the future given the fast progressing of AI research. 
-    + The pretext task, inventing a new pretext task also affects on the quality of the code embeddings.
+## Compare to other work
+- There are a few other techniques for code representation learning, but none of them are designed with the intention to have a pretrained model to convert code to vector. For example, [Code2vec](https://arxiv.org/abs/1803.09473) (Alon et al.), despite the attractive name, Code2vec is not suitable to convert code to vector since they trained the model to predict the method name. If one wants to reuse the Code2vec model to convert code to vector, their implementation is not ready for this purpose. 
+    
+- There are also other pretrained models for code, such as CodeBert, GraphCodeBert, CuBert, etc, but they did not wrap their implementation into usable implementations.
+
+- None of the above work supports such many languages like InferCode.
+    
     
 ## Citation
 If you find this work useful for your research, please consider citing our paper:

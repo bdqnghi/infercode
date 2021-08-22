@@ -19,7 +19,7 @@ install_requires=[
 
 setup(
   name = 'infercode',
-  version = '0.0.11',
+  version = '0.0.17',
   py_modules = ['infercode'],
   description = 'Map any code snippet into vector',
   author = 'Nghi D. Q. Bui and Yijun Yu',
@@ -35,6 +35,7 @@ setup(
   ],
   package_dir={"infercode": "infercode"},
   packages=find_packages(where=".", exclude=["tests", "logo", "datasets"]),
-  package_data={'infercode': ['configs/*.ini']},
-  install_requires=install_requires
+  package_data={'infercode': ['configs/*.ini', 'sentencepiece_vocab/*', 'sentencepiece_vocab/node_types/*' , 'sentencepiece_vocab/subtrees/*', 'sentencepience_vocab/tokens/*' ]},
+  install_requires=install_requires,
+  include_package_data=True,
 )

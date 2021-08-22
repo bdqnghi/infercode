@@ -2,17 +2,15 @@ import os
 import logging
 import coloredlogs
 import sys
-from pathlib import Path
-# To import upper level modules
-sys.path.append(str(Path('.').absolute().parent))
-from data_utils.ast_util import ASTUtil
-from data_utils.ast_parser import ASTParser
+sys.path.insert(0, '..')
+from infercode.data_utils.ast_util import ASTUtil
+from infercode.data_utils.ast_parser import ASTParser
 import configparser
 import tensorflow.compat.v1 as tf
-from network.infercode_network import InferCodeModel
-from data_utils.vocabulary import Vocabulary
-from data_utils.language_util import LanguageUtil
-from data_utils.tensor_util import TensorUtil
+from infercode.network.infercode_network import InferCodeModel
+from infercode.data_utils.vocabulary import Vocabulary
+from infercode.data_utils.language_util import LanguageUtil
+from infercode.data_utils.tensor_util import TensorUtil
 from .base_client import BaseClient
 tf.disable_v2_behavior()
 
@@ -26,7 +24,9 @@ class InferCodeClient(BaseClient):
 
     def init_from_config(self, config=None):        
         
-        self.init_params(config)
+        self.load_configs(config)
+        self.init_params()
+        self.init_resources()
         self.init_utils()
         self.init_model_checkpoint()
 
@@ -54,7 +54,9 @@ class InferCodeClient(BaseClient):
             self.LOGGER.info("Load model successfully : " + str(self.checkfile))
             self.saver.restore(self.sess, ckpt.model_checkpoint_path)
         else:
-            raise ValueError("Could not find the model : " + str(self.checkfile))
+            error_message = "Could not find the model : " + str(self.checkfile)
+            self.LOGGER.error(error_message)
+            raise ValueError(error_message)
 
     def snippets_to_tensors(self, batch_code_snippets):
         batch_tree_indexes = []

@@ -26,8 +26,10 @@ class DataLoader():
             batch_trees = []
             samples = 0
             for i, tree in enumerate(trees):
-                batch_trees.append(tree)
-                samples += 1
+                if tree["size"] < 500:
+                    batch_trees.append(tree)
+                    samples += 1
+                
                 if samples >= self.batch_size:
                     batch_obj = self.tensor_util.trees_to_batch_tensors(batch_trees)
                 

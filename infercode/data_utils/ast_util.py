@@ -9,6 +9,7 @@ from pathlib import Path
 import glob, os
 import numpy as np
 import logging
+from dpu_utils.codeutils import identifiersplitting
 
 
 class ASTUtil():
@@ -64,7 +65,8 @@ class ASTUtil():
                     if not has_child:
                         child_token = text[child.start_byte:child.end_byte].decode("utf-8")
                         child_sub_tokens_id = self.token_vocab.get_id_or_unk_for_text(child_token)
-                        child_sub_tokens = self.token_vocab.tokenize(child_token)
+                        subtokens = " ".join(identifiersplitting.split_identifier_into_parts(child_token))
+                        child_sub_tokens = self.token_vocab.tokenize(subtokens)
 
                     if len(child_sub_tokens_id) == 0:
                         child_sub_tokens_id.append(0)
