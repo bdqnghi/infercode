@@ -11,9 +11,14 @@ import glob, os
 import numpy as np
 import logging
 import urllib.request
+from urllib3.exceptions import InsecureRequestWarning
 from tqdm import tqdm
 import zipfile
 import shutil
+
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 class DownloadProgressBar(tqdm):
     def update_to(self, b=1, bsize=1, tsize=None):
@@ -25,6 +30,8 @@ class DownloadProgressBar(tqdm):
 def download_url(url, output_path):
     with DownloadProgressBar(unit='B', unit_scale=True,
                              miniters=1, desc=url.split('/')[-1]) as t:
+        if (not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unverified_context', None)):
+           ssl._create_default_https_context = ssl._create_unverified_context
         urllib.request.urlretrieve(url, filename=output_path, reporthook=t.update_to)
 
 class ASTParser():
