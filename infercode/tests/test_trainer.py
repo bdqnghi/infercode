@@ -11,7 +11,10 @@ logging.basicConfig(level=logging.INFO)
 
 # config = configparser.ConfigParser()
 # config.read("../configs/OJ_raw_small.ini")
-
-infercode_trainer = InferCodeTrainer(language="c")
+input_data_path = "../../datasets/OJ_raw_small/"
+output_processed_data_path = "../../datasets/OJ_raw_processed/OJ_raw_small.pkl"
+infercode_trainer = InferCodeTrainer(language="c", 
+                                    input_data_path=input_data_path,
+                                    output_processed_data_path=output_processed_data_path)
 infercode_trainer.init_from_config()
 infercode_trainer.train()

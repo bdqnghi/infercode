@@ -20,9 +20,10 @@ class InferCodeTrainer(BaseClient):
 
     LOGGER = logging.getLogger('InferCodeTrainer')
 
-    def __init__(self, language):
+    def __init__(self, language, input_data_path, output_processed_data_path):
         self.language = language
-
+        self.data_path = input_data_path
+        self.output_processed_data_path = output_processed_data_path
 
     def init_from_config(self, config=None):
         # Load default config if do not provide an external one

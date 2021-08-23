@@ -73,10 +73,9 @@ class BaseClient():
         self.learning_rate=float(self.nn_config["lr"])
     
     def init_resources(self):
-        self.data_path = self.resource_config["data_path"]
-        self.output_processed_data_path = self.resource_config["output_processed_data_path"]
         self.model_name = self.resource_config["model_name"]
         self.pretrained_model_url = self.resource_config["pretrained_model_url"]
+        self.version = self.resource_config["pretrained_model_url"]
 
         # Init vocab
         self.node_type_vocab_model_prefix = os.path.join(package_dir, "sentencepiece_vocab", self.resource_config["node_type_vocab_model_prefix"])
@@ -86,7 +85,7 @@ class BaseClient():
     def init_model_checkpoint(self):
         home = str(Path.home())
         os.getcwd()
-        model_checkpoint = path.join(home, ".infercode_data" ,"model_checkpoint", self.model_name)
+        model_checkpoint = path.join(home, ".infercode_data" ,"model_checkpoint", self.version, self.model_name)
         model_checkpoint_ckpt = path.join(model_checkpoint, "cnn_tree.ckpt.index")
 
         if not os.path.exists(model_checkpoint):
