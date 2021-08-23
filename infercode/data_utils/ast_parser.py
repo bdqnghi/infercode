@@ -41,14 +41,14 @@ class ASTParser():
         cd = os.getcwd()
         p = path.join(home, ".tree-sitter")
         if not path.exists(p):
-                os.makedirs(p, exist_ok=True)
-                zip_url = "https://github.com/yijunyu/tree-sitter-parsers/archive/refs/heads/main.zip"
-                parsers_target = os.path.join(p, "main.zip")
-                download_url(zip_url, parsers_target)
-                with zipfile.ZipFile(parsers_target, 'r') as zip_ref:
-              	        zip_ref.extractall(p)
-              	        shutil.move(path.join(p, "tree-sitter-parsers-main"), path.join(p, "bin"))
-              	        os.remove(parsers_target)
+            os.makedirs(p, exist_ok=True)
+            zip_url = "https://github.com/yijunyu/tree-sitter-parsers/archive/refs/heads/main.zip"
+            parsers_target = os.path.join(p, "main.zip")
+            download_url(zip_url, parsers_target)
+            with zipfile.ZipFile(parsers_target, 'r') as zip_ref:
+          	        zip_ref.extractall(p)
+          	        shutil.move(path.join(p, "tree-sitter-parsers-main"), path.join(p, "bin"))
+          	        os.remove(parsers_target)
         p = path.join(p, "bin")
         os.chdir(p)
         self.Languages = {}
@@ -63,7 +63,7 @@ class ASTParser():
         
         self.language = language
         if self.language == None:
-            self.LOGGER.info("Cannot find language configuration, using java parser to parse the code into AST")
+            self.LOGGER.info("Cannot find language configuration, using java parser as the default to parse the code into AST")
             self.language = "java"
 
         lang = self.Languages.get(self.language)

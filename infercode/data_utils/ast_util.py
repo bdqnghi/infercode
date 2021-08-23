@@ -50,13 +50,12 @@ class ASTUtil():
                 if child_type not in ignore_types:
                     queue.append(child)
 
-                    
                     child_type_id = self.type_vocab.get_id_or_unk_for_text(child_type)[0]
 
                     child_token = ""
                     child_sub_tokens_id = []
                     child_sub_tokens = []
-
+                    
                     has_child = len(child.children) > 0
 
                     if not has_child:

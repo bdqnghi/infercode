@@ -137,6 +137,10 @@ class Vocabulary(Sized):
 
         return new_pieces
 
+    def get_id_from_piece(self, text: str):
+        sp_piece = self.__sp_model.EncodeAsPieces(text)[0]
+        return self.__sp_model.piece_to_id(sp_piece)
+
     def get_id_or_unk_for_text(self, text: str, pad_to_size: Optional[int] = None,
                                padding_element: int = 0) -> List[int]:
         """

@@ -103,7 +103,7 @@ class WriteThread(threading.Thread):
 
     def write_subtree(self, subtrees):
         for s in subtrees:
-            if len(s) > 1 and len(s) < 8:
+            if len(s) >= 4 and len(s) <= 16:
                 # Concat the list of nodes in a subtree into a string
                 subtree_str = "-".join(s)
                 # if subtree_str not in all_subtrees_vocab:

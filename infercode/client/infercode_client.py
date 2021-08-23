@@ -60,8 +60,10 @@ class InferCodeClient(BaseClient):
     def snippets_to_tensors(self, batch_code_snippets):
         batch_tree_indexes = []
         for code_snippet in batch_code_snippets:
-            ast = self.ast_parser.parse(code_snippet)
-            tree_representation, _ = self.ast_util.simplify_ast(ast, code_snippet.decode("utf-8"))
+            # tree-sitter parser requires bytes as the input, not string
+            code_snippet_to_byte = str.encode(code_snippet)
+            ast = self.ast_parser.parse(code_snippet_to_byte)
+            tree_representation, _ = self.ast_util.simplify_ast(ast, code_snippet)
             tree_indexes = self.tensor_util.transform_tree_to_index(tree_representation)
             batch_tree_indexes.append(tree_indexes)
          

@@ -32,7 +32,7 @@ for subdir , dirs, files in os.walk("../../datasets/OJ_raw_small"):
         file_path_splits = file_path.split("/")
         label = file_path_splits[len(file_path_splits)-2]
         vocabulary.append(label)
-        with open(file_path, "rb") as f:
+        with open(file_path, "r") as f:
             data = f.read()
         vector = infercode.encode([data])
         wv.append(vector[0])
