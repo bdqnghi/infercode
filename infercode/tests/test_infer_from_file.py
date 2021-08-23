@@ -25,10 +25,10 @@ def calculate_cosine_similarity(a, b):
 infercode = InferCodeClient(language="c")
 infercode.init_from_config()
 
-with open("../../datasets/OJ_raw_small/1/1001.c", "r") as f1:
+with open("f1.c", "r") as f1:
     f1_data = str(f1.read())
 
-with open("../../datasets/OJ_raw_small/1/1008.c", "r") as f2:
+with open("f2.c", "r") as f2:
     f2_data = str(f2.read())
 
 vectors = infercode.encode([f1_data, f2_data])

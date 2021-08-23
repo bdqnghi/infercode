@@ -75,7 +75,7 @@ class BaseClient():
     def init_resources(self):
         self.model_name = self.resource_config["model_name"]
         self.pretrained_model_url = self.resource_config["pretrained_model_url"]
-        self.version = self.resource_config["pretrained_model_url"]
+        self.version = self.resource_config["version"]
 
         # Init vocab
         self.node_type_vocab_model_prefix = os.path.join(package_dir, "sentencepiece_vocab", self.resource_config["node_type_vocab_model_prefix"])
@@ -94,11 +94,11 @@ class BaseClient():
         """
         Comment out this part if training locally
         """
-        # if not os.path.exists(model_checkpoint_ckpt):
-        #     pretrained_model_checkpoint_target = os.path.join(model_checkpoint, "universal_model_med.zip")
-        #     download_url(self.pretrained_model_url, pretrained_model_checkpoint_target)
-        #     with zipfile.ZipFile(pretrained_model_checkpoint_target, 'r') as zip_ref:
-        #         zip_ref.extractall(model_checkpoint)
+        if not os.path.exists(model_checkpoint_ckpt):
+            pretrained_model_checkpoint_target = os.path.join(model_checkpoint, "universal_model.zip")
+            download_url(self.pretrained_model_url, pretrained_model_checkpoint_target)
+            with zipfile.ZipFile(pretrained_model_checkpoint_target, 'r') as zip_ref:
+                zip_ref.extractall(model_checkpoint)
 
         self.model_checkpoint = model_checkpoint
         
