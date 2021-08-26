@@ -19,6 +19,7 @@ from tqdm import tqdm
 import zipfile
 import os
 package_dir = Path(__file__).parents[1]
+from configs.__version__ import version
 
 
 class DownloadProgressBar(tqdm):
@@ -75,7 +76,7 @@ class BaseClient():
     def init_resources(self):
         self.model_name = self.resource_config["model_name"]
         self.pretrained_model_url = self.resource_config["pretrained_model_url"]
-        self.version = self.resource_config["version"]
+        self.version = version
 
         # Init vocab
         self.node_type_vocab_model_prefix = os.path.join(package_dir, "sentencepiece_vocab", self.resource_config["node_type_vocab_model_prefix"])
