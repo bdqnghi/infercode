@@ -81,15 +81,15 @@ class DatasetProcessor():
                             subtrees_id.append(subtree_id)
 
                 # Assert to make sure the list of subtrees must NOT be 0, if it is 0, then it's likely a bug
-                assert len(subtrees_id) > 0
-                subtrees_id = list(set(subtrees_id))
-                
-                print(subtrees_id)
-                # Put different instances of the same snippet (with different subtree id) into buckets for training
-                for subtree_id in subtrees_id:
-                    tree_indexes["subtree_id"] = subtree_id
-                    chosen_bucket_idx = np.argmax(bucket_sizes > tree_size)
-                    buckets[chosen_bucket_idx].append(tree_indexes)
+                # assert len(subtrees_id) > 0
+                if len(subtrees_id) > 0:
+                    subtrees_id = list(set(subtrees_id))
+                            
+                    # Put different instances of the same snippet (with different subtree id) into buckets for training
+                    for subtree_id in subtrees_id:
+                        tree_indexes["subtree_id"] = subtree_id
+                        chosen_bucket_idx = np.argmax(bucket_sizes > tree_size)
+                        buckets[chosen_bucket_idx].append(tree_indexes)
 
         self.LOGGER.info("Saving processed data into pickle format.....")
         pickle.dump(buckets, open(self.output_tensors_path, "wb" ) )
