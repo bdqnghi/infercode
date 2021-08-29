@@ -52,6 +52,17 @@ class ASTParser():
         p = path.join(p, "bin")
         os.chdir(p)
         self.Languages = {}
+        langs = []
+        for file in glob.glob("tree-sitter-*"):        
+            lang = file.split("-")[2]
+            langs.append(file)
+            Language.build_library(
+                # Store the library in the `build` directory
+                lang + '.so',
+                # Include one or more languages
+                langs
+            )            
+        self.Languages = {}
         for file in glob.glob("*.so"):
           try:
             lang = os.path.splitext(file)[0]
