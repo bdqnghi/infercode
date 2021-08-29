@@ -55,8 +55,8 @@ class ASTParser():
         langs = []
         for file in glob.glob("tree-sitter-*"):        
             lang = file.split("-")[2]
-            if not "." in file.split("-")[3]: # c-sharp
-                lang = lang + "-" + file.split("-")[3]
+            if not "." in file.split("-")[3]: # c-sharp => c_sharp.so
+                lang = lang + "_" + file.split("-")[3]
             langs.append(file)
             Language.build_library(
                 # Store the library in the `build` directory
