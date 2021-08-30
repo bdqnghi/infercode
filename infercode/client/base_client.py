@@ -97,7 +97,8 @@ class BaseClient():
         """
         if not os.path.exists(model_checkpoint_ckpt):
             pretrained_model_checkpoint_target = os.path.join(model_checkpoint, "universal_model.zip")
-            download_url(self.pretrained_model_url, pretrained_model_checkpoint_target)
+            if not os.path.exists(pretrained_model_checkpoint_target):
+                download_url(self.pretrained_model_url, pretrained_model_checkpoint_target)
             with zipfile.ZipFile(pretrained_model_checkpoint_target, 'r') as zip_ref:
                 zip_ref.extractall(model_checkpoint)
 

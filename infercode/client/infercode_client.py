@@ -59,6 +59,7 @@ class InferCodeClient(BaseClient):
 
     def snippets_to_tensors(self, batch_code_snippets):
         batch_tree_indexes = []
+        assert len(batch_code_snippets) <= 5
         for code_snippet in batch_code_snippets:
             # tree-sitter parser requires bytes as the input, not string
             code_snippet_to_byte = str.encode(code_snippet)

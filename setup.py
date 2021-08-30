@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-from infercode.configs.__version__ import version
 
 
 install_requires=[
@@ -20,7 +19,7 @@ install_requires=[
 
 setup(
   name = 'infercode',
-  version = version,
+  version = "0.0.22",
   py_modules = ['infercode'],
   description = 'Map any code snippet into vector',
   author = 'Nghi D. Q. Bui and Yijun Yu',
