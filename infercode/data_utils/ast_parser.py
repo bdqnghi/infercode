@@ -34,8 +34,6 @@ class ASTParser():
     import logging
     LOGGER = logging.getLogger('ASTParser')
     def __init__(self, language=None):
-
-
         # ------------ To initialize for the treesitter parser ------------
         home = str(Path.home())
         cd = os.getcwd()
@@ -47,23 +45,29 @@ class ASTParser():
             download_url(zip_url, parsers_target)
             with zipfile.ZipFile(parsers_target, 'r') as zip_ref:
           	        zip_ref.extractall(p)
-          	        shutil.move(path.join(p, "tree-sitter-parsers-main"), path.join(p, "bin"))
-          	        os.remove(parsers_target)
-        p = path.join(p, "bin")
-        os.chdir(p)
-        self.Languages = {}
+          	        os.remove(parsers_target)       
         langs = []
+        os.chdir(path.join(p, "tree-sitter-parsers-main"))
         for file in glob.glob("tree-sitter-*"):        
             lang = file.split("-")[2]
             if not "." in file.split("-")[3]: # c-sharp => c_sharp.so
                 lang = lang + "_" + file.split("-")[3]
             langs.append(file)
-            Language.build_library(
-                # Store the library in the `build` directory
-                lang + '.so',
-                # Include one or more languages
-                langs
-            )            
+            try:
+                Language.build_library(
+                    # Store the library in the `build` directory
+                    path.join("..", lang + '.so'),
+                    # Include one or more languages
+                    langs
+                )
+            except: # download precompiled libraries for Ubuntu 16.04
+                zip_url = "https://ai4code.s3.ap-southeast-1.amazonaws.com/tree-sitter-x86_64.zip"
+                parsers_target = os.path.join(p, "tree-sitter-x86_64.zip")
+                download_url(zip_url, parsers_target)
+                with zipfile.ZipFile(parsers_target, 'r') as zip_ref:
+                        zip_ref.extractall(p) 
+                break                                           	      
+        os.chdir(p)
         self.Languages = {}
         for file in glob.glob("*.so"):
           try:
@@ -95,3 +99,4 @@ class ASTParser():
     def set_language(self, language):
         lang = self.Languages.get(language)
         self.parser.set_language(lang)
+
