@@ -11,6 +11,7 @@ from urllib3.exceptions import InsecureRequestWarning
 from tqdm import tqdm
 import zipfile
 import shutil
+import platform
 
 import ssl
 
@@ -37,42 +38,39 @@ class ASTParser():
         # ------------ To initialize for the treesitter parser ------------
         home = str(Path.home())
         cd = os.getcwd()
+        plat = platform.system()     
         p = path.join(home, ".tree-sitter")
         if not path.exists(p):
             os.makedirs(p, exist_ok=True)
-            zip_url = "https://github.com/yijunyu/tree-sitter-parsers/archive/refs/heads/main.zip"
-            parsers_target = os.path.join(p, "main.zip")
-            download_url(zip_url, parsers_target)
-            with zipfile.ZipFile(parsers_target, 'r') as zip_ref:
-          	        zip_ref.extractall(p)
-          	        os.remove(parsers_target)       
-        langs = []
-        os.chdir(path.join(p, "tree-sitter-parsers-main"))
-        for file in glob.glob("tree-sitter-*"):        
-            lang = file.split("-")[2]
-            if not "." in file.split("-")[3]: # c-sharp => c_sharp.so
-                lang = lang + "_" + file.split("-")[3]
-            langs.append(file)
+            zip_url = "https://github.com/yijunyu/tree-sitter-parsers/archive/refs/heads/" + plat + ".zip"
+            parsers_target = os.path.join(p, plat + ".zip")
             try:
-                Language.build_library(
-                    # Store the library in the `build` directory
-                    path.join("..", lang + '.so'),
-                    # Include one or more languages
-                    langs
-                )
-            except: # download precompiled libraries for Ubuntu 16.04
-                zip_url = "https://ai4code.s3.ap-southeast-1.amazonaws.com/tree-sitter-x86_64.zip"
-                parsers_target = os.path.join(p, "tree-sitter-x86_64.zip")
+                # download from precompiled binaries
                 download_url(zip_url, parsers_target)
                 with zipfile.ZipFile(parsers_target, 'r') as zip_ref:
-                        zip_ref.extractall(p) 
-                break                                           	      
-        os.chdir(p)
+          	        zip_ref.extractall(p)
+            except: 
+                plat = "main"
+                # build from scratch
+                langs = []
+                os.chdir(path.join(p, "tree-sitter-parsers-" + plat))
+                for file in glob.glob("tree-sitter-*"):        
+                    lang = file.split("-")[2]
+                    if not "." in file.split("-")[3]: # c-sharp => c_sharp.so
+                        lang = lang + "_" + file.split("-")[3]
+                    langs = [file]
+                    Language.build_library(
+                        # Store the library in the `build` directory
+                        lang + '.so',
+                        # Include one or more languages
+                        langs
+                    )
+        os.chdir(path.join(p, "tree-sitter-parsers-" + plat))
         self.Languages = {}
         for file in glob.glob("*.so"):
           try:
             lang = os.path.splitext(file)[0]
-            self.Languages[lang] = Language(path.join(p, file), lang)
+            self.Languages[lang] = Language(path.join(p, "tree-sitter-parsers-" + plat, file), lang)
           except:
             print("An exception occurred to {}".format(lang))
         os.chdir(cd)
