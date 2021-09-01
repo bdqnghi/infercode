@@ -19,7 +19,7 @@ install_requires=[
 
 setup(
   name = 'infercode',
-  version = "0.0.22",
+  version = "0.0.24",
   py_modules = ['infercode'],
   description = 'Map any code snippet into vector',
   author = 'Nghi D. Q. Bui and Yijun Yu',
