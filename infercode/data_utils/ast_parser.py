@@ -6,30 +6,8 @@ from pathlib import Path
 import glob, os
 import numpy as np
 import logging
-import urllib.request
-from urllib3.exceptions import InsecureRequestWarning
-from tqdm import tqdm
-import zipfile
-import shutil
 import platform
-
-import ssl
-
-ssl._create_default_https_context = ssl._create_unverified_context
-
-class DownloadProgressBar(tqdm):
-    def update_to(self, b=1, bsize=1, tsize=None):
-        if tsize is not None:
-            self.total = tsize
-        self.update(b * bsize - self.n)
-
-
-def download_url(url, output_path):
-    with DownloadProgressBar(unit='B', unit_scale=True,
-                             miniters=1, desc=url.split('/')[-1]) as t:
-        if (not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unverified_context', None)):
-           ssl._create_default_https_context = ssl._create_unverified_context
-        urllib.request.urlretrieve(url, filename=output_path, reporthook=t.update_to)
+import tree_sitter_parsers
 
 class ASTParser():
     import logging
@@ -40,31 +18,6 @@ class ASTParser():
         cd = os.getcwd()
         plat = platform.system()     
         p = path.join(home, ".tree-sitter")
-        if not path.exists(p):
-            os.makedirs(p, exist_ok=True)
-            zip_url = "https://github.com/yijunyu/tree-sitter-parsers/archive/refs/heads/" + plat + ".zip"
-            parsers_target = os.path.join(p, plat + ".zip")
-            try:
-                # download from precompiled binaries
-                download_url(zip_url, parsers_target)
-                with zipfile.ZipFile(parsers_target, 'r') as zip_ref:
-          	        zip_ref.extractall(p)
-            except: 
-                plat = "main"
-                # build from scratch
-                langs = []
-                os.chdir(path.join(p, "tree-sitter-parsers-" + plat))
-                for file in glob.glob("tree-sitter-*"):        
-                    lang = file.split("-")[2]
-                    if not "." in file.split("-")[3]: # c-sharp => c_sharp.so
-                        lang = lang + "_" + file.split("-")[3]
-                    langs = [file]
-                    Language.build_library(
-                        # Store the library in the `build` directory
-                        lang + '.so',
-                        # Include one or more languages
-                        langs
-                    )
         os.chdir(path.join(p, "tree-sitter-parsers-" + plat))
         self.Languages = {}
         for file in glob.glob("*.so"):

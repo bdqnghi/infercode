@@ -1,6 +1,5 @@
 from setuptools import setup, find_packages
 
-
 install_requires=[
     "bidict==0.21.2",
     "coloredlogs == 15.0.1",
@@ -13,13 +12,13 @@ install_requires=[
     "sentencepiece==0.1.95",
     "tensorflow==2.4.0",
     "tqdm==4.55.1",
-    "tree_sitter==0.19.0",
+    "tree_sitter_parsers==0.0.2",
     "utils==1.0.1"
 ]
 
 setup(
   name = 'infercode',
-  version = "0.0.24",
+  version = "0.0.26",
   py_modules = ['infercode'],
   description = 'Map any code snippet into vector',
   author = 'Nghi D. Q. Bui and Yijun Yu',
