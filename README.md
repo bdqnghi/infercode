@@ -61,7 +61,7 @@ Note that on the initial step, the script will build tree-sitter parsers from so
 ## Compare to other work
 - There are a few other techniques for code representation learning, but none of them are designed with the intention to have a pretrained model to convert code to vector. For example, [Code2vec](https://arxiv.org/abs/1803.09473) (Alon et al.), despite the attractive name, Code2vec is not suitable to convert code to vector since they trained the model to predict the method name. If one wants to reuse the Code2vec model to convert code to vector, their implementation is not ready for this purpose. 
     
-- There are also other pretrained models for code, such as CodeBert, GraphCodeBert, CuBert, etc, but they did not wrap their implementation into usable implementations.
+- There are also other pretrained models for code, such as CodeBert, GraphCodeBert, CuBert, etc, but they did not wrap their code into usable inferfaces.
 
 - None of the above work supports such many languages like InferCode.
     
