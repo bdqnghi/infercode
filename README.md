@@ -11,7 +11,7 @@ This is a Tensorflow Implementation for "InferCode: Self-Supervised Learning of 
 We trained our model on a dataset comprised of 19 languages, which are: java, c, c++, c#, golang, javascript, lua, php, python, ruby, rust, scala, kotlin, solidity, haskell, r, html, css, bash. We use [tree-sitter](https://github.com/tree-sitter/tree-sitter) as the backbone to parse these languages to AST. This is a bit different from the implementation we reported in our paper, which used [srcml](https://www.srcml.org/) as the AST parser. The reasons are that we found that tree-sitter supports more language than srcml, and tree-sitter also provides a [python binding interface](https://github.com/tree-sitter/py-tree-sitter), which makes it easy to parse any code snippet into AST by using python code. A details of our old implementation using srcml can be found in [old_version](old_version/).
 
 ## Set up
-Install the Pypi package (current version is 0.0.26):
+Install the Pypi package (current version is 0.0.27):
 ```python
 pip3 install infercode
 ```

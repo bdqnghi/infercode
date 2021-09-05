@@ -12,7 +12,7 @@ install_requires=[
     "sentencepiece==0.1.95",
     "tensorflow==2.4.0",
     "tqdm==4.55.1",
-    "tree_sitter_parsers==0.0.2",
+    "tree_sitter_parsers>=0.0.3",
     "utils==1.0.1"
 ]
 
