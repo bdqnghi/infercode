@@ -64,7 +64,7 @@ class InferCodeClient(BaseClient):
             # tree-sitter parser requires bytes as the input, not string
             code_snippet_to_byte = str.encode(code_snippet)
             ast = self.ast_parser.parse(code_snippet_to_byte)
-            tree_representation, _ = self.ast_util.simplify_ast(ast, code_snippet)
+            tree_representation, _ = self.ast_util.simplify_ast(ast, code_snippet_to_byte)
             tree_indexes = self.tensor_util.transform_tree_to_index(tree_representation)
             batch_tree_indexes.append(tree_indexes)
          
