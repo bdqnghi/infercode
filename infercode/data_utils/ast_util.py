@@ -59,7 +59,7 @@ class ASTUtil():
                     has_child = len(child.children) > 0
 
                     if not has_child:
-                        child_token = text[child.start_byte:child.end_byte]
+                        child_token = text[child.start_byte:child.end_byte].decode()
                         child_sub_tokens_id = self.token_vocab.get_id_or_unk_for_text(child_token)
                         subtokens = " ".join(identifiersplitting.split_identifier_into_parts(child_token))
                         child_sub_tokens = self.token_vocab.tokenize(subtokens)
