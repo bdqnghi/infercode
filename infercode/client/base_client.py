@@ -86,7 +86,7 @@ class BaseClient():
     def init_model_checkpoint(self):
         home = str(Path.home())
         os.getcwd()
-        model_checkpoint = path.join(home, ".infercode_data" ,"model_checkpoint", self.version, self.model_name)
+        model_checkpoint = path.join(home, ".infercode_data" ,"model_checkpoint", self.model_name)
         model_checkpoint_ckpt = path.join(model_checkpoint, "cnn_tree.ckpt.index")
 
         if not os.path.exists(model_checkpoint):
