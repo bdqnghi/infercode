@@ -1,3 +1,4 @@
+import tree_sitter_parsers
 import os
 import warnings
 warnings.filterwarnings("ignore")
