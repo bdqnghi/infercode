@@ -1,24 +1,24 @@
 from setuptools import setup, find_packages
 
 install_requires=[
-    "bidict==0.21.2",
-    "coloredlogs == 15.0.1",
-    "dpu_utils==0.2.19",
-    "keras_radam==0.15.0",
-    "numpy==1.19.4",
-    "protobuf==3.14.0",
-    "scikit_learn==0.24.0",
-    "scipy==1.5.2",
-    "sentencepiece==0.1.95",
-    "tensorflow==2.4.0",
-    "tqdm==4.55.1",
+    "bidict>=0.21.2",
+    "coloredlogs >= 15.0.1",
+    "dpu_utils>=0.2.19",
+    "keras_radam>=0.15.0",
+    "numpy>=1.19.4",
+    "protobuf>=3.14.0",
+    "scikit_learn>=0.24.0",
+    "scipy>=1.5.2",
+    "sentencepiece>=0.1.95",
+    "tensorflow>=2.4.0",
+    "tqdm>=4.55.1",
     "tree_sitter_parsers>=0.0.3",
-    "utils==1.0.1"
+    "utils>=1.0.1"
 ]
 
 setup(
   name = 'infercode',
-  version = "0.0.28",
+  version = "0.0.29",
   py_modules = ['infercode'],
   description = 'Map any code snippet into vector',
   author = 'Nghi D. Q. Bui and Yijun Yu',
