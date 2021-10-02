@@ -8,3 +8,4 @@ else
 pip uninstall infercode -y
 pip install dist/infercode-*-py3-none-any.whl
 fi
+python test.py
