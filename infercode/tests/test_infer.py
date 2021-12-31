@@ -15,3 +15,9 @@ infercode.init_from_config()
 vectors = infercode.encode(["for (i = 0; i < n; i++)", "struct book{ int num; char s[27]; }shu[1000];"])
 
 print(vectors)
+
+infercode = InferCodeClient(language="java")
+infercode.init_from_config()
+vectors = infercode.encode(["public MyClass(String str) { this.str = str; }"])
+
+print(vectors)

@@ -42,7 +42,7 @@ class InferCodeClient(BaseClient):
                                               batch_size=self.batch_size, 
                                               learning_rate=self.learning_rate)
 
-        self.saver = tf.train.Saver(save_relative_paths=True, max_to_keep=5)
+        self.saver = tf.train.import_meta_graph(os.path.join(self.model_checkpoint, 'cnn_tree.ckpt.meta'))
         self.init = tf.global_variables_initializer()
         self.sess = tf.Session()
         self.sess.run(self.init)
