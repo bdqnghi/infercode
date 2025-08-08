@@ -301,7 +301,13 @@ class InferCodeModel():
         # replace the root node with the zero vector so lookups for the 0th
         # vector return 0 instead of the root vector
         # zero_vecs is (batch_size, num_nodes, 1)
-        zero_vecs = tf.zeros((batch_size, 1, node_type_dim))
+
+        # zero_vecs = tf.zeros((batch_size, 1, node_type_dim))
+        # 首先确保batch_size是通过tf.shape获取的动态形状
+        batch_size = tf.shape(self.parent_node_type_embeddings)[0]
+        # 使用tf.fill创建零向量，避免NumPy的形状检查
+        zero_vecs = tf.fill((batch_size, 1, node_type_dim), 0.0)
+
         # vector_lookup is (batch_size x num_nodes x node_dim)
         vector_lookup = tf.concat([zero_vecs, parent_node_embeddings[:, 1:, :]], axis=1)
         # children is (batch_size x num_nodes x num_children x 1)
@@ -351,7 +357,8 @@ class InferCodeModel():
             max_children = tf.shape(input=children)[2]
             # eta_t is shape (batch_size x max_tree_size x max_children + 1)
             return tf.tile(tf.expand_dims(tf.concat(
-                [tf.ones((max_tree_size, 1)), tf.zeros((max_tree_size, max_children))],
+                [tf.fill((max_tree_size, 1), 1.0), tf.fill((max_tree_size, max_children), 0.0)],
+                # [tf.ones((max_tree_size, 1)), tf.zeros((max_tree_size, max_children))],
                 axis=1), axis=0,
             ), [batch_size, 1, 1], name='coef_t')
 
@@ -376,7 +383,8 @@ class InferCodeModel():
             # creates a mask of 1's and 0's where 1 means there is a child there
             # has shape (batch_size x max_tree_size x max_children + 1)
             mask = tf.concat(
-                [tf.zeros((batch_size, max_tree_size, 1)),
+                #[tf.zeros((batch_size, max_tree_size, 1)),
+                [tf.fill((batch_size, max_tree_size, 1), 0.0),
                  tf.minimum(children, tf.ones(tf.shape(input=children)))],
                 axis=2, name='mask'
             )
@@ -396,9 +404,11 @@ class InferCodeModel():
             # weights for every tree node in the case that num_siblings = 0
             # shape is (batch_size x max_tree_size x max_children + 1)
             singles = tf.concat(
-                [tf.zeros((batch_size, max_tree_size, 1)),
+                #[tf.zeros((batch_size, max_tree_size, 1)),
+                [tf.fill((batch_size, max_tree_size, 1), 0.0),
                  tf.fill((batch_size, max_tree_size, 1), 0.5),
-                 tf.zeros((batch_size, max_tree_size, max_children - 1))],
+                 #tf.zeros((batch_size, max_tree_size, max_children - 1))],
+                 tf.fill((batch_size, max_tree_size, max_children - 1), 0.0)],
                 axis=2, name='singles')
 
             # eta_r is shape (batch_size x max_tree_size x max_children + 1)
@@ -420,8 +430,9 @@ class InferCodeModel():
             # creates a mask of 1's and 0's where 1 means there is a child there
             # has shape (batch_size x max_tree_size x max_children + 1)
             mask = tf.concat(
-                [tf.zeros((batch_size, max_tree_size, 1)),
-                    tf.minimum(children, tf.ones(tf.shape(input=children)))],
+                #[tf.zeros((batch_size, max_tree_size, 1)),
+                [tf.fill((batch_size, max_tree_size, 1), 0.0),
+                    tf.minimum(children, tf.fill(tf.shape(input=children), 1.0))],
                 axis=2,
                 name='mask'
             )
